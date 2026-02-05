@@ -149,6 +149,10 @@ export const notesApi = {
             body: JSON.stringify({ content })
         });
         return await response.json();
+    },
+
+    deleteNote: async (id: string) => {
+        await fetch(`${API_BASE_URL}/notes/${id}`, { method: 'DELETE' });
     }
 };
 

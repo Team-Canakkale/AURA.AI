@@ -63,4 +63,25 @@ router.post('/', requireAuth, async (req: Request, res: Response) => {
     }
 });
 
+// DELETE /api/habit/notes/:id
+router.delete('/:id', requireAuth, async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const { error } = await supabase
+            .from('habitat_notes')
+            .delete()
+            .eq('id', id);
+
+        if (error) {
+            console.error('Error deleting note:', error);
+            return res.status(500).json({ error: 'Failed to delete note' });
+        }
+
+        res.json({ success: true });
+    } catch (err) {
+        console.error('Server error in DELETE /notes:', err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 export const notesRouter = router;

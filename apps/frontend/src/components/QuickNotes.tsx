@@ -34,6 +34,12 @@ export default function QuickNotes() {
         }
     };
 
+    const handleDelete = async (id: string) => {
+        if (!confirm('Are you sure you want to delete this note?')) return;
+        await notesApi.deleteNote(id);
+        setNotes(prev => prev.filter(n => n.id !== id));
+    };
+
     return (
         <>
             {/* Trigger Button */}
@@ -89,10 +95,28 @@ export default function QuickNotes() {
                             ) : (
                                 notes.map(note => (
                                     <div key={note.id} className="note-card">
-                                        <div className="note-time">
-                                            {new Date(note.created_at).toLocaleString('tr-TR', {
-                                                weekday: 'short', hour: '2-digit', minute: '2-digit'
-                                            })}
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                                            <div className="note-time">
+                                                {new Date(note.created_at).toLocaleString('tr-TR', {
+                                                    weekday: 'short', hour: '2-digit', minute: '2-digit'
+                                                })}
+                                            </div>
+                                            <button
+                                                onClick={() => handleDelete(note.id)}
+                                                style={{
+                                                    background: 'none',
+                                                    border: 'none',
+                                                    color: '#666',
+                                                    fontSize: '1.2rem',
+                                                    cursor: 'pointer',
+                                                    padding: '0 4px',
+                                                    lineHeight: '1',
+                                                    marginTop: '-2px'
+                                                }}
+                                                className="delete-note-btn"
+                                            >
+                                                ×
+                                            </button>
                                         </div>
                                         <p className="note-content">{note.content}</p>
                                     </div>
