@@ -41,7 +41,7 @@ router.get('/', requireAuth, async (req: Request, res: Response) => {
 router.post('/', requireAuth, async (req: Request, res: Response) => {
     try {
         const userId = req.user?.id || '00000000-0000-0000-0000-000000000000';
-        const { title, event_date, type } = req.body;
+        const { title, event_date, end_date, type, location } = req.body;
 
         if (!title || !event_date || !type) {
             return res.status(400).json({ error: 'Missing required fields: title, event_date, type' });
@@ -51,7 +51,9 @@ router.post('/', requireAuth, async (req: Request, res: Response) => {
             user_id: userId,
             title,
             event_date,
-            type
+            end_date: end_date || null,
+            type,
+            location: location || ''
         };
 
         const { data, error } = await supabase

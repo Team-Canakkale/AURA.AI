@@ -163,10 +163,13 @@ body {
 
 .habitat-grid {
   display: grid;
-  grid-template-columns: 1fr 1.5fr 1fr;
-  gap: 1.5rem;
-  margin-top: 2rem;
+  grid-template-columns: 1.5fr 1fr;
+  /* Task Matrix biraz daha geniş olsun */
+  gap: 3rem;
+  margin: 2rem auto;
   align-items: start;
+  justify-content: center;
+  max-width: 1100px;
 }
 
 @media (max-width: 1024px) {
@@ -500,4 +503,232 @@ body {
   .dashboard-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* Event Location Style */
+.event-loc {
+  display: block;
+  font-size: 0.85rem;
+  color: #a8a8a8;
+  margin-top: 4px;
+  font-weight: normal;
+}
+
+.event-form {
+  flex-wrap: wrap;
+}
+
+/* Custom City Autocomplete */
+.city-wrapper {
+  position: relative;
+  flex: 1;
+  min-width: 80px;
+}
+
+.city-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-height: 200px;
+  /* Scroll için limit */
+  overflow-y: auto;
+  background: #2a2a2a;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  z-index: 100;
+  margin-top: 4px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.city-option {
+  padding: 8px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 0.9rem;
+  color: #ddd;
+}
+
+/* --- New Event Card Design --- */
+.event-card {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  /* Hafif border */
+  border-radius: 16px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.event-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+}
+
+.event-date-box {
+  background: rgba(100, 108, 255, 0.1);
+  border-radius: 12px;
+  min-width: 60px;
+  height: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  border: 1px solid rgba(100, 108, 255, 0.2);
+}
+
+.event-date-box .day {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+}
+
+.event-date-box .month {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #646cff;
+  letter-spacing: 1px;
+  margin-top: 2px;
+}
+
+.event-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+  /* Sola hizala */
+  text-align: left;
+}
+
+.event-title-text {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: white;
+  margin: 0;
+}
+
+.event-meta {
+  display: flex;
+  gap: 12px;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+  flex-wrap: wrap;
+  align-items: center;
+  /* Dikey ortala */
+}
+
+.event-location {
+  color: #a8a8a8;
+  display: flex;
+  align-items: center;
+}
+
+/* Status: Removed as container, keeping styles if needed or cleanup */
+
+.countdown-badge {
+  font-size: 0.7rem;
+  /* Biraz daha küçült */
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.countdown-badge.active {
+  background: rgba(76, 175, 80, 0.2);
+  color: #4caf50;
+  border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.countdown-badge.expired {
+  background: rgba(244, 67, 54, 0.2);
+  color: #f44336;
+}
+
+/* --- Event Form Grid Layout --- */
+.event-form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.form-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.input-title,
+.input-type,
+.input-date,
+.input-time,
+.city-wrapper input {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 10px;
+  border-radius: 8px;
+  /* Daha yuvarlak */
+  color: white;
+  font-size: 0.9rem;
+}
+
+.input-type {
+  background: rgba(255, 255, 255, 0.05);
+  /* Uyumlu */
+  color: #ddd;
+}
+
+.event-type-badge {
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #aaa;
+  /* Daha silik */
+  font-weight: normal;
+  margin-left: 10px;
+  text-transform: capitalize;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.add-btn {
+  background: #646cff;
+  /* Mavi renk */
+  color: white;
+  border: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.add-btn:hover {
+  background: #535bf2;
+  transform: scale(1.05);
+}
+
+.city-wrapper input {
+  padding-right: 0;
+}
+
+/* Override Colors */
+.event-location {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+input::placeholder,
+select,
+textarea::placeholder {
+  color: rgba(255, 255, 255, 0.7) !important;
 }

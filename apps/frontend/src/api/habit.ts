@@ -23,7 +23,9 @@ export interface Event {
     id: string;
     title: string;
     event_date: string;
-    type: 'meeting' | 'reminder' | 'deadline' | 'other';
+    end_date?: string;
+    location?: string;
+    type: string;
 }
 
 // --- API ---
@@ -103,7 +105,7 @@ export const eventApi = {
         } catch (e) { return []; }
     },
 
-    createEvent: async (event: { title: string; event_date: string; type: string }) => {
+    createEvent: async (event: { title: string; event_date: string; end_date?: string; type: string; location?: string }) => {
         const response = await fetch(`${API_BASE_URL}/events`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
