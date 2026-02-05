@@ -14,3 +14,9 @@ const genAI = new GoogleGenerativeAI(apiKey);
 export const getGeminiModel = (modelName: string = 'gemini-pro') => {
     return genAI.getGenerativeModel({ model: modelName });
 };
+
+// Export chat model for TUSU chatbot (faster responses)
+export const getChatModel = () => {
+    return genAI.getGenerativeModel({ model: 'gemini-pro' });
+};
+

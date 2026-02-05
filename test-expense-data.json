@@ -1,0 +1,39 @@
+{
+    "transactions": [
+        {
+            "date": "2026-02-01",
+            "description": "Fancy Restaurant",
+            "category": "Dining",
+            "amount": 5000,
+            "currency": "TL"
+        },
+        {
+            "date": "2026-02-05",
+            "description": "Coffee Shop",
+            "category": "Dining",
+            "amount": 500,
+            "currency": "TL"
+        },
+        {
+            "date": "2026-02-02",
+            "description": "Uber",
+            "category": "Transportation",
+            "amount": 1500,
+            "currency": "TL"
+        },
+        {
+            "date": "2026-02-03",
+            "description": "Shopping Mall",
+            "category": "Shopping",
+            "amount": 6000,
+            "currency": "TL"
+        },
+        {
+            "date": "2026-02-04",
+            "description": "Electricity Bill",
+            "category": "Utilities",
+            "amount": 800,
+            "currency": "TL"
+        }
+    ]
+}

@@ -1,0 +1,22 @@
+{
+    "userMessage": "Merhaba TUSU! Dining kategorisinde fazla harcama yaptığımı gördüm. Ne önerirsin?",
+    "contextData": {
+        "totalPotentialSavings": 4500,
+        "excessiveCategories": [
+            {
+                "category": "Dining",
+                "averageMonthlySpending": 3000,
+                "currentMonthSpending": 5500,
+                "percentageChange": 83.33,
+                "potentialSavings": 2500,
+                "recommendation": {
+                    "asset": "Tech Funds",
+                    "trend": "+5.0%",
+                    "estimatedGain": 125,
+                    "message": "Dining harcamandan artırdığın 2,500 TL'yi 'Tech Funds' fonuna yatırsaydın, şu an %5 değer kazanabilirdin (Tahmini kazanç: 125 TL)."
+                }
+            }
+        ],
+        "message": "⚠️ Excessive consumption detected in 2 categories. Total potential savings: 4,500 TL"
+    }
+}

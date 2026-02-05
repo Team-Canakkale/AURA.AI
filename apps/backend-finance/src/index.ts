@@ -5,6 +5,8 @@ dotenv.config();
 
 import { supabase } from './lib/supabase';
 import { getGeminiModel } from './lib/gemini';
+import { ExpenseAnalysisController } from './controllers/ExpenseAnalysisController';
+import { ChatController } from './controllers/ChatController';
 
 const app = express();
 const PORT = process.env.PORT || 4001;
@@ -12,6 +14,10 @@ const PORT = process.env.PORT || 4001;
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Initialize controllers
+const expenseAnalysisController = new ExpenseAnalysisController();
+const chatController = new ChatController();
 
 // Health check endpoint
 app.get('/health', (req: Request, res: Response) => {
@@ -21,6 +27,18 @@ app.get('/health', (req: Request, res: Response) => {
         timestamp: new Date().toISOString()
     });
 });
+
+// ========================================
+// TUSU Expense Analysis API
+// ========================================
+app.post('/api/analyze-expenses', expenseAnalysisController.analyzeExpenses);
+app.get('/api/expense-categories', expenseAnalysisController.getCategories);
+
+// ========================================
+// TUSU Chat API
+// ========================================
+app.post('/api/chat', chatController.chat);
+app.get('/api/chat/greeting', chatController.getGreeting);
 
 // Sample finance endpoints
 app.get('/transactions', (req: Request, res: Response) => {
