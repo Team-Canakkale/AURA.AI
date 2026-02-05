@@ -125,6 +125,41 @@ Edit root `package.json`:
 }
 ```
 
+## ☁️ Supabase & Gemini Integration
+
+The platform is pre-configured with Supabase and Gemini AI.
+
+### Environment Variables
+
+Configure your keys in the root `.env` file:
+
+```env
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_KEY=your-anon-key
+GEMINI_API_KEY=your-gemini-key
+```
+
+### Usage in Backend Services
+
+Utilities are available in `src/lib/`:
+
+**Supabase Client:**
+```typescript
+import { supabase } from './lib/supabase';
+
+// Use as normal
+const { data, error } = await supabase.from('your_table').select('*');
+```
+
+**Gemini AI:**
+```typescript
+import { getGeminiModel } from './lib/gemini';
+
+const model = getGeminiModel();
+const result = await model.generateContent("Hello!");
+console.log(result.response.text());
+```
+
 ## 📋 Code Style
 
 - Use TypeScript for all code
