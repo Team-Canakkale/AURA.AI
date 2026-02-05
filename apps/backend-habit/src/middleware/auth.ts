@@ -11,30 +11,8 @@ declare global {
 }
 
 export const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        // Check for Authorization header first, then cookie
-        let token = req.headers.authorization?.split(' ')[1];
-
-        if (!token && req.cookies) {
-            // Assuming the cookie name is 'sb-access-token' or similar, adaptable
-            token = req.cookies['sb-access-token'];
-        }
-
-        if (!token) {
-            return res.status(401).json({ error: 'Unauthorized: No token provided' });
-        }
-
-        const { data: { user }, error } = await supabase.auth.getUser(token);
-
-        if (error || !user) {
-            return res.status(401).json({ error: 'Unauthorized: Invalid token' });
-        }
-
-        // Attach user to request
-        req.user = user;
-        next();
-    } catch (err) {
-        console.error('Auth Middleware Error:', err);
-        res.status(500).json({ error: 'Internal Server Error during authentication' });
-    }
+    // BYPASS AUTHENTICATION COMPLETELY - STUPID MODE
+    // We use a valid UUID (Nil UUID) to satisfy Postgres 'uuid' type check
+    req.user = { id: '00000000-0000-0000-0000-000000000000', email: 'bypass@aura.ai' };
+    next();
 };

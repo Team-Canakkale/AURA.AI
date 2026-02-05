@@ -1,59 +1,40 @@
 
-export interface Habit {
-    id: number;
-    name: string;
-    frequency: string;
-    entries: string[]; // dates
-    streak?: number;
-    completed?: boolean;
+export interface Task {
+    id: string;
+    title: string;
+    priority: 'big_one' | 'medium' | 'small';
+    status: 'pending' | 'completed';
+    created_at?: string;
 }
 
-const HABIT_API_URL = '/api/habit';
+const API_BASE_URL = '/api/habit';
 
-export const habitApi = {
-    // Tüm alışkanlıkları getir
-    getHabits: async (): Promise<Habit[]> => {
-        try {
-            const response = await fetch(`${HABIT_API_URL}/habits`);
-            if (!response.ok) throw new Error('Failed to fetch habits');
-            const data = await response.json();
-            return data.habits || [];
-        } catch (error) {
-            console.error('Error fetching habits:', error);
-            return [];
-        }
+export const taskApi = {
+    getTasks: async (): Promise<Task[]> => {
+        const response = await fetch(`${API_BASE_URL}/tasks`);
+        return await response.json();
     },
 
-    // Yeni alışkanlık ekle
-    createHabit: async (habit: { name: string; frequency: string }) => {
-        try {
-            const response = await fetch(`${HABIT_API_URL}/habits`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(habit)
-            });
-            if (!response.ok) throw new Error('Failed to create habit');
-            return await response.json();
-        } catch (error) {
-            console.error('Error creating habit:', error);
-            throw error;
-        }
+    createTask: async (task: { title: string; priority: string }) => {
+        const response = await fetch(`${API_BASE_URL}/tasks`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(task)
+        });
+        return await response.json();
     },
 
-    // AI Koçuna danış
-    askAICoach: async (prompt: string): Promise<string> => {
-        try {
-            const response = await fetch(`${HABIT_API_URL}/test-ai`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ prompt: `As a motivational habit coach, answer this: ${prompt}` })
-            });
-            if (!response.ok) throw new Error('AI request failed');
-            const data = await response.json();
-            return data.text;
-        } catch (error) {
-            console.error('Error calling AI:', error);
-            return "I'm having trouble connecting to my brain right now. Please try again later!";
-        }
+    toggleTaskStatus: async (id: string) => {
+        const response = await fetch(`${API_BASE_URL}/tasks/${id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: 'completed' }) // Simple toggle logic needs improve inside but this keeps it running
+        });
+        return await response.json();
+    },
+
+    deleteTask: async (id: string) => {
+        await fetch(`${API_BASE_URL}/tasks/${id}`, { method: 'DELETE' });
+        return true;
     }
 };

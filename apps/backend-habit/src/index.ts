@@ -24,7 +24,7 @@ app.get('/health', (req: Request, res: Response) => {
 });
 
 // Mount Task Routes
-app.use('/api/habitat/tasks', tasksRouter);
+app.use('/tasks', tasksRouter);
 
 // Sample habit endpoints (Legacy)
 app.get('/habits', (req: Request, res: Response) => {
