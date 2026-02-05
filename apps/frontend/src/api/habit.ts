@@ -26,6 +26,7 @@ export interface Event {
     end_date?: string;
     location?: string;
     type: string;
+    status?: 'pending' | 'completed';
 }
 
 // --- API ---
@@ -98,18 +99,24 @@ export const taskApi = {
 // 3. Event API
 export const eventApi = {
     getEvents: async (): Promise<Event[]> => {
-        try {
-            const response = await fetch(`${API_BASE_URL}/events`);
-            if (!response.ok) return [];
-            return await response.json();
-        } catch (e) { return []; }
+        const response = await fetch(`${API_BASE_URL}/events`);
+        return await response.json();
     },
 
-    createEvent: async (event: { title: string; event_date: string; end_date?: string; type: string; location?: string }) => {
+    createEvent: async (event: Omit<Event, 'id' | 'user_id' | 'created_at'>) => {
         const response = await fetch(`${API_BASE_URL}/events`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(event)
+        });
+        return await response.json();
+    },
+
+    updateEvent: async (id: string, updates: Partial<Event>) => {
+        const response = await fetch(`${API_BASE_URL}/events/${id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updates)
         });
         return await response.json();
     },

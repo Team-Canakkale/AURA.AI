@@ -98,8 +98,8 @@ router.post('/action', requireAuth, async (req: Request, res: Response) => {
         // C. EVENT RULE
         else if (action === 'event_attended') {
             if (eventType?.toLowerCase().includes('hackathon')) {
-                xpGained = 5;
-                message = 'Hackathon katılımı! (+5 Su)';
+                xpGained = 10;
+                message = 'Hackathon katılımı! (+10 Su)';
             } else if (eventType?.toLowerCase().includes('staj')) {
                 xpGained = 3;
                 message = 'Staj günü! (+3 Su)';

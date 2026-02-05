@@ -108,6 +108,14 @@ export default function HabitDashboard() {
         loadAllData();
     };
 
+    const handleCompleteEvent = async (ev: Event) => {
+        // Optimistic UI update (optional, but let's just wait for reload)
+        await eventApi.updateEvent(ev.id, { status: 'completed' }); // Update DB
+        await gamificationApi.triggerAction('event_attended', ev.type); // Give XP
+        setTreeRefresh(p => p + 1); // Animate Tree
+        loadAllData(); // Refresh Lists
+    };
+
 
 
     // Sort tasks: Big One first
@@ -174,13 +182,14 @@ export default function HabitDashboard() {
                             <button type="submit">+</button>
                         </form>
 
+                        {/* ACTIVE TASKS */}
                         <div className="list task-list">
-                            {sortedTasks.map(task => (
-                                <div key={task.id} className={`item task-item ${task.priority} ${task.status}`}>
+                            {sortedTasks.filter(t => t.status !== 'completed').map(task => (
+                                <div key={task.id} className={`item task-item ${task.priority}`}>
                                     <div className="task-left">
                                         <input
                                             type="checkbox"
-                                            checked={task.status === 'completed'}
+                                            checked={false}
                                             onChange={() => toggleTask(task)}
                                         />
                                         <span className="task-title">{task.title}</span>
@@ -189,6 +198,28 @@ export default function HabitDashboard() {
                                 </div>
                             ))}
                         </div>
+
+                        {/* COMPLETED TASKS */}
+                        {sortedTasks.filter(t => t.status === 'completed').length > 0 && (
+                            <div className="completed-section">
+                                <h3>Completed Tasks</h3>
+                                <div className="list task-list">
+                                    {sortedTasks.filter(t => t.status === 'completed').map(task => (
+                                        <div key={task.id} className={`item task-item completed ${task.priority}`}>
+                                            <div className="task-left">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={true}
+                                                    onChange={() => toggleTask(task)}
+                                                />
+                                                <span className="task-title">{task.title}</span>
+                                            </div>
+                                            <button onClick={() => handleDeleteTask(task.id)} className="del-btn">×</button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
 
@@ -198,7 +229,7 @@ export default function HabitDashboard() {
                         <h2>📅 Upcoming</h2>
                         <form onSubmit={handleAddEvent} className="event-form-grid">
 
-                            {/* ROW 1: Title & Type */}
+                            {/* ROW 1 */}
                             <div className="form-row">
                                 <input
                                     value={newEventTitle}
@@ -222,7 +253,7 @@ export default function HabitDashboard() {
                                 </select>
                             </div>
 
-                            {/* ROW 2: Date & Location */}
+                            {/* ROW 2 */}
                             <div className="form-row">
                                 <input
                                     type="date"
@@ -256,7 +287,7 @@ export default function HabitDashboard() {
                                 </div>
                             </div>
 
-                            {/* ROW 3: Time Range & Button */}
+                            {/* ROW 3 */}
                             <div className="form-row">
                                 <div className="time-range-group" style={{ flex: 1, display: 'flex', gap: '8px', alignItems: 'center' }}>
                                     <input
@@ -277,22 +308,16 @@ export default function HabitDashboard() {
                                 </div>
                                 <button type="submit" className="add-btn">+</button>
                             </div>
-
                         </form>
-                        <div className="list">
-                            {events.map((ev, i) => (
-                                <div key={i} className="item event-card">
-                                    {/* Left: Date Box */}
-                                    <div className="event-date-box">
-                                        <span className="day">
-                                            {new Date(ev.event_date).getDate()}
-                                        </span>
-                                        <span className="month">
-                                            {new Date(ev.event_date).toLocaleString('tr-TR', { month: 'short' }).toUpperCase()}
-                                        </span>
-                                    </div>
 
-                                    {/* Center: Info */}
+                        {/* UPCOMING EVENTS */}
+                        <div className="list">
+                            {events.filter(e => e.status !== 'completed').map((ev, i) => (
+                                <div key={i} className="item event-card">
+                                    <div className="event-date-box">
+                                        <span className="day">{new Date(ev.event_date).getDate()}</span>
+                                        <span className="month">{new Date(ev.event_date).toLocaleString('tr-TR', { month: 'short' }).toUpperCase()}</span>
+                                    </div>
                                     <div className="event-info">
                                         <div style={{ display: 'flex', alignItems: 'center' }}>
                                             <h3 className="event-title-text">{ev.title}</h3>
@@ -305,26 +330,50 @@ export default function HabitDashboard() {
                                                 🕒 {new Date(ev.event_date).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}
                                                 {ev.end_date && ` - ${new Date(ev.end_date).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}`}
                                             </span>
-
                                             <span className={`countdown-badge ${getTimeLeft(ev.event_date).includes('kaldı') ? 'active' : 'expired'}`}>
                                                 {getTimeLeft(ev.event_date)}
                                             </span>
-
-                                            {ev.location && (
-                                                <span className="event-location">
-                                                    📍 {ev.location}
-                                                </span>
-                                            )}
+                                            {ev.location && <span className="event-location">📍 {ev.location}</span>}
                                         </div>
                                     </div>
-
-                                    {/* Right: Action */}
-                                    <button onClick={() => handleDeleteEvent(ev.id)} className="del-btn">
-                                        ×
-                                    </button>
+                                    <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                                        <button onClick={() => handleCompleteEvent(ev)} className="complete-btn" style={{ background: 'rgba(76, 175, 80, 0.15)', border: '1px solid rgba(76, 175, 80, 0.3)', color: '#4caf50', borderRadius: '6px', width: '28px', height: '28px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9rem' }}>✓</button>
+                                        <button onClick={() => handleDeleteEvent(ev.id)} className="del-btn">×</button>
+                                    </div>
                                 </div>
                             ))}
                         </div>
+
+                        {/* COMPLETED EVENTS */}
+                        {events.filter(e => e.status === 'completed').length > 0 && (
+                            <div className="completed-section">
+                                <h3>Past / Completed</h3>
+                                <div className="list">
+                                    {events.filter(e => e.status === 'completed').map((ev, i) => (
+                                        <div key={i} className="item event-card completed">
+                                            <div className="event-date-box" style={{ opacity: 0.5 }}>
+                                                <span className="day">{new Date(ev.event_date).getDate()}</span>
+                                                <span className="month">{new Date(ev.event_date).toLocaleString('tr-TR', { month: 'short' }).toUpperCase()}</span>
+                                            </div>
+                                            <div className="event-info">
+                                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                    <h3 className="event-title-text">{ev.title}</h3>
+                                                </div>
+                                                <div className="event-meta">
+                                                    <span className="event-time">
+                                                        {new Date(ev.event_date).toLocaleDateString()}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                                                {/* No complete button for completed events */}
+                                                <button onClick={() => handleDeleteEvent(ev.id)} className="del-btn">×</button>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

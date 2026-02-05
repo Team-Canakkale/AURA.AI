@@ -95,4 +95,25 @@ router.delete('/:id', requireAuth, async (req: Request, res: Response) => {
     }
 });
 
+// PATCH /api/habit/events/:id - Update Event
+router.patch('/:id', requireAuth, async (req: Request, res: Response) => {
+    try {
+        const eventId = req.params.id;
+        const updates = req.body;
+
+        const { data, error } = await supabase
+            .from('habitat_events')
+            .update(updates)
+            .eq('id', eventId)
+            .select()
+            .single();
+
+        if (error) throw error;
+        res.json(data);
+    } catch (error: any) {
+        console.error('Error updating event:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
 export default router;

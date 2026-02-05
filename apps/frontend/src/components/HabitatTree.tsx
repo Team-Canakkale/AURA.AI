@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { gamificationApi, TreeState } from '../api/habit';
+import '../App.css';
 
 interface Props {
     refreshKey: number; // Increment this to force reload
@@ -8,24 +9,44 @@ interface Props {
 export default function HabitatTree({ refreshKey }: Props) {
     const [tree, setTree] = useState<TreeState | null>(null);
     const [loading, setLoading] = useState(true);
+    const [showWater, setShowWater] = useState(false);
+    const prevXPRef = useRef<number | null>(null);
 
     useEffect(() => {
-        loadTree();
+        const fetchTree = async () => {
+            try {
+                const data = await gamificationApi.getState();
+                setTree(data);
+
+                if (data) {
+                    // Animasyon Tetikleyici:
+                    // İlk yükleme değilse (prevXP null değilse) VE XP arttıysa
+                    if (prevXPRef.current !== null && data.current_xp > prevXPRef.current) {
+                        setShowWater(true);
+                        setTimeout(() => setShowWater(false), 1500);
+                    }
+
+                    // Mevcut XP'yi kaydet
+                    prevXPRef.current = data.current_xp;
+                }
+
+            } catch (error) {
+                console.error('Error fetching tree:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchTree();
     }, [refreshKey]);
 
-    const loadTree = async () => {
-        const data = await gamificationApi.getState();
-        setTree(data);
-        setLoading(false);
-    };
-
-    if (loading) return <div className="glass-panel" style={{ height: '100px' }}>Loading Habitat...</div>;
+    if (loading) return <div className="glass-panel">Loading habitat...</div>;
     if (!tree) return null;
 
     const nextLevelXP = tree.current_level * 10;
     const progress = Math.min(100, (tree.current_xp / nextLevelXP) * 100);
 
-    // Evolution Logic
+    // Evolution Logic (Emojis)
     let icon = '🌱';
     let title = 'Seedling';
     if (tree.current_level >= 3) { icon = '🌿'; title = 'Sapling'; }
@@ -34,20 +55,34 @@ export default function HabitatTree({ refreshKey }: Props) {
     if (tree.current_level >= 20) { icon = '🌳🏡'; title = 'Habitat'; }
 
     return (
-        <div className="glass-panel habitat-tree-panel" style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+        <div className="glass-panel habitat-tree-panel" style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '1.5rem', position: 'relative', overflow: 'hidden' }}>
+            {/* Background Glow */}
+            <div style={{
+                position: 'absolute', top: '-50%', left: '-20%', width: '200px', height: '200px',
+                background: 'radial-gradient(circle, rgba(76, 175, 80, 0.15) 0%, rgba(0,0,0,0) 70%)',
+                zIndex: 0, pointerEvents: 'none'
+            }} />
+
+            {/* Water Drop Animation */}
+            {showWater && <div className="water-drop">💧</div>}
+
             {/* Left: Icon */}
             <div className="tree-icon-wrapper" style={{
-                fontSize: '3rem',
-                background: 'rgba(255,255,255,0.05)',
+                zIndex: 1,
+                background: 'rgba(255,255,255,0.03)',
                 borderRadius: '50%',
                 width: '80px',
                 height: '80px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '0 0 20px rgba(76, 175, 80, 0.2)'
+                border: '1px solid rgba(255,255,255,0.1)',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+                transition: 'transform 0.3s ease'
             }}>
-                {icon}
+                <span style={{ fontSize: '3rem', display: 'inline-block', filter: 'drop-shadow(0 0 10px rgba(76, 175, 80, 0.3))' }}>
+                    {icon}
+                </span>
             </div>
 
             {/* Middle: Stats */}
