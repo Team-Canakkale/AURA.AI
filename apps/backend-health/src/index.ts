@@ -5,6 +5,7 @@ dotenv.config();
 
 import { supabase } from './lib/supabase';
 import { getGeminiModel } from './lib/gemini';
+import healthRoutes from './routes/healthRoutes';
 
 const app = express();
 const PORT = process.env.PORT || 4003;
@@ -12,6 +13,7 @@ const PORT = process.env.PORT || 4003;
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(healthRoutes);
 
 // Health check endpoint
 app.get('/health', (req: Request, res: Response) => {
