@@ -124,8 +124,202 @@ body {
   .header h1 {
     font-size: 2rem;
   }
-  
+
   .services-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Health Dashboard Styles */
+.health-dashboard {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  color: white;
+}
+
+.health-container {
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.upload-section {
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.file-input {
+  display: none;
+}
+
+.file-label {
+  display: block;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px dashed rgba(255, 255, 255, 0.3);
+  border-radius: 15px;
+  padding: 3rem;
+  margin-bottom: 2rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 1.2rem;
+}
+
+.file-label:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #646cff;
+}
+
+.action-btn {
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 30px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.action-btn:hover {
+  transform: scale(1.05);
+  background: #45a049;
+}
+
+.loading-state {
+  text-align: center;
+  margin: 3rem 0;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #646cff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.error-message {
+  background: rgba(244, 67, 54, 0.1);
+  color: #ff5252;
+  border: 1px solid rgba(244, 67, 54, 0.3);
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 2rem;
+}
+
+/* Results Grid */
+.results-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+  width: 100%;
+  text-align: left;
+}
+
+.metrics-column {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+  padding: 1.5rem;
+  height: fit-content;
+}
+
+.metric-item {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.8rem 0;
+}
+
+.metric-name {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.metric-value {
+  font-weight: bold;
+  color: #64ffda;
+}
+
+.recommendations-box {
+  margin-top: 2rem;
+  background: rgba(100, 108, 255, 0.1);
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+.recommendations-box ul {
+  padding-left: 1.5rem;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.plan-column {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+  padding: 2rem;
+}
+
+.plan-overview {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.food-lists {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.food-list {
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+.food-list.good {
+  background: rgba(76, 175, 80, 0.1);
+  border: 1px solid rgba(76, 175, 80, 0.2);
+}
+
+.food-list.bad {
+  background: rgba(244, 67, 54, 0.1);
+  border: 1px solid rgba(244, 67, 54, 0.2);
+}
+
+.meal-card {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1.5rem;
+  border-radius: 15px;
+  margin-top: 1rem;
+}
+
+.meal-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  align-items: flex-start;
+}
+
+.meal-icon {
+  font-size: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .results-grid {
     grid-template-columns: 1fr;
   }
 }
