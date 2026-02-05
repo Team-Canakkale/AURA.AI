@@ -1,10 +1,10 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+dotenv.config();
+
 import { supabase } from './lib/supabase';
 import { getGeminiModel } from './lib/gemini';
-
-dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 4002;
