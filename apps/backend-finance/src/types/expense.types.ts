@@ -37,6 +37,7 @@ export interface ExpenseAnalysisResult {
   analysisDate: string;
   totalPotentialSavings: number;
   excessiveCategories: CategoryAnalysis[];
+  allCategories: CategoryAnalysis[];
   message: string;
   recommendations: string[];
 }

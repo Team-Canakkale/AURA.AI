@@ -25,72 +25,334 @@ function PdfUploader({ onTransactionsExtracted }: PdfUploaderProps) {
     const categorizeTransaction = (description: string): string => {
         const desc = description.toLowerCase();
 
-        // Groceries - Market alışverişleri
+        // Banking & Finance - Bankacılık ve Finans
+        if (desc.includes('banka') || desc.includes('bank') || desc.includes('iş bankası') ||
+            desc.includes('garanti') || desc.includes('bbva') || desc.includes('akbank') ||
+            desc.includes('yapı kredi') || desc.includes('ykb') || desc.includes('ziraat') ||
+            desc.includes('vakıfbank') || desc.includes('vakıf bank') || desc.includes('halkbank') ||
+            desc.includes('qnb') || desc.includes('finansbank') || desc.includes('teb') ||
+            desc.includes('denizbank') || desc.includes('papara') || desc.includes('iyzico') ||
+            desc.includes('param') || desc.includes('pep ') || desc.includes('moka') ||
+            desc.includes('figopara') || desc.includes('atm') || desc.includes('eft') ||
+            desc.includes('havale') || desc.includes('kredi kartı') || desc.includes('bankamatik')) {
+            return 'Banking & Finance';
+        }
+
+        // Insurance - Sigorta
+        if (desc.includes('sigorta') || desc.includes('insurance') || desc.includes('anadolu sigorta') ||
+            desc.includes('aksigorta') || desc.includes('türkiye sigorta') || desc.includes('allianz') ||
+            desc.includes('ray sigorta') || desc.includes('axa') || desc.includes('mapfre') ||
+            desc.includes('groupama') || desc.includes('güneş sigorta')) {
+            return 'Insurance';
+        }
+
+        // Airlines - Havayolu
+        if (desc.includes('thy') || desc.includes('türk hava yolları') || desc.includes('turkish airlines') ||
+            desc.includes('pegasus') || desc.includes('sunexpress') || desc.includes('ajet') ||
+            desc.includes('uçak') || desc.includes('flight') || desc.includes('airline') ||
+            desc.includes('havayolu') || desc.includes('boarding')) {
+            return 'Airlines';
+        }
+
+        // Cargo & Logistics - Kargo ve Lojistik
+        if (desc.includes('kargo') || desc.includes('cargo') || desc.includes('aras kargo') ||
+            desc.includes('yurtiçi kargo') || desc.includes('mng') || desc.includes('sürat kargo') ||
+            desc.includes('ptt kargo') || desc.includes('hepsijet') || desc.includes('trendyol express') ||
+            desc.includes('reysaş') || desc.includes('netlog') || desc.includes('borusan lojistik') ||
+            desc.includes('ekol') || desc.includes('mars logistics') || desc.includes('lojistik') ||
+            desc.includes('kurye') || desc.includes('teslimat') || desc.includes('delivery')) {
+            return 'Cargo & Logistics';
+        }
+
+
+
+        // E-Commerce - E-Ticaret
+        if (desc.includes('trendyol') || desc.includes('hepsiburada') || desc.includes('n11') ||
+            desc.includes('pazarama') || desc.includes('çiçeksepeti') || desc.includes('gittigidiyor') ||
+            desc.includes('amazon') || desc.includes('aliexpress') || desc.includes('ebay') ||
+            desc.includes('sahibinden') || desc.includes('letgo') || desc.includes('dolap') ||
+            desc.includes('hepsipay')) {
+            return 'E-Commerce';
+        }
+
+        // Software & Technology - Yazılım ve Teknoloji
+        if (desc.includes('logo yazılım') || desc.includes('softtech') || desc.includes('cybersoft') ||
+            desc.includes('havelsan') || desc.includes('stm ') || desc.includes('innova') ||
+            desc.includes('medianova') || desc.includes('microsoft') || desc.includes('adobe') ||
+            desc.includes('google cloud') || desc.includes('aws ') || desc.includes('azure') ||
+            desc.includes('github') || desc.includes('domain') || desc.includes('hosting') ||
+            desc.includes('yazılım') || desc.includes('software') || desc.includes('saas')) {
+            return 'Software & Technology';
+        }
+
+        // Personal Care & Beauty - Kozmetik ve Kişisel Bakım
+        if (desc.includes('watsons') || desc.includes('gratis') || desc.includes('rossmann') ||
+            desc.includes('sephora') || desc.includes('mac cosmetics') || desc.includes('the body shop') ||
+            desc.includes('yves rocher') || desc.includes('l\'oreal') || desc.includes('loreal') ||
+            desc.includes('flormar') || desc.includes('golden rose') || desc.includes('pastel') ||
+            desc.includes('essence') || desc.includes('catrice') || desc.includes('nyx') ||
+            desc.includes('maybelline') || desc.includes('kozmetik') || desc.includes('cosmetics') ||
+            desc.includes('parfüm') || desc.includes('perfume') || desc.includes('makyaj') ||
+            desc.includes('makeup') || desc.includes('beauty') || desc.includes('kişisel bakım')) {
+            return 'Personal Care & Beauty';
+        }
+
+        // Groceries - Market alışverişleri (perakende)
         if (desc.includes('market') || desc.includes('migros') || desc.includes('carrefour') ||
             desc.includes('a101') || desc.includes('bim') || desc.includes('şok') ||
-            desc.includes('a 101') || desc.includes('a-101')) {
+            desc.includes('a 101') || desc.includes('a-101') ||
+            desc.includes('file') || desc.includes('makro') || desc.includes('metro market') ||
+            desc.includes('kipa') || desc.includes('real') || desc.includes('bauhaus') ||
+            desc.includes('praktiker') || desc.includes('koçtaş') || desc.includes('tekzen') ||
+            desc.includes('hakmar') || desc.includes('onur market') || desc.includes('çağrı market') ||
+            desc.includes('mopaş') || desc.includes('biçen') || desc.includes('happy center') ||
+            desc.includes('kim market') || desc.includes('rammar') || desc.includes('snowy') ||
+            desc.includes('altun market') || desc.includes('özkuruşlar') || desc.includes('sarıyer market') ||
+            desc.includes('namlı') || desc.includes('gurme') || desc.includes('şarküteri') ||
+            desc.includes('manav') || desc.includes('kasap') || desc.includes('bakkal') ||
+            desc.includes('büfe') || desc.includes('tekel') ||
+            desc.includes('moneypay') || desc.includes('migrosone') || desc.includes('getir perakende') ||
+            desc.includes('getir büyük') || desc.includes('getir su') || desc.includes('getir market')) {
             return 'Groceries';
         }
 
-        // Dining - Yemek ve içecek
-        if (desc.includes('restaurant') || desc.includes('cafe') || desc.includes('starbucks') ||
-            desc.includes('mcdonald') || desc.includes('burger') || desc.includes('pizza') ||
-            desc.includes('kahve') || desc.includes('restoran') || desc.includes('lokanta') ||
-            desc.includes('yemek') || desc.includes('kfc') || desc.includes('popeyes')) {
-            return 'Dining';
+        // Food & Beverage - Yemek ve içecek servisleri
+        if (desc.includes('yemeksepeti') || desc.includes('getir yemek') || desc.includes('getir') ||
+            desc.includes('sedat arslan') || desc.includes('trendyol yemek') ||
+            desc.includes('migros yemek') || desc.includes('migros hemen') ||
+            desc.includes('tıkla gelsin') || desc.includes('banabi') ||
+            desc.includes('restaurant') || desc.includes('restoran') || desc.includes('lokanta') ||
+            desc.includes('mcdonald') || desc.includes('burger king') || desc.includes('burger') ||
+            desc.includes('pizza') || desc.includes('kfc') || desc.includes('popeyes') ||
+            desc.includes('dominos') || desc.includes('pizza hut') || desc.includes('sbarro') ||
+            desc.includes('arby') || desc.includes('subway') || desc.includes('tavuk dünyası') ||
+            desc.includes('usta dönerci') || desc.includes('köfteci') || desc.includes('kebap') ||
+            desc.includes('steakhouse') || desc.includes('nusret') || desc.includes('nusr-et') ||
+            desc.includes('günaydın') || desc.includes('bigchefs') || desc.includes('happy moon') ||
+            desc.includes('midpoint') || desc.includes('hd iskender') || desc.includes('d.ream') ||
+            desc.includes('mangal') || desc.includes('balık') || desc.includes('fish') ||
+            desc.includes('sushi') || desc.includes('chinese') || desc.includes('italian') ||
+            desc.includes('mexican') || desc.includes('yemek') || desc.includes('dining') ||
+            desc.includes('carl\'s jr') || desc.includes('shake shack') || desc.includes('midyeci ahmet') ||
+            desc.includes('köfteci yusuf') || desc.includes('baydöner') || desc.includes('kasap döner') ||
+            desc.includes('green salads') || desc.includes('cookshop') || desc.includes('huqqa') ||
+            desc.includes('bigmann') || desc.includes('the hunger') || desc.includes('numnum') ||
+            desc.includes('kırıntı') || desc.includes('sushico') || desc.includes('le pain quotidien') ||
+            desc.includes('eataly') || desc.includes('zomato') || desc.includes('ocakbaşı') ||
+            desc.includes('meyhane') || desc.includes('pide') || desc.includes('lahmacun') ||
+            desc.includes('food') || desc.includes('delivery') || desc.includes('fuudy') ||
+            desc.includes('sodexo') || desc.includes('multinet') || desc.includes('setcard') ||
+            desc.includes('ticket restaurant') || desc.includes('metropol') || desc.includes('edenred') ||
+            desc.includes('kantin') || desc.includes('kafeterya')) {
+            return 'Foods';
         }
 
-        // Transportation - Ulaşım
-        if (desc.includes('uber') || desc.includes('taxi') || desc.includes('taksi') ||
+        // Cafes - Kafeler
+        if (desc.includes('cafe') || desc.includes('kahve') || desc.includes('starbucks') ||
+            desc.includes('kahve dünyası') || desc.includes('espresso lab') ||
+            desc.includes('coffee') || desc.includes('caribou') || desc.includes('nero') ||
+            desc.includes('gloria jeans') || desc.includes('tchibo') || desc.includes('mado') ||
+            desc.includes('simit sarayı') || desc.includes('kahveci') || desc.includes('kahvaltı') ||
+            desc.includes('arabica') || desc.includes('viyana kahvesi') || desc.includes('federal coffee') ||
+            desc.includes('kronotrop') || desc.includes('petra') || desc.includes('moc ') ||
+            desc.includes('ministry of coffee') || desc.includes('barns') || desc.includes('roastery') ||
+            desc.includes('bakery') || desc.includes('fırın') || desc.includes('pastane') ||
+            desc.includes('güllüoğlu') || desc.includes('hafız mustafa') || desc.includes('divan pastane') ||
+            desc.includes('pelit') || desc.includes('saray muhallebicisi') || desc.includes('özsüt') ||
+            desc.includes('starbuc') || desc.includes('bucks') || desc.includes('sütlü cup') ||
+            desc.includes('yakomoz') || desc.includes('börek') || desc.includes('gözleme')) {
+            return 'Cafes';
+        }
+
+
+
+        // Travel & Accommodation - Seyahat ve Konaklama
+        if (desc.includes('hotel') || desc.includes('otel') || desc.includes('rixos') ||
+            desc.includes('divan') || desc.includes('dedeman') || desc.includes('titanic hotel') ||
+            desc.includes('barut') || desc.includes('maxx royal') || desc.includes('hilton') ||
+            desc.includes('marriott') || desc.includes('sheraton') || desc.includes('radisson') ||
+            desc.includes('hyatt') || desc.includes('swissotel') || desc.includes('intercontinental') ||
+            desc.includes('kempinski') || desc.includes('ritz carlton') || desc.includes('four seasons') ||
+            desc.includes('conrad') || desc.includes('doubletree') || desc.includes('crowne plaza') ||
+            desc.includes('ramada') || desc.includes('novotel') || desc.includes('ibis') ||
+            desc.includes('mercure') || desc.includes('holiday inn') || desc.includes('best western') ||
+            desc.includes('hostel') || desc.includes('airbnb') || desc.includes('booking') ||
+            desc.includes('hotels.com') || desc.includes('trivago') || desc.includes('expedia') ||
+            desc.includes('agoda') || desc.includes('priceline') || desc.includes('kayak') ||
+            desc.includes('konaklama') || desc.includes('accommodation') || desc.includes('resort') ||
+            desc.includes('ets tur') || desc.includes('jolly tur') || desc.includes('setur') ||
+            desc.includes('tatilsepeti') || desc.includes('tatilbudur') || desc.includes('coral travel') ||
+            desc.includes('pronto') || desc.includes('anı tur') || desc.includes('fez travel') ||
+            desc.includes('gezinomi') || desc.includes('odamax') || desc.includes('otelz') ||
+            desc.includes('acente') || desc.includes('travel agency') ||
+            desc.includes('tur ') || desc.includes('tour ') || desc.includes('turizm') ||
+            desc.includes('obilet') || desc.includes('bilet.com') || desc.includes('enuygun') ||
+            desc.includes('turna.com') || desc.includes('biletall') || desc.includes('aerobilet')) {
+            return 'Travel & Accommodation';
+        }
+
+        // Transportation - Ulaşım (toplu taşıma + yakıt + araç kiralama + otobüs bileti)
+        // DİKKAT: "taksi" kelimesi "taksit" içinde geçtiği için "taksi " veya ".taksi" şeklinde aranmalı
+        if (desc.includes('uber') || desc.includes('taxi') || desc.includes('taksi ') || desc.includes('bi taksi') ||
+            desc.includes('bitaksi') || desc.endsWith('taksi') ||
             desc.includes('metro') || desc.includes('bus') || desc.includes('otobüs') ||
+            desc.includes('toplu taşıma') || desc.includes('istanbulkart') ||
+            desc.includes('akbil') || desc.includes('ulaşım') || desc.includes('tramvay') ||
+            desc.includes('metrobüs') || desc.includes('dolmuş') || desc.includes('minibüs') ||
+            desc.includes('feribot') || desc.includes('vapur') || desc.includes('deniz otobüsü') ||
+            desc.includes('ido') || desc.includes('iett') || desc.includes('marmaray') ||
+            desc.includes('kamil koç') || desc.includes('metro turizm') || desc.includes('pamukkale') ||
+            desc.includes('varan') || desc.includes('ulusoy') || desc.includes('otobüs bileti') ||
+            desc.includes('bus ticket') || desc.includes('şehirlerarası') ||
+            desc.includes('toplu tasima') || desc.includes('toplu tasıma') || desc.includes('ego ') ||
             desc.includes('benzin') || desc.includes('akaryakıt') || desc.includes('shell') ||
             desc.includes('opet') || desc.includes('petrol') || desc.includes('po ') ||
-            desc.includes('bp ')) {
+            desc.includes('bp ') || desc.includes('total') || desc.includes('aytemiz') ||
+            desc.includes('alpet') || desc.includes('moil') || desc.includes('lukoil') ||
+            desc.includes('petrol ofisi') || desc.includes('fuel') || desc.includes('gas station') ||
+            desc.includes('starpet') || desc.includes('kadoil') || desc.includes('tpal') ||
+            desc.includes('garenta') || desc.includes('avis') || desc.includes('budget') ||
+            desc.includes('enterprise') || desc.includes('sixt') || desc.includes('europcar') ||
+            desc.includes('moov') || desc.includes('tiktak') || desc.includes('zipcar') ||
+            desc.includes('getir araç') || desc.includes('yolcu360') || desc.includes('obilet') ||
+            desc.includes('hgs') || desc.includes('ogs') || desc.includes('otoyol') ||
+            desc.includes('köprü') || desc.includes('gişe') || desc.includes('ispark') || desc.includes('bi taksi')) {
             return 'Transportation';
-        }
-
-        // Entertainment - Eğlence
-        if (desc.includes('cinema') || desc.includes('sinema') || desc.includes('netflix') ||
-            desc.includes('spotify') || desc.includes('game') || desc.includes('oyun') ||
-            desc.includes('bilet') || desc.includes('ticket')) {
-            return 'Entertainment';
-        }
-
-        // Shopping - Alışveriş
-        if (desc.includes('zara') || desc.includes('h&m') || desc.includes('mango') ||
-            desc.includes('lcw') || desc.includes('koton') || desc.includes('defacto') ||
-            desc.includes('waikiki') || desc.includes('mavi') || desc.includes('colin') ||
-            desc.includes('boyner') || desc.includes('marks') || desc.includes('spencer')) {
-            return 'Shopping';
-        }
-
-        // Utilities - Faturalar
-        if (desc.includes('electric') || desc.includes('elektrik') || desc.includes('su ') ||
-            desc.includes('doğalgaz') || desc.includes('internet') || desc.includes('fatura') ||
-            desc.includes('bill') || desc.includes('ttnet') || desc.includes('turkcell') ||
-            desc.includes('vodafone') || desc.includes('türk telekom')) {
-            return 'Utilities';
         }
 
         // Healthcare - Sağlık
         if (desc.includes('eczane') || desc.includes('pharmacy') || desc.includes('hospital') ||
             desc.includes('hastane') || desc.includes('doktor') || desc.includes('klinik') ||
-            desc.includes('sağlık') || desc.includes('health')) {
+            desc.includes('sağlık') || desc.includes('health') || desc.includes('tıp') ||
+            desc.includes('diş') || desc.includes('dental') || desc.includes('göz') ||
+            desc.includes('optik') || desc.includes('laboratuvar') || desc.includes('poliklinik') ||
+            desc.includes('medical') || desc.includes('acıbadem') || desc.includes('memorial') ||
+            desc.includes('medicana') || desc.includes('florence nightingale') || desc.includes('liv') ||
+            desc.includes('medical park') || desc.includes('mlp care') || desc.includes('güven hastanesi') ||
+            desc.includes('dünyagöz') || desc.includes('biruni laboratuvar') ||
+            desc.includes('medipol') || desc.includes('kolan') || desc.includes('bezmialem') ||
+            desc.includes('başkent') || desc.includes('yeditepe hastane') || desc.includes('koç hastane') ||
+            desc.includes('amerikan hastanesi') || desc.includes('anadolu sağlık') || desc.includes('bayındır') ||
+            desc.includes('medisis') || desc.includes('lokman hekim') || desc.includes('medline')) {
             return 'Healthcare';
         }
 
         // Education - Eğitim
         if (desc.includes('school') || desc.includes('okul') || desc.includes('university') ||
             desc.includes('üniversite') || desc.includes('course') || desc.includes('kurs') ||
-            desc.includes('eğitim') || desc.includes('kitap') || desc.includes('book')) {
+            desc.includes('eğitim') || desc.includes('bahçeşehir') || desc.includes('doğa koleji') ||
+            desc.includes('ted koleji') || desc.includes('bilfen') || desc.includes('koç üniversite') ||
+            desc.includes('sabancı') || desc.includes('bilkent') || desc.includes('yeditepe') ||
+            desc.includes('özyeğin') || desc.includes('boğaziçi') || desc.includes('metu') ||
+            desc.includes('odtü') || desc.includes('istanbul üniversite') ||
+            desc.includes('kunduz') || desc.includes('vitamin eğitim') || desc.includes('raunt') ||
+            desc.includes('kırtasiye') || desc.includes('udemy') || desc.includes('coursera') ||
+            desc.includes('skillshare') || desc.includes('masterclass') || desc.includes('linkedin learning') ||
+            desc.includes('pluralsight') || desc.includes('dershane') || desc.includes('etüt') ||
+            desc.includes('özel ders') || desc.includes('academy') || desc.includes('akademi')) {
             return 'Education';
         }
 
-        // Travel - Seyahat
-        if (desc.includes('hotel') || desc.includes('otel') || desc.includes('flight') ||
-            desc.includes('uçak') || desc.includes('booking') || desc.includes('thy') ||
-            desc.includes('pegasus') || desc.includes('anadolujet') || desc.includes('hostel')) {
-            return 'Travel';
+        // Culture & Arts - Kültür ve Sanat
+        if (desc.includes('kitap') || desc.includes('book') || desc.includes('d&r') ||
+            desc.includes('idefix') || desc.includes('remzi') ||
+            desc.includes('kitapyurdu') || desc.includes('hepsiburada kitap') || desc.includes('nadir kitap') ||
+            desc.includes('konser') || desc.includes('concert') || desc.includes('biletix') ||
+            desc.includes('passo') || desc.includes('bubilet') || desc.includes('mobilet') ||
+            desc.includes('tiyatro') || desc.includes('theatre') || desc.includes('theater') ||
+            desc.includes('müze') || desc.includes('museum') || desc.includes('galeri') ||
+            desc.includes('gallery') || desc.includes('sergi') || desc.includes('exhibition') ||
+            desc.includes('opera') || desc.includes('bale') || desc.includes('ballet') ||
+            desc.includes('filarmoni') || desc.includes('philharmonic') || desc.includes('orkestra') ||
+            desc.includes('sanat') || desc.includes(' art ') || desc.includes('kültür') ||
+            desc.includes('culture') || desc.includes('festival') || desc.includes('etkinlik')) {
+            return 'Culture & Arts';
+        }
+
+        // Media & Entertainment - Medya ve Dijital Eğlence
+        if (desc.includes('cinema') || desc.includes('sinema') || desc.includes('cinemaximum') ||
+            desc.includes('cinetech') || desc.includes('prestige') || desc.includes('afm') ||
+            desc.includes('cgv') || desc.includes('cinepol') || desc.includes('netflix') ||
+            desc.includes('spotify') || desc.includes('youtube premium') || desc.includes('youtube') ||
+            desc.includes('apple music') || desc.includes('apple tv') || desc.includes('amazon prime') ||
+            desc.includes('disney') || desc.includes('disney+') || desc.includes('hbo') ||
+            desc.includes('blutv') || desc.includes('exxen') || desc.includes('gain') ||
+            desc.includes('tv+') || desc.includes('tivibu') || desc.includes('bein connect') ||
+            desc.includes('digiturk') || desc.includes('todtv') || desc.includes('tod tv') ||
+            desc.includes('beinsports') || desc.includes('d-smart') || desc.includes('saran sport') ||
+            desc.includes('acun medya') || desc.includes('ay yapım') || desc.includes('tims&b') ||
+            desc.includes('demirören') || desc.includes('doğuş yayın') ||
+            desc.includes('game') || desc.includes('oyun') || desc.includes('ps plus') ||
+            desc.includes('playstation') || desc.includes('xbox') || desc.includes('xbox game pass') ||
+            desc.includes('steam') || desc.includes('epic games') || desc.includes('origin') ||
+            desc.includes('ubisoft') || desc.includes('ea play') || desc.includes('nintendo') ||
+            desc.includes('twitch') || desc.includes('patreon')) {
+            return 'Media & Entertainment';
+        }
+
+        // Telecommunications - Telekomünikasyon
+        if (desc.includes('turkcell') || desc.includes('türk telekom') || desc.includes('vodafone') ||
+            desc.includes('superonline') || desc.includes('turknet') || desc.includes('türknet') ||
+            desc.includes('millenicom') || desc.includes('ttnet') || desc.includes('kablonet') ||
+            desc.includes('telefon') || desc.includes('mobile') || desc.includes('gsm') ||
+            desc.includes('hat ') || desc.includes('fatura') || desc.includes('internet')) {
+            return 'Telecommunications';
+        }
+
+        // Utilities - Faturalar (Elektrik, Su, Doğalgaz)
+        if (desc.includes('electric') || desc.includes('elektrik') || desc.includes('su ') ||
+            desc.includes('doğalgaz') || desc.includes('fatura') || desc.includes('bill') ||
+            desc.includes('digiturk') || desc.includes('dsmart') ||
+            desc.includes('igdaş') || desc.includes('akedaş') || desc.includes('bedaş') ||
+            desc.includes('ayedaş') || desc.includes('iski') || desc.includes('aski') ||
+            desc.includes('utility') || desc.includes('water') || desc.includes('gas') ||
+            desc.includes('enerjisa') || desc.includes('ck boğaziçi') || desc.includes('ck akdeniz') ||
+            desc.includes('gediz') || desc.includes('uludağ') || desc.includes('başkent elektrik') ||
+            desc.includes('toroslar') || desc.includes('aras elektrik') || desc.includes('dicle elektrik') ||
+            desc.includes('vangölü') || desc.includes('çoruh') || desc.includes('fırat elektrik') ||
+            desc.includes('çamlıbel') || desc.includes('meram') || desc.includes('osmangazi') ||
+            desc.includes('sakarya elektrik') || desc.includes('yeşilırmak') || desc.includes('akdeniz elektrik') ||
+            desc.includes('aydem') || desc.includes('kayseri elektrik') || desc.includes('izsu') ||
+            desc.includes('buski') || desc.includes('teski') || desc.includes('deski') || desc.includes('meski')) {
+            return 'Utilities';
+        }
+
+        // Jewelry & Accessories - Takı ve Aksesuar
+        if (desc.includes('pandora') || desc.includes('swarovski') || desc.includes('atasay') ||
+            desc.includes('zen pırlanta') || desc.includes('zen diamond') || desc.includes('altınbaş') ||
+            desc.includes('koçak') || desc.includes('blue diamond') || desc.includes('so chic') ||
+            desc.includes('ariş') || desc.includes('gülaylar') || desc.includes('kuyumcu') ||
+            desc.includes('mücevher') || desc.includes('gold') || desc.includes('pırlanta') ||
+            desc.includes('gümüş') || desc.includes('silver') || desc.includes('takı') ||
+            desc.includes('aksesuar') || desc.includes('saat') || desc.includes('watch') ||
+            desc.includes('saat&saat') || desc.includes('welch') || desc.includes('assos') ||
+            desc.includes('kaş') || desc.includes('baget')) {
+            return 'Jewelry & Accessories';
+        }
+
+        // Shopping - Alışveriş (giyim ve genel)
+        if (desc.includes('zara') || desc.includes('h&m') || desc.includes('mango') ||
+            desc.includes('lcw') || desc.includes('koton') || desc.includes('defacto') ||
+            desc.includes('waikiki') || desc.includes('mavi') || desc.includes('colin') ||
+            desc.includes('boyner') || desc.includes('marks') || desc.includes('spencer') ||
+            desc.includes('pull&bear') || desc.includes('bershka') || desc.includes('stradivarius') ||
+            desc.includes('massimo dutti') || desc.includes('network') || desc.includes('vakko') ||
+            desc.includes('beymen') || desc.includes('adidas') || desc.includes('nike') ||
+            desc.includes('puma') || desc.includes('decathlon') || desc.includes('columbia') ||
+            desc.includes('north face') || desc.includes('shopping') || desc.includes('alışveriş') ||
+            desc.includes('mudo') || desc.includes('yargıcı') || desc.includes('ipekyol') ||
+            desc.includes('twist') || desc.includes('desa') || desc.includes('derimod') ||
+            desc.includes('kemal tanca') || desc.includes('flo') || desc.includes('instreet') ||
+            desc.includes('skechers') || desc.includes('suwen') || desc.includes('penti') ||
+            desc.includes('dagi') || desc.includes('teknosa') || desc.includes('mediamarkt') ||
+            desc.includes('vatan bilgisayar') || desc.includes('apple store') || desc.includes('samsung') ||
+            desc.includes('troy') || desc.includes('gürgençler') || desc.includes('huawei') ||
+            desc.includes('xiaomi') || desc.includes('dyson') || desc.includes('tefal') ||
+            desc.includes('karaca') || desc.includes('english home') || desc.includes('madame coco') ||
+            desc.includes('ikea') || desc.includes('koçtaş') || desc.includes('vivense') ||
+            desc.includes('eren perakende') || desc.includes('17 burda') || desc.includes('avm') ||
+            desc.includes('mall') || desc.includes('center') || desc.includes('lc waikiki')) {
+            return 'Shopping';
         }
 
         return 'Other';
@@ -123,20 +385,39 @@ function PdfUploader({ onTransactionsExtracted }: PdfUploaderProps) {
             date = `${dateMatch[3]}-${dateMatch[2]}-${dateMatch[1]}`;
         }
 
-        // Tutar bul
-        for (const pattern of amountPatterns) {
-            const match = line.match(pattern);
-            if (match) {
-                let amountStr = match[1];
-                // Türk formatı (1.234,56) -> (1234.56)
-                amountStr = amountStr.replace(/\./g, '').replace(',', '.');
-                amount = parseFloat(amountStr);
-                if (amount > 0) break;
+        // Tutar bulma mantığı güncellendi - Taksitli işlemleri doğru yakalamak için
+        // Tüm olası tutar formatlarını bul (Örn: 1.234,56 veya 123,45)
+        const allAmountMatches = [...line.matchAll(/(\d{1,3}(?:\.\d{3})*,\d{2})/g)];
+
+        if (allAmountMatches.length > 0) {
+            // Bulunan tüm tutarları sayıya çevir
+            const amounts = allAmountMatches.map(match => {
+                const valStr = match[1].replace(/\./g, '').replace(',', '.');
+                return parseFloat(valStr);
+            });
+
+            // Taksitli işlem kontrolü
+            const isInstallment = /taksit|taksidi/i.test(line);
+
+            if (isInstallment && amounts.length >= 2) {
+                // Taksitli işlemlerde genelde format: "TOPLAM_BORÇ ... TAKSİT_TUTARI" şeklindedir.
+                // Satırın en sonundaki tutarı (taksit tutarını) alıyoruz.
+                // Örn: "7.180,45 TL İşlemin 5/6 Taksidi 1.196,74" -> 1.196,74 alınmalı
+                amount = amounts[amounts.length - 1];
+            } else {
+                // Taksit değilse veya tek tutar varsa, yine satırın sonundakini tercih et
+                // Çünkü bazen satır başında tarih veya başka sayılar karışabilir
+                amount = amounts[amounts.length - 1];
+            }
+
+            // İade kontrolü
+            if (amount !== null && /iade|İade/i.test(line)) {
+                amount = amount * -1;
             }
         }
 
         // Açıklama bul (tarih ile tutar arasındaki kısım)
-        if (date && amount && amount > 0) {
+        if (date && amount !== null && amount !== 0) {
             // Tarihi kaldır
             let cleanLine = line.replace(datePattern, '').trim();
 
@@ -149,6 +430,33 @@ function PdfUploader({ onTransactionsExtracted }: PdfUploaderProps) {
             cleanLine = cleanLine.replace(/İşlemin\s+\d+\/\d+\s+Taksiti/gi, '').trim();
 
             description = cleanLine;
+
+            // Ekstre özet bilgilerini ve başlıkları filtrele (İşlem olmayan satırlar)
+            const lowerDesc = description.toLowerCase();
+            if (lowerDesc.includes('nakit avans') ||
+                lowerDesc.includes('dönem borcu') ||
+                lowerDesc.includes('son ödeme tarihi') ||
+                lowerDesc.includes('hesap kesim') ||
+                lowerDesc.includes('kullanılabilir limit') ||
+                lowerDesc.includes('toplam bankkart') ||
+                lowerDesc.includes('asgari ödeme') ||
+                lowerDesc.includes('devreden bakiye') ||
+                lowerDesc.includes('toplam borç') ||
+                lowerDesc.includes('limit artış') ||
+                lowerDesc.includes('sayın müşteri') ||
+                lowerDesc.includes('ekstre') ||
+                lowerDesc.includes('toplam tutar') ||
+                lowerDesc.includes('transferler') ||
+                lowerDesc.includes('ödemeler') ||
+                lowerDesc.includes('faiz ve ücretler') ||
+                lowerDesc.includes('taksitli işlemler') ||
+                lowerDesc.includes('ödeme-teşekkür ederiz') ||
+                lowerDesc.includes('bankkart lira ile ödeme') ||
+                lowerDesc.includes('bsmv') ||
+                lowerDesc.includes('kkdf') ||
+                lowerDesc.includes('faiz')) {
+                return null;
+            }
 
             // Eğer açıklama çok kısa veya boşsa, skip et
             if (description.length < 3) {
@@ -285,35 +593,44 @@ function PdfUploader({ onTransactionsExtracted }: PdfUploaderProps) {
     return (
         <div className="pdf-uploader">
             <div className="upload-header">
-                <h3>📄 Upload Bank Statement (PDF)</h3>
-                <p className="upload-subtitle">Upload your bank statement PDF to automatically extract transactions</p>
+                <h3>📄 Upload Bank Statement</h3>
             </div>
 
-            <div className="upload-area">
-                <input
-                    type="file"
-                    id="pdf-upload"
-                    accept=".pdf"
-                    onChange={handleFileUpload}
-                    disabled={uploading}
-                    style={{ display: 'none' }}
-                />
-                <label htmlFor="pdf-upload" className={`upload-label ${uploading ? 'uploading' : ''}`}>
-                    {uploading ? (
-                        <>
+            <div className="uploader-row">
+                {/* Sol: Upload Alanı (Kare) */}
+                <div className="upload-area">
+                    <input
+                        type="file"
+                        id="pdf-upload"
+                        accept=".pdf"
+                        onChange={handleFileUpload}
+                        disabled={uploading}
+                        style={{ display: 'none' }}
+                    />
+                    <label htmlFor="pdf-upload" className={`upload-label ${uploading ? 'uploading' : ''}`}>
+                        {uploading ? (
                             <div className="upload-spinner"></div>
-                            <span>Processing PDF...</span>
-                        </>
-                    ) : (
-                        <>
-                            <div className="upload-icon">📤</div>
-                            <span className="upload-text">
-                                {fileName ? `Selected: ${fileName}` : 'Click to upload PDF'}
-                            </span>
-                            <span className="upload-hint">Supports Turkish bank statements</span>
-                        </>
-                    )}
-                </label>
+                        ) : (
+                            <>
+                                <div className="upload-icon">📤</div>
+                                <span className="upload-text-small">
+                                    {fileName ? 'Change PDF' : 'Select PDF'}
+                                </span>
+                            </>
+                        )}
+                    </label>
+                    {fileName && <div className="file-name-display">{fileName}</div>}
+                </div>
+
+                {/* Sağ: Bilgi Alanı */}
+                <div className="upload-info">
+                    <h4>💡 Supported Formats</h4>
+                    <ul>
+                        <li>Garanti, İş, Akbank, etc.</li>
+                        <li>Format: DD/MM/YYYY</li>
+                        <li>Amount: 1.234,56 TL</li>
+                    </ul>
+                </div>
             </div>
 
             {error && (
@@ -322,15 +639,6 @@ function PdfUploader({ onTransactionsExtracted }: PdfUploaderProps) {
                     <p>{error}</p>
                 </div>
             )}
-
-            <div className="upload-info">
-                <h4>💡 Supported Formats:</h4>
-                <ul>
-                    <li>Turkish bank statements (Garanti, İş Bankası, Akbank, etc.)</li>
-                    <li>Date formats: DD/MM/YYYY, DD.MM.YYYY, YYYY-MM-DD</li>
-                    <li>Amount formats: 1.234,56 TL or 1,234.56 TL</li>
-                </ul>
-            </div>
         </div>
     );
 }

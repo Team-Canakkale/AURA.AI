@@ -40,8 +40,11 @@ export class ExpenseAnalysisService {
         // Step 2: Calculate averages from historical data (or mock data)
         const historicalAverages = this.getHistoricalAverages(categorySpending);
 
-        // Step 3: Detect anomalies (>20% excess spending)
-        const anomalies = this.detectAnomalies(categorySpending, historicalAverages);
+        // Step 3: Analyze all categories
+        const allAnalysis = this.analyzeCategories(categorySpending, historicalAverages);
+
+        // Filter anomalies (>20% total spending)
+        const anomalies = allAnalysis.filter(c => c.isExcessive);
 
         // Step 4: Calculate total potential savings
         const totalSavings = anomalies.reduce((sum, a) => sum + a.potentialSavings, 0);
@@ -53,6 +56,7 @@ export class ExpenseAnalysisService {
             analysisDate: new Date().toISOString(),
             totalPotentialSavings: totalSavings,
             excessiveCategories: anomalies,
+            allCategories: allAnalysis,
             message: this.generateSummaryMessage(anomalies, totalSavings),
             recommendations
         };
@@ -103,36 +107,43 @@ export class ExpenseAnalysisService {
     }
 
     /**
-     * Detects anomalies: spending >20% above historical average
+     * Analyzes all categories against the 20% total spending rule
      */
-    private detectAnomalies(
+    private analyzeCategories(
         currentSpending: Map<string, CategorySpending>,
-        historicalAverages: Map<string, number>
+        _historicalAverages?: Map<string, number>
     ): CategoryAnalysis[] {
-        const anomalies: CategoryAnalysis[] = [];
-        const THRESHOLD_PERCENTAGE = 20; // 20% excess triggers anomaly
+        const analysisResults: CategoryAnalysis[] = [];
+        const PERCENTAGE_LIMIT = 0.20; // 20% limit
 
-        currentSpending.forEach((spending, category) => {
-            const average = historicalAverages.get(category) || spending.totalAmount;
-            const percentageChange = ((spending.totalAmount - average) / average) * 100;
-            const isExcessive = percentageChange > THRESHOLD_PERCENTAGE;
-
-            if (isExcessive) {
-                const potentialSavings = spending.totalAmount - average;
-
-                anomalies.push({
-                    category,
-                    averageMonthlySpending: average,
-                    currentMonthSpending: spending.totalAmount,
-                    percentageChange: Math.round(percentageChange * 100) / 100,
-                    isExcessive: true,
-                    potentialSavings: Math.round(potentialSavings * 100) / 100
-                });
-            }
+        // 1. Calculate Total Spending
+        let totalMonthlySpending = 0;
+        currentSpending.forEach(spending => {
+            totalMonthlySpending += spending.totalAmount;
         });
 
-        // Sort by potential savings (highest first)
-        return anomalies.sort((a, b) => b.potentialSavings - a.potentialSavings);
+        // 2. Define Threshold (20% of Total)
+        const thresholdAmount = totalMonthlySpending * PERCENTAGE_LIMIT;
+
+        currentSpending.forEach((spending, category) => {
+            const isExcessive = spending.totalAmount > thresholdAmount;
+
+            // Calculate potential savings only if excessive
+            const potentialSavings = isExcessive ? (spending.totalAmount - thresholdAmount) : 0;
+            const percentageOfTotal = (spending.totalAmount / totalMonthlySpending) * 100;
+
+            analysisResults.push({
+                category,
+                averageMonthlySpending: thresholdAmount, // Recommended Limit
+                currentMonthSpending: spending.totalAmount,
+                percentageChange: Math.round(percentageOfTotal * 100) / 100, // % of Total
+                isExcessive: isExcessive,
+                potentialSavings: Math.round(potentialSavings * 100) / 100
+            });
+        });
+
+        // Sort by spending amount (highest first)
+        return analysisResults.sort((a, b) => b.currentMonthSpending - a.currentMonthSpending);
     }
 
     /**
@@ -140,11 +151,11 @@ export class ExpenseAnalysisService {
      */
     private generateRecommendations(anomalies: CategoryAnalysis[]): string[] {
         return anomalies.map(anomaly => {
-            const currency = 'TL'; // Default currency
-            return `You spent ${anomaly.currentMonthSpending.toLocaleString()} ${currency} on ${anomaly.category}, ` +
-                `usually you spend ${anomaly.averageMonthlySpending.toLocaleString()} ${currency}. ` +
-                `Potential saving: ${anomaly.potentialSavings.toLocaleString()} ${currency} ` +
-                `(+${anomaly.percentageChange.toFixed(1)}%)`;
+            const currency = 'TL';
+            return `You spent ${anomaly.currentMonthSpending.toLocaleString()} ${currency} on ${anomaly.category} ` +
+                `(${anomaly.percentageChange.toFixed(1)}% of total). ` +
+                `This exceeds the recommended 20% limit (${anomaly.averageMonthlySpending.toLocaleString()} ${currency}). ` +
+                `Potential saving: ${anomaly.potentialSavings.toLocaleString()} ${currency}.`;
         });
     }
 

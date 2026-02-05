@@ -3,7 +3,7 @@ import axios from 'axios';
 import './FinanceDashboard.css';
 import TusuChatWidget from '../components/finance/TusuChatWidget';
 import ExpenseAnalyzer from '../components/finance/ExpenseAnalyzer';
-import RecommendationCard from '../components/finance/RecommendationCard';
+
 
 interface Transaction {
     date: string;
@@ -32,6 +32,7 @@ interface AnalysisResult {
     analysisDate: string;
     totalPotentialSavings: number;
     excessiveCategories: CategoryAnalysis[];
+    allCategories: CategoryAnalysis[];
     message: string;
     recommendations: string[];
 }
@@ -158,15 +159,14 @@ function FinanceDashboard({ onBack }: FinanceDashboardProps) {
                                             <div key={idx} className="category-card">
                                                 <div className="category-header">
                                                     <h3>{category.category}</h3>
-                                                    <span className={`change-badge ${category.percentageChange > 0 ? 'negative' : 'positive'}`}>
-                                                        {category.percentageChange > 0 ? '↑' : '↓'}
-                                                        {Math.abs(category.percentageChange).toFixed(1)}%
+                                                    <span className={`change-badge ${category.percentageChange > 20 ? 'negative' : 'neutral'}`}>
+                                                        {category.percentageChange}% of Total
                                                     </span>
                                                 </div>
 
                                                 <div className="category-stats">
                                                     <div className="stat">
-                                                        <span className="stat-label">Average Monthly</span>
+                                                        <span className="stat-label">Recommended Limit (20%)</span>
                                                         <span className="stat-value">
                                                             ₺{category.averageMonthlySpending.toLocaleString('tr-TR')}
                                                         </span>
@@ -185,11 +185,38 @@ function FinanceDashboard({ onBack }: FinanceDashboardProps) {
                                                     </div>
                                                 </div>
 
-                                                {category.recommendation && (
-                                                    <RecommendationCard recommendation={category.recommendation} />
-                                                )}
+                                                <div className="category-alert">
+                                                    <span className="alert-icon">⚠️</span>
+                                                    <p>
+                                                        You spent <strong>₺{category.currentMonthSpending.toLocaleString('tr-TR')}</strong> on {category.category},
+                                                        which is <strong>{category.percentageChange.toFixed(1)}%</strong> of your total spending.
+                                                        You exceeded the recommended limit by <strong>₺{category.potentialSavings.toLocaleString('tr-TR')}</strong>.
+                                                    </p>
+                                                </div>
                                             </div>
                                         ))}
+                                    </div>
+                                )}
+
+                                {/* All Categories Breakdown (Excluding Excessive Ones) */}
+                                {analysisResult.allCategories && analysisResult.allCategories.filter(cat => !cat.isExcessive).length > 0 && (
+                                    <div className="all-categories-section">
+                                        <h2>📊 Other Categories</h2>
+                                        <div className="categories-grid">
+                                            {analysisResult.allCategories
+                                                .filter(cat => !cat.isExcessive)
+                                                .map((cat, idx) => (
+                                                    <div key={idx} className="mini-category-card">
+                                                        <div className="cat-info">
+                                                            <span className="cat-name">{cat.category}</span>
+                                                            <span className="cat-percent">{cat.percentageChange.toFixed(1)}%</span>
+                                                        </div>
+                                                        <div className="cat-amount">
+                                                            ₺{cat.currentMonthSpending.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                        </div>
                                     </div>
                                 )}
                             </>

@@ -175,6 +175,25 @@ function ExpenseAnalyzer({ onAnalyze, loading }: ExpenseAnalyzerProps) {
                         <span className="total-amount">Total: ₺{totalAmount.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}</span>
                     </div>
 
+                    <button
+                        className="analyze-btn"
+                        onClick={handleAnalyze}
+                        disabled={loading}
+                        style={{ marginBottom: '1rem' }}
+                    >
+                        {loading ? (
+                            <>
+                                <span className="spinner"></span>
+                                Analyzing...
+                            </>
+                        ) : (
+                            <>
+                                <span className="btn-icon">🔍</span>
+                                Analyze Expenses
+                            </>
+                        )}
+                    </button>
+
                     <div className="transactions-scroll">
                         {transactions.map((transaction, index) => (
                             <div key={index} className="transaction-item">
@@ -203,24 +222,6 @@ function ExpenseAnalyzer({ onAnalyze, loading }: ExpenseAnalyzerProps) {
                             </div>
                         ))}
                     </div>
-
-                    <button
-                        className="analyze-btn"
-                        onClick={handleAnalyze}
-                        disabled={loading}
-                    >
-                        {loading ? (
-                            <>
-                                <span className="spinner"></span>
-                                Analyzing...
-                            </>
-                        ) : (
-                            <>
-                                <span className="btn-icon">🔍</span>
-                                Analyze Expenses
-                            </>
-                        )}
-                    </button>
                 </div>
             )}
         </div>

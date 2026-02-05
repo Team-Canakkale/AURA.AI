@@ -4,8 +4,8 @@
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 20px;
-    padding: 2rem;
+    border-radius: 16px;
+    padding: 1.25rem;
     color: white;
 }
 
@@ -13,21 +13,21 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 .analyzer-header h2 {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     margin: 0;
 }
 
 .sample-btn {
-    padding: 0.5rem 1rem;
+    padding: 0.4rem 0.8rem;
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 8px;
+    border-radius: 6px;
     color: white;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     cursor: pointer;
     transition: all 0.3s ease;
 }
@@ -47,7 +47,7 @@
     display: flex;
     align-items: center;
     text-align: center;
-    margin: 1.5rem 0;
+    margin: 1rem 0;
 }
 
 .divider::before,
@@ -58,31 +58,31 @@
 }
 
 .divider span {
-    padding: 0 1rem;
+    padding: 0 0.75rem;
     color: rgba(255, 255, 255, 0.6);
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
 }
 
 /* Transaction Form */
 .transaction-form {
     background: rgba(255, 255, 255, 0.05);
-    border-radius: 16px;
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
 }
 
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    margin-bottom: 1rem;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
 }
 
 .form-group {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.4rem;
 }
 
 .form-group.flex-2 {
@@ -90,19 +90,19 @@
 }
 
 .form-group label {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: rgba(255, 255, 255, 0.8);
     font-weight: 500;
 }
 
 .form-group input,
 .form-group select {
-    padding: 0.75rem;
+    padding: 0.6rem;
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
+    border-radius: 6px;
     color: white;
-    font-size: 1rem;
+    font-size: 0.9rem;
     transition: all 0.3s ease;
 }
 
@@ -130,12 +130,12 @@
 
 .add-btn {
     width: 100%;
-    padding: 0.75rem;
+    padding: 0.6rem;
     background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
     border: none;
-    border-radius: 8px;
+    border-radius: 6px;
     color: white;
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -156,47 +156,47 @@
 }
 
 .btn-icon {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
 }
 
 /* Transactions List */
 .transactions-list {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.75rem;
 }
 
 .list-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .list-header h3 {
-    font-size: 1.1rem;
+    font-size: 1rem;
     margin: 0;
 }
 
 .total-amount {
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 600;
     color: #4caf50;
 }
 
 .transactions-scroll {
-    max-height: 400px;
+    max-height: 700px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.5rem;
     padding-right: 0.5rem;
 }
 
 /* Custom Scrollbar */
 .transactions-scroll::-webkit-scrollbar {
-    width: 6px;
+    width: 5px;
 }
 
 .transactions-scroll::-webkit-scrollbar-track {
@@ -219,8 +219,8 @@
     align-items: center;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    padding: 1rem;
+    border-radius: 8px;
+    padding: 0.75rem;
     transition: all 0.3s ease;
 }
 
@@ -233,53 +233,53 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.25rem;
 }
 
 .transaction-main {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.5rem;
 }
 
 .transaction-description {
     font-weight: 500;
-    font-size: 1rem;
+    font-size: 0.9rem;
 }
 
 .transaction-category {
-    padding: 0.25rem 0.75rem;
+    padding: 0.2rem 0.5rem;
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    font-size: 0.85rem;
+    border-radius: 8px;
+    font-size: 0.75rem;
     color: rgba(255, 255, 255, 0.8);
 }
 
 .transaction-details {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.75rem;
 }
 
 .transaction-date {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: rgba(255, 255, 255, 0.6);
 }
 
 .transaction-amount {
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 600;
     color: #ffc107;
 }
 
 .remove-btn {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     background: rgba(244, 67, 54, 0.2);
     border: 1px solid rgba(244, 67, 54, 0.3);
     border-radius: 50%;
     color: #f44336;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex;
@@ -302,12 +302,12 @@
 /* Analyze Button */
 .analyze-btn {
     width: 100%;
-    padding: 1rem;
+    padding: 0.8rem;
     background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
     border: none;
-    border-radius: 12px;
+    border-radius: 8px;
     color: white;
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
