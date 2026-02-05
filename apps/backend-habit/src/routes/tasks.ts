@@ -94,10 +94,28 @@ router.patch('/:id', requireAuth, async (req: Request, res: Response) => {
 router.delete('/:id', requireAuth, async (req: Request, res: Response) => {
     try {
         const taskId = req.params.id;
-        const { error } = await supabase.from('tasks').delete().eq('id', taskId);
-        if (error) throw error;
-        res.json({ success: true });
+        console.log(`Attempting to delete task: ${taskId}`); // DEBUG LOG
+
+        const { error, count } = await supabase
+            .from('tasks')
+            .delete({ count: 'exact' }) // Request count of deleted rows
+            .eq('id', taskId);
+
+        if (error) {
+            console.error('Supabase Delete Error:', error);
+            throw error;
+        }
+
+        console.log(`Deleted rows count: ${count}`);
+
+        if (count === 0) {
+            // It might be already deleted or ID mismatch or RLS hidden
+            console.warn(`Task ${taskId} not found or permission denied (RLS).`);
+        }
+
+        res.json({ success: true, count });
     } catch (error: any) {
+        console.error('DELETE Handler Error:', error);
         res.status(500).json({ error: error.message });
     }
 });

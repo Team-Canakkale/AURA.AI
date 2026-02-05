@@ -59,12 +59,13 @@ export default function HabitDashboard() {
     };
 
     const handleDeleteTask = async (id: string) => {
-        if (!confirm('Are you sure you want to delete this task?')) return;
+        // Removed confirm dialog for faster deletion as requested
         try {
             await taskApi.deleteTask(id);
             setTasks(tasks.filter(t => t.id !== id));
         } catch (err) {
             console.error(err);
+            alert('Delete failed. Please check console.');
         }
     };
 
