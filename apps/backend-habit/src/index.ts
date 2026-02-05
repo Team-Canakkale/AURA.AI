@@ -1,0 +1,42 @@
+import express, { Request, Response } from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const app = express();
+const PORT = process.env.PORT || 4002;
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Health check endpoint
+app.get('/health', (req: Request, res: Response) => {
+    res.json({
+        status: 'ok',
+        service: 'habit',
+        timestamp: new Date().toISOString()
+    });
+});
+
+// Sample habit endpoints
+app.get('/habits', (req: Request, res: Response) => {
+    res.json({
+        habits: [
+            { id: 1, name: 'Morning Exercise', streak: 7, completed: true }
+        ]
+    });
+});
+
+app.post('/habits', (req: Request, res: Response) => {
+    const { name, frequency } = req.body;
+    res.json({
+        success: true,
+        habit: { id: Date.now(), name, frequency, streak: 0, completed: false }
+    });
+});
+
+app.listen(PORT, () => {
+    console.log(`🚀 Habit service running on http://localhost:${PORT}`);
+});

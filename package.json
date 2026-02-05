@@ -1,0 +1,29 @@
+{
+  "name": "aura-ai",
+  "version": "1.0.0",
+  "description": "Aura AI - Multi-service AI Platform",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspaces",
+    "build": "npm run build --workspaces",
+    "dev:frontend": "npm run dev -w apps/frontend",
+    "dev:finance": "npm run dev -w apps/backend-finance",
+    "dev:habit": "npm run dev -w apps/backend-habit",
+    "dev:health": "npm run dev -w apps/backend-health",
+    "install:all": "npm install",
+    "clean": "npm run clean --workspaces"
+  },
+  "keywords": [
+    "ai",
+    "monorepo",
+    "microservices"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  }
+}
