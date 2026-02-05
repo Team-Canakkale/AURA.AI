@@ -1,4 +1,29 @@
+/* Design System - Color Palette (Dark Mode) */
+:root {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --primary: 263 70% 50%;
+    /* Purple */
+    --secondary: 199 89% 48%;
+    /* Blue */
+    --accent: 142 76% 36%;
+    /* Green */
+    --destructive: 0 62.8% 30.6%;
+}
+
+/* Glassmorphism Utilities */
+.glass {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 body {
     margin: 0;
     min-height: 100vh;
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 }

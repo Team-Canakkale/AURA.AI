@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import './App.css'
+import FinanceDashboard from './pages/FinanceDashboard'
 
 interface ServiceStatus {
     status: string;
@@ -7,7 +8,10 @@ interface ServiceStatus {
     timestamp: string;
 }
 
+type Page = 'home' | 'finance' | 'habit' | 'health';
+
 function App() {
+    const [currentPage, setCurrentPage] = useState<Page>('home');
     const [services, setServices] = useState<{ [key: string]: ServiceStatus | null }>({
         finance: null,
         habit: null,
@@ -39,6 +43,11 @@ function App() {
         return () => clearInterval(interval);
     }, []);
 
+    // Render different pages based on currentPage
+    if (currentPage === 'finance') {
+        return <FinanceDashboard onBack={() => setCurrentPage('home')} />;
+    }
+
     return (
         <div className="app">
             <header className="header">
@@ -51,17 +60,20 @@ function App() {
                     <ServiceCard
                         title="💰 Finance Service"
                         status={services.finance}
-                        description="Track your financial transactions and budgets"
+                        description="Track your financial transactions and budgets with TUSU AI"
+                        onClick={() => setCurrentPage('finance')}
                     />
                     <ServiceCard
                         title="🏥 Health Metrics"
                         status={services.health}
                         description="Monitor your health and wellness data"
+                        onClick={() => setCurrentPage('health')}
                     />
                     <ServiceCard
                         title="✅ Habit Tracker"
                         status={services.habit}
                         description="Build and maintain positive habits"
+                        onClick={() => setCurrentPage('habit')}
                     />
                 </div>
             </main>
@@ -73,11 +85,15 @@ interface ServiceCardProps {
     title: string;
     status: ServiceStatus | null;
     description: string;
+    onClick: () => void;
 }
 
-function ServiceCard({ title, status, description }: ServiceCardProps) {
+function ServiceCard({ title, status, description, onClick }: ServiceCardProps) {
     return (
-        <div className={`service-card ${status?.status === 'ok' ? 'active' : 'inactive'}`}>
+        <div
+            className={`service-card ${status?.status === 'ok' ? 'active' : 'inactive'}`}
+            onClick={onClick}
+        >
             <h2>{title}</h2>
             <p className="description">{description}</p>
             <div className="status">
