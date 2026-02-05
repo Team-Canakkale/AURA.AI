@@ -144,3 +144,31 @@ export const notesApi = {
         return await response.json();
     }
 };
+
+// 5. Gamification API (Habitat Tree)
+export interface TreeState {
+    id: string;
+    current_xp: number;
+    current_level: number;
+    streak_days: number;
+    last_watered_at: string;
+}
+
+export const gamificationApi = {
+    getState: async (): Promise<TreeState | null> => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/gamification`);
+            if (!response.ok) return null;
+            return await response.json();
+        } catch (e) { return null; }
+    },
+
+    triggerAction: async (action: 'login' | 'task_complete' | 'event_attended', eventType?: string) => {
+        const response = await fetch(`${API_BASE_URL}/gamification/action`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action, eventType })
+        });
+        return await response.json();
+    }
+};

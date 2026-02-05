@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { taskApi, eventApi, Task, Event } from '../api/habit';
+import { taskApi, eventApi, gamificationApi, Task, Event } from '../api/habit';
 import QuickNotes from '../components/QuickNotes';
+import HabitatTree from '../components/HabitatTree';
 
 const CITIES = [
     "Online", "Adana", "Adıyaman", "Afyonkarahisar", "Ağrı", "Amasya", "Ankara", "Antalya", "Artvin", "Aydın", "Balıkesir", "Bilecik", "Bingöl", "Bitlis", "Bolu", "Burdur", "Bursa", "Çanakkale", "Çankırı", "Çorum", "Denizli", "Diyarbakır", "Edirne", "Elazığ", "Erzincan", "Erzurum", "Eskişehir", "Gaziantep", "Giresun", "Gümüşhane", "Hakkari", "Hatay", "Isparta", "Mersin", "İstanbul", "İzmir", "Kars", "Kastamonu", "Kayseri", "Kırklareli", "Kırşehir", "Kocaeli", "Konya", "Kütahya", "Malatya", "Manisa", "Kahramanmaraş", "Mardin", "Muğla", "Muş", "Nevşehir", "Niğde", "Ordu", "Rize", "Sakarya", "Samsun", "Siirt", "Sinop", "Sivas", "Tekirdağ", "Tokat", "Trabzon", "Tunceli", "Şanlıurfa", "Uşak", "Van", "Yozgat", "Zonguldak", "Aksaray", "Bayburt", "Karaman", "Kırıkkale", "Batman", "Şırnak", "Bartın", "Ardahan", "Iğdır", "Yalova", "Karabük", "Kilis", "Osmaniye", "Düzce"
@@ -10,7 +11,8 @@ const CITIES = [
 export default function HabitDashboard() {
     // --- STATE ---
 
-
+    // Game
+    const [treeRefresh, setTreeRefresh] = useState(0);
 
     // Tasks
     const [tasks, setTasks] = useState<Task[]>([]);
@@ -30,9 +32,11 @@ export default function HabitDashboard() {
     // AI
 
 
-    // Initial Load
+    // Initial Load & Game Login
     useEffect(() => {
         loadAllData();
+        // Trigger generic login action
+        gamificationApi.triggerAction('login').then(() => setTreeRefresh(p => p + 1));
     }, []);
 
     const loadAllData = async () => {
@@ -59,6 +63,12 @@ export default function HabitDashboard() {
     const toggleTask = async (task: Task) => {
         const newStatus = task.status === 'completed' ? 'pending' : 'completed';
         await taskApi.updateTaskStatus(task.id, newStatus);
+
+        // Game Action: If completed, give XP
+        if (newStatus === 'completed') {
+            gamificationApi.triggerAction('task_complete').then(() => setTreeRefresh(p => p + 1));
+        }
+
         loadAllData();
     };
 
@@ -138,49 +148,52 @@ export default function HabitDashboard() {
             </header>
 
             <div className="habitat-grid">
+                {/* 1. LEFT COLUMN: HABITAT & TASKS */}
+                <div className="column left-col">
 
+                    {/* HABITAT GAME TREE */}
+                    <HabitatTree refreshKey={treeRefresh} />
 
+                    {/* Task Matrix */}
+                    <div className="glass-panel task-panel">
+                        <div className="panel-header">
+                            <h2>✅ Task Matrix</h2>
+                            <span className="badge">{tasks.filter(t => t.status === 'pending').length} pending</span>
+                        </div>
+                        <form onSubmit={handleAddTask} className="mini-form task-form">
+                            <input
+                                value={newTaskTitle}
+                                onChange={e => setNewTaskTitle(e.target.value)}
+                                placeholder="New task..."
+                            />
+                            <select value={newTaskPriority} onChange={e => setNewTaskPriority(e.target.value)}>
+                                <option value="big_one">⭐ Big One</option>
+                                <option value="medium">Medium</option>
+                                <option value="small">Small</option>
+                            </select>
+                            <button type="submit">+</button>
+                        </form>
 
-                {/* 2. TASKS COLUMN */}
-                <div className="column glass-panel task-column">
-                    <h2>✅ Task Matrix</h2>
-                    <form onSubmit={handleAddTask} className="mini-form task-form">
-                        <input
-                            value={newTaskTitle}
-                            onChange={e => setNewTaskTitle(e.target.value)}
-                            placeholder="New task..."
-                        />
-                        <select value={newTaskPriority} onChange={e => setNewTaskPriority(e.target.value)}>
-                            <option value="big_one">⭐ Big One</option>
-                            <option value="medium">Medium</option>
-                            <option value="small">Small</option>
-                        </select>
-                        <button type="submit">+</button>
-                    </form>
-
-                    <div className="list task-list">
-                        {sortedTasks.map(task => (
-                            <div key={task.id} className={`item task-item ${task.priority} ${task.status}`}>
-                                <div className="task-left">
-                                    <input
-                                        type="checkbox"
-                                        checked={task.status === 'completed'}
-                                        onChange={() => toggleTask(task)}
-                                    />
-                                    <span className="task-title">{task.title}</span>
+                        <div className="list task-list">
+                            {sortedTasks.map(task => (
+                                <div key={task.id} className={`item task-item ${task.priority} ${task.status}`}>
+                                    <div className="task-left">
+                                        <input
+                                            type="checkbox"
+                                            checked={task.status === 'completed'}
+                                            onChange={() => toggleTask(task)}
+                                        />
+                                        <span className="task-title">{task.title}</span>
+                                    </div>
+                                    <button onClick={() => handleDeleteTask(task.id)} className="del-btn">×</button>
                                 </div>
-                                <button onClick={() => handleDeleteTask(task.id)} className="del-btn">×</button>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
                 </div>
 
-                {/* 3. AI & EVENTS COLUMN */}
+                {/* 2. RIGHT COLUMN: EVENTS */}
                 <div className="column right-col">
-
-
-
-                    {/* Events */}
                     <div className="glass-panel events-panel">
                         <h2>📅 Upcoming</h2>
                         <form onSubmit={handleAddEvent} className="event-form-grid">
@@ -313,9 +326,7 @@ export default function HabitDashboard() {
                             ))}
                         </div>
                     </div>
-
                 </div>
-
             </div>
         </div>
     );

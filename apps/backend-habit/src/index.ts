@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import tasksRouter from './routes/tasks';
 import eventsRouter from './routes/events';
 import { notesRouter } from './routes/notes';
+import { gamificationRouter } from './routes/gamification';
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ app.get('/health', (req: Request, res: Response) => {
 app.use('/tasks', tasksRouter);
 app.use('/events', eventsRouter);
 app.use('/notes', notesRouter);
+app.use('/gamification', gamificationRouter);
 
 // Legacy/Simple Habit Routes (Keep for compatibility if frontend uses them)
 // Ideally, habits should also be in a dedicated router
