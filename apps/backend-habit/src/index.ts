@@ -1,6 +1,8 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
+import tasksRouter from './routes/tasks';
 
 dotenv.config();
 
@@ -10,6 +12,7 @@ const PORT = process.env.PORT || 4002;
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 // Health check endpoint
 app.get('/health', (req: Request, res: Response) => {
@@ -20,7 +23,10 @@ app.get('/health', (req: Request, res: Response) => {
     });
 });
 
-// Sample habit endpoints
+// Mount Task Routes
+app.use('/api/habitat/tasks', tasksRouter);
+
+// Sample habit endpoints (Legacy)
 app.get('/habits', (req: Request, res: Response) => {
     res.json({
         habits: [
