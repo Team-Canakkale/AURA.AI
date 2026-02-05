@@ -24,7 +24,10 @@ app.get('/health', (req: Request, res: Response) => {
 });
 
 // Mount Task Routes
+// Mount Routes
+import eventsRouter from './routes/events';
 app.use('/tasks', tasksRouter);
+app.use('/events', eventsRouter);
 
 // Sample habit endpoints (Legacy)
 app.get('/habits', (req: Request, res: Response) => {
