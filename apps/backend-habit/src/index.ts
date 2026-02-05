@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import tasksRouter from './routes/tasks';
 import eventsRouter from './routes/events';
+import { notesRouter } from './routes/notes';
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ app.get('/health', (req: Request, res: Response) => {
 // Frontend: /api/habit/tasks -> Proxy -> Backend: /tasks
 app.use('/tasks', tasksRouter);
 app.use('/events', eventsRouter);
+app.use('/notes', notesRouter);
 
 // Legacy/Simple Habit Routes (Keep for compatibility if frontend uses them)
 // Ideally, habits should also be in a dedicated router

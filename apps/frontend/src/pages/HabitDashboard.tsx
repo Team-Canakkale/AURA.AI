@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { taskApi, eventApi, Task, Event } from '../api/habit';
+import QuickNotes from '../components/QuickNotes';
 
 const CITIES = [
     "Online", "Adana", "Adıyaman", "Afyonkarahisar", "Ağrı", "Amasya", "Ankara", "Antalya", "Artvin", "Aydın", "Balıkesir", "Bilecik", "Bingöl", "Bitlis", "Bolu", "Burdur", "Bursa", "Çanakkale", "Çankırı", "Çorum", "Denizli", "Diyarbakır", "Edirne", "Elazığ", "Erzincan", "Erzurum", "Eskişehir", "Gaziantep", "Giresun", "Gümüşhane", "Hakkari", "Hatay", "Isparta", "Mersin", "İstanbul", "İzmir", "Kars", "Kastamonu", "Kayseri", "Kırklareli", "Kırşehir", "Kocaeli", "Konya", "Kütahya", "Malatya", "Manisa", "Kahramanmaraş", "Mardin", "Muğla", "Muş", "Nevşehir", "Niğde", "Ordu", "Rize", "Sakarya", "Samsun", "Siirt", "Sinop", "Sivas", "Tekirdağ", "Tokat", "Trabzon", "Tunceli", "Şanlıurfa", "Uşak", "Van", "Yozgat", "Zonguldak", "Aksaray", "Bayburt", "Karaman", "Kırıkkale", "Batman", "Şırnak", "Bartın", "Ardahan", "Iğdır", "Yalova", "Karabük", "Kilis", "Osmaniye", "Düzce"
@@ -119,9 +120,21 @@ export default function HabitDashboard() {
     return (
         <div className="habit-dashboard">
             <header className="dashboard-header">
-                <Link to="/" className="back-btn">← Back to Hub</Link>
-                <h1>🌿 Habitat Control Center</h1>
-                <p>Manage your habits, tasks, and schedule in one place.</p>
+                {/* Top Navigation Bar */}
+                <div className="header-top-bar">
+                    <Link to="/" className="back-link">
+                        <span className="arrow">←</span> Hub
+                    </Link>
+                    <div className="header-actions">
+                        <QuickNotes />
+                    </div>
+                </div>
+
+                {/* Title Area */}
+                <div className="header-title-area">
+                    <h1>🌿 Habitat Control Center</h1>
+                    <p>Manage your habits, tasks, and schedule in one place.</p>
+                </div>
             </header>
 
             <div className="habitat-grid">

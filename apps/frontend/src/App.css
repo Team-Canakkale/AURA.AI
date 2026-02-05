@@ -732,3 +732,282 @@ select,
 textarea::placeholder {
   color: rgba(255, 255, 255, 0.7) !important;
 }
+
+/* --- Quick Notes (Brain Dump) --- */
+.quick-notes-trigger {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ddd;
+  font-size: 0.9rem;
+  padding: 8px 16px;
+  border-radius: 8px;
+  /* Karemsi/Yuvarlak Köşe */
+  cursor: pointer;
+  transition: all 0.2s;
+  width: auto;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.quick-notes-trigger:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.quick-notes-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.quick-notes-drawer {
+  position: fixed;
+  top: 0;
+  right: -400px;
+  /* Initially hidden */
+  width: 400px;
+  height: 100vh;
+  background: #111;
+  border-left: 1px solid #333;
+  z-index: 1000;
+  transition: right 0.3s ease-in-out;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+}
+
+.quick-notes-drawer.open {
+  right: 0;
+}
+
+.drawer-header {
+  padding: 1rem;
+  border-bottom: 1px solid #333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1a1a1a;
+}
+
+.drawer-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #fff;
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  color: #888;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.drawer-content {
+  flex: 1;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.note-input-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 2rem;
+}
+
+.note-input-section textarea {
+  background: #222;
+  border: 1px solid #333;
+  color: #fff;
+  padding: 12px;
+  border-radius: 8px;
+  resize: vertical;
+  min-height: 100px;
+  font-family: inherit;
+}
+
+.save-note-btn {
+  background: #646cff;
+  color: white;
+  border: none;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.save-note-btn:hover {
+  background: #535bf2;
+}
+
+.notes-history {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.notes-history h3 {
+  font-size: 0.9rem;
+  color: #888;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.notes-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-right: 5px;
+  /* Scrollbar space */
+}
+
+.note-card {
+  background: #1a1a1a;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #333;
+}
+
+.note-time {
+  font-size: 0.75rem;
+  color: #666;
+  margin-bottom: 6px;
+}
+
+.note-content {
+  margin: 0;
+  white-space: pre-wrap;
+  /* Preserve line breaks */
+  color: #eee;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+/* --- Senior Level Header & Actions --- */
+.dashboard-header {
+  margin-bottom: 2rem;
+  padding: 0 1rem;
+}
+
+.header-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-top: 1rem;
+}
+
+.back-link {
+  text-decoration: none;
+  color: #888;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.2s;
+  font-weight: 500;
+}
+
+.back-link:hover {
+  color: #fff;
+}
+
+.header-title-area {
+  text-align: center;
+}
+
+.header-title-area h1 {
+  font-size: 2.5rem;
+  margin: 0 0 0.5rem 0;
+  background: linear-gradient(to right, #fff, #aaa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Premium Quick Notes Button */
+.quick-notes-trigger {
+  background: rgba(20, 20, 20, 0.6) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #ccc !important;
+  font-size: 0.85rem !important;
+  padding: 8px 20px !important;
+  border-radius: 20px !important;
+  /* Hap şeklinde */
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  width: auto !important;
+  height: 36px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  font-weight: 500 !important;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
+}
+
+.quick-notes-trigger:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(100, 108, 255, 0.5) !important;
+  /* Mavi border parlaması */
+  color: white !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 15px rgba(100, 108, 255, 0.2) !important;
+  /* Mavi glow */
+}
+
+/* Final Polish: Brain Dump Button */
+.quick-notes-trigger {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 8px !important;
+  /* Hap değil, hafif köşe */
+  padding: 0 16px !important;
+  height: 38px !important;
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.7rem !important;
+  font-weight: 600 !important;
+  color: #999 !important;
+  box-shadow: none !important;
+  backdrop-filter: blur(5px);
+}
+
+.quick-notes-trigger:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+  color: #fff !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+.quick-notes-trigger svg {
+  margin-right: 2px;
+  transition: all 0.2s;
+  width: 16px;
+  height: 16px;
+}
+
+.quick-notes-trigger:hover svg {
+  transform: rotate(-5deg) scale(1.1);
+  stroke: #646cff;
+  /* İkon rengi maviye dönsün */
+}

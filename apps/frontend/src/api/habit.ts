@@ -118,3 +118,29 @@ export const eventApi = {
         await fetch(`${API_BASE_URL}/events/${id}`, { method: 'DELETE' });
     }
 };
+
+// 4. Notes API (Brain Dump)
+export interface Note {
+    id: string;
+    content: string;
+    created_at: string;
+}
+
+export const notesApi = {
+    getNotes: async (): Promise<Note[]> => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/notes`);
+            if (!response.ok) return [];
+            return await response.json();
+        } catch (e) { return []; }
+    },
+
+    createNote: async (content: string) => {
+        const response = await fetch(`${API_BASE_URL}/notes`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ content })
+        });
+        return await response.json();
+    }
+};
