@@ -1979,11 +1979,29 @@ textarea::placeholder {
 }
 
 .logo-container {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 1.5rem;
+  position: relative;
   margin-bottom: 0.5rem;
+}
+
+.lumi-wrapper {
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  padding-right: 1.5rem;
+  /* Gap between logo and title */
+}
+
+.lumi-img-v2 {
+  height: 120px;
+  width: auto;
+  filter: drop-shadow(0 0 15px rgba(100, 100, 255, 0.4));
+  animation: floatLumiV2 3s ease-in-out infinite;
 }
 
 .aura-logo {
@@ -2061,7 +2079,6 @@ textarea::placeholder {
   width: auto;
   filter: drop-shadow(0 0 15px rgba(100, 100, 255, 0.4));
   animation: floatLumiV2 3s ease-in-out infinite;
-  margin-right: 1rem;
 }
 
 @keyframes floatLumiV2 {
