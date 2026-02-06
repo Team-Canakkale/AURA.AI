@@ -6,6 +6,7 @@ import tasksRouter from './routes/tasks';
 import eventsRouter from './routes/events';
 import { notesRouter } from './routes/notes';
 import { gamificationRouter } from './routes/gamification';
+import { aiRouter } from './routes/ai';
 
 dotenv.config();
 
@@ -32,6 +33,7 @@ app.use('/tasks', tasksRouter);
 app.use('/events', eventsRouter);
 app.use('/notes', notesRouter);
 app.use('/gamification', gamificationRouter);
+app.use('/ai', aiRouter);
 
 // Legacy/Simple Habit Routes (Keep for compatibility if frontend uses them)
 // Ideally, habits should also be in a dedicated router

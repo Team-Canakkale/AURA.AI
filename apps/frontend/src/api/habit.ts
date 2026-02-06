@@ -183,3 +183,26 @@ export const gamificationApi = {
         return await response.json();
     }
 };
+
+// 6. AI API
+export interface MoodAnalysis {
+    mood: string;
+    score: number;
+    advice: string;
+}
+
+export const aiApi = {
+    analyzeMood: async (): Promise<MoodAnalysis | null> => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/ai/mood`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            if (!response.ok) throw new Error('AI Failed');
+            return await response.json();
+        } catch (e) {
+            console.error(e);
+            return null;
+        }
+    }
+};

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { taskApi, eventApi, gamificationApi, Task, Event } from '../api/habit';
 import QuickNotes from '../components/QuickNotes';
 import HabitatTree from '../components/HabitatTree';
+import MoodAnalyst from '../components/MoodAnalyst';
 
 const CITIES = [
     "Online", "Adana", "Adıyaman", "Afyonkarahisar", "Ağrı", "Amasya", "Ankara", "Antalya", "Artvin", "Aydın", "Balıkesir", "Bilecik", "Bingöl", "Bitlis", "Bolu", "Burdur", "Bursa", "Çanakkale", "Çankırı", "Çorum", "Denizli", "Diyarbakır", "Edirne", "Elazığ", "Erzincan", "Erzurum", "Eskişehir", "Gaziantep", "Giresun", "Gümüşhane", "Hakkari", "Hatay", "Isparta", "Mersin", "İstanbul", "İzmir", "Kars", "Kastamonu", "Kayseri", "Kırklareli", "Kırşehir", "Kocaeli", "Konya", "Kütahya", "Malatya", "Manisa", "Kahramanmaraş", "Mardin", "Muğla", "Muş", "Nevşehir", "Niğde", "Ordu", "Rize", "Sakarya", "Samsun", "Siirt", "Sinop", "Sivas", "Tekirdağ", "Tokat", "Trabzon", "Tunceli", "Şanlıurfa", "Uşak", "Van", "Yozgat", "Zonguldak", "Aksaray", "Bayburt", "Karaman", "Kırıkkale", "Batman", "Şırnak", "Bartın", "Ardahan", "Iğdır", "Yalova", "Karabük", "Kilis", "Osmaniye", "Düzce"
@@ -161,6 +162,9 @@ export default function HabitDashboard() {
 
                     {/* HABITAT GAME TREE */}
                     <HabitatTree refreshKey={treeRefresh} />
+
+                    {/* MOOD ANALYST AI */}
+                    <MoodAnalyst />
 
                     {/* Task Matrix */}
                     <div className="glass-panel task-panel">
