@@ -11,3 +11,4 @@ easyocr
 PyMuPDF
 numpy
 openai
+
