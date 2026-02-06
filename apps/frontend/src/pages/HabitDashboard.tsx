@@ -4,6 +4,7 @@ import { taskApi, eventApi, gamificationApi, Task, Event } from '../api/habit';
 import QuickNotes from '../components/QuickNotes';
 import HabitatTree from '../components/HabitatTree';
 import MoodAnalyst from '../components/MoodAnalyst';
+import HabitatNavbar from '../components/habitat/HabitatNavbar';
 
 const CITIES = [
     "Online", "Adana", "Adıyaman", "Afyonkarahisar", "Ağrı", "Amasya", "Ankara", "Antalya", "Artvin", "Aydın", "Balıkesir", "Bilecik", "Bingöl", "Bitlis", "Bolu", "Burdur", "Bursa", "Çanakkale", "Çankırı", "Çorum", "Denizli", "Diyarbakır", "Edirne", "Elazığ", "Erzincan", "Erzurum", "Eskişehir", "Gaziantep", "Giresun", "Gümüşhane", "Hakkari", "Hatay", "Isparta", "Mersin", "İstanbul", "İzmir", "Kars", "Kastamonu", "Kayseri", "Kırklareli", "Kırşehir", "Kocaeli", "Konya", "Kütahya", "Malatya", "Manisa", "Kahramanmaraş", "Mardin", "Muğla", "Muş", "Nevşehir", "Niğde", "Ordu", "Rize", "Sakarya", "Samsun", "Siirt", "Sinop", "Sivas", "Tekirdağ", "Tokat", "Trabzon", "Tunceli", "Şanlıurfa", "Uşak", "Van", "Yozgat", "Zonguldak", "Aksaray", "Bayburt", "Karaman", "Kırıkkale", "Batman", "Şırnak", "Bartın", "Ardahan", "Iğdır", "Yalova", "Karabük", "Kilis", "Osmaniye", "Düzce"
@@ -140,259 +141,235 @@ export default function HabitDashboard() {
     };
 
     return (
-        <div className="habit-dashboard">
-            <header className="dashboard-header">
-                {/* 1. TOP NAVIGATION BAR (Fixed height, pins Hub/BrainDump) */}
-                <div className="header-top-bar">
-                    <div className="nav-left">
-                        <Link to="/" className="back-link">
-                            <span className="arrow">←</span> Hub
-                        </Link>
-                    </div>
+        <>
+            <HabitatNavbar tree={tree} QuickNotesComponent={<QuickNotes />} />
+            <div className="habit-dashboard" style={{ paddingTop: '80px' }}>
+                <div className="habitat-grid">
+                    {/* 1. LEFT COLUMN: HABITAT & TASKS */}
+                    <div className="column left-col">
 
-                    <div className="nav-right">
-                        {tree && (
-                            <div className="token-stats" style={{ display: 'flex', gap: '15px', marginRight: '20px', fontSize: '0.9rem', color: '#4caf50', fontWeight: 'bold' }}>
-                                <span>💧 {tree.current_xp} Water</span>
-                                <span>⭐ Lvl {tree.current_level}</span>
+                        {/* HABITAT GAME TREE */}
+                        <HabitatTree refreshKey={treeRefresh} />
+
+                        {/* MOOD ANALYST AI */}
+                        <MoodAnalyst />
+
+                        {/* Task Matrix */}
+                        <div className="glass-panel task-panel">
+                            <div className="panel-header">
+                                <h2>✅ Görev Matrisi</h2>
+                                <span className="badge">{tasks.filter(t => t.status === 'pending').length} bekliyor</span>
                             </div>
-                        )}
-                        <QuickNotes />
-                    </div>
-                </div>
-
-                {/* 2. TITLE AREA (Centered) */}
-                <div className="header-title-area">
-                    <h1>🌿 Habitat Control Center</h1>
-                    <p>Manage your habits, tasks, and schedule in one place.</p>
-                </div>
-            </header>
-
-            <div className="habitat-grid">
-                {/* 1. LEFT COLUMN: HABITAT & TASKS */}
-                <div className="column left-col">
-
-                    {/* HABITAT GAME TREE */}
-                    <HabitatTree refreshKey={treeRefresh} />
-
-                    {/* MOOD ANALYST AI */}
-                    <MoodAnalyst />
-
-                    {/* Task Matrix */}
-                    <div className="glass-panel task-panel">
-                        <div className="panel-header">
-                            <h2>✅ Task Matrix</h2>
-                            <span className="badge">{tasks.filter(t => t.status === 'pending').length} pending</span>
-                        </div>
-                        <form onSubmit={handleAddTask} className="mini-form task-form">
-                            <input
-                                value={newTaskTitle}
-                                onChange={e => setNewTaskTitle(e.target.value)}
-                                placeholder="New task..."
-                            />
-                            <select value={newTaskPriority} onChange={e => setNewTaskPriority(e.target.value)}>
-                                <option value="big_one">⭐ Big One</option>
-                                <option value="medium">Medium</option>
-                                <option value="small">Small</option>
-                            </select>
-                            <button type="submit">+</button>
-                        </form>
-
-                        {/* ACTIVE TASKS */}
-                        <div className="list task-list">
-                            {sortedTasks.filter(t => t.status !== 'completed').map(task => (
-                                <div key={task.id} className={`item task-item ${task.priority}`}>
-                                    <div className="task-left">
-                                        <input
-                                            type="checkbox"
-                                            checked={false}
-                                            onChange={() => toggleTask(task)}
-                                        />
-                                        <span className="task-title">{task.title}</span>
-                                    </div>
-                                    <button onClick={() => handleDeleteTask(task.id)} className="del-btn">×</button>
-                                </div>
-                            ))}
-                        </div>
-
-                        {/* COMPLETED TASKS */}
-                        {sortedTasks.filter(t => t.status === 'completed').length > 0 && (
-                            <div className="completed-section">
-                                <h3>Completed Tasks</h3>
-                                <div className="list task-list">
-                                    {sortedTasks.filter(t => t.status === 'completed').map(task => (
-                                        <div key={task.id} className={`item task-item completed ${task.priority}`}>
-                                            <div className="task-left">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={true}
-                                                    onChange={() => toggleTask(task)}
-                                                />
-                                                <span className="task-title">{task.title}</span>
-                                            </div>
-                                            <button onClick={() => handleDeleteTask(task.id)} className="del-btn">×</button>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                </div>
-
-                {/* 2. RIGHT COLUMN: EVENTS */}
-                <div className="column right-col">
-                    <div className="glass-panel events-panel">
-                        <h2>📅 Upcoming</h2>
-                        <form onSubmit={handleAddEvent} className="event-form-grid">
-
-                            {/* ROW 1 */}
-                            <div className="form-row">
+                            <form onSubmit={handleAddTask} className="mini-form task-form">
                                 <input
-                                    value={newEventTitle}
-                                    onChange={e => setNewEventTitle(e.target.value)}
-                                    placeholder="Event..."
-                                    className="input-title"
-                                    style={{ flex: 2 }}
+                                    value={newTaskTitle}
+                                    onChange={e => setNewTaskTitle(e.target.value)}
+                                    placeholder="Yeni görev..."
                                 />
-                                <select
-                                    value={newEventType}
-                                    onChange={e => setNewEventType(e.target.value)}
-                                    className="input-type"
-                                    style={{ flex: 1, minWidth: '100px', cursor: 'pointer' }}
-                                >
-                                    <option value="diğer">Diğer</option>
-                                    <option value="ders">Ders</option>
-                                    <option value="sınav">Sınav</option>
-                                    <option value="staj">Staj</option>
-                                    <option value="hackathon">Hackathon</option>
-                                    <option value="toplantı">Toplantı</option>
+                                <select value={newTaskPriority} onChange={e => setNewTaskPriority(e.target.value)}>
+                                    <option value="big_one">⭐ Büyük Görev</option>
+                                    <option value="medium">Orta</option>
+                                    <option value="small">Küçük</option>
                                 </select>
+                                <button type="submit">+</button>
+                            </form>
+
+                            {/* ACTIVE TASKS */}
+                            <div className="list task-list">
+                                {sortedTasks.filter(t => t.status !== 'completed').map(task => (
+                                    <div key={task.id} className={`item task-item ${task.priority}`}>
+                                        <div className="task-left">
+                                            <input
+                                                type="checkbox"
+                                                checked={false}
+                                                onChange={() => toggleTask(task)}
+                                            />
+                                            <span className="task-title">{task.title}</span>
+                                        </div>
+                                        <button onClick={() => handleDeleteTask(task.id)} className="del-btn">×</button>
+                                    </div>
+                                ))}
                             </div>
 
-                            {/* ROW 2 */}
-                            <div className="form-row">
-                                <input
-                                    type="date"
-                                    value={newEventDateVal}
-                                    onChange={e => setNewEventDateVal(e.target.value)}
-                                    className="input-date"
-                                    style={{ flex: 1 }}
-                                />
-                                <div className="city-wrapper" style={{ flex: 1 }}>
-                                    <input
-                                        value={newEventLocation}
-                                        onChange={e => setNewEventLocation(e.target.value)}
-                                        onFocus={() => setShowCityList(true)}
-                                        onBlur={() => setTimeout(() => setShowCityList(false), 200)}
-                                        placeholder="📍 Location"
-                                        style={{ width: '100%' }}
-                                    />
-                                    {showCityList && (
-                                        <div className="city-dropdown">
-                                            {CITIES.filter(c => c.toLowerCase().includes(newEventLocation.toLowerCase())).map(city => (
-                                                <div
-                                                    key={city}
-                                                    className="city-option"
-                                                    onClick={() => setNewEventLocation(city)}
-                                                >
-                                                    {city}
+                            {/* COMPLETED TASKS */}
+                            {sortedTasks.filter(t => t.status === 'completed').length > 0 && (
+                                <div className="completed-section">
+                                    <h3>Tamamlanan Görevler</h3>
+                                    <div className="list task-list">
+                                        {sortedTasks.filter(t => t.status === 'completed').map(task => (
+                                            <div key={task.id} className={`item task-item completed ${task.priority}`}>
+                                                <div className="task-left">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={true}
+                                                        onChange={() => toggleTask(task)}
+                                                    />
+                                                    <span className="task-title">{task.title}</span>
                                                 </div>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-
-                            {/* ROW 3 */}
-                            <div className="form-row">
-                                <div className="time-range-group" style={{ flex: 1, display: 'flex', gap: '8px', alignItems: 'center' }}>
-                                    <input
-                                        type="time"
-                                        value={newEventTimeVal}
-                                        onChange={e => setNewEventTimeVal(e.target.value)}
-                                        className="input-time"
-                                        style={{ flex: 1 }}
-                                    />
-                                    <span style={{ color: '#999' }}>-</span>
-                                    <input
-                                        type="time"
-                                        value={newEventEndTimeVal}
-                                        onChange={e => setNewEventEndTimeVal(e.target.value)}
-                                        className="input-time"
-                                        style={{ flex: 1 }}
-                                    />
-                                </div>
-                                <button type="submit" className="add-btn">+</button>
-                            </div>
-                        </form>
-
-                        {/* UPCOMING EVENTS */}
-                        <div className="list">
-                            {events.filter(e => e.status !== 'completed').map((ev, i) => (
-                                <div key={i} className="item event-card">
-                                    <div className="event-date-box">
-                                        <span className="day">{new Date(ev.event_date).getDate()}</span>
-                                        <span className="month">{new Date(ev.event_date).toLocaleString('tr-TR', { month: 'short' }).toUpperCase()}</span>
-                                    </div>
-                                    <div className="event-info">
-                                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                                            <h3 className="event-title-text">{ev.title}</h3>
-                                            {ev.type && ev.type !== 'diğer' && ev.type !== 'reminder' && (
-                                                <span className="event-type-badge">{ev.type}</span>
-                                            )}
-                                        </div>
-                                        <div className="event-meta">
-                                            <span className="event-time">
-                                                🕒 {new Date(ev.event_date).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}
-                                                {ev.end_date && ` - ${new Date(ev.end_date).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}`}
-                                            </span>
-                                            <span className={`countdown-badge ${getTimeLeft(ev.event_date).includes('kaldı') ? 'active' : 'expired'}`}>
-                                                {getTimeLeft(ev.event_date)}
-                                            </span>
-                                            {ev.location && <span className="event-location">📍 {ev.location}</span>}
-                                        </div>
-                                    </div>
-                                    <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
-                                        <button onClick={() => handleCompleteEvent(ev)} className="complete-btn" style={{ background: 'rgba(76, 175, 80, 0.15)', border: '1px solid rgba(76, 175, 80, 0.3)', color: '#4caf50', borderRadius: '6px', width: '28px', height: '28px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9rem' }}>✓</button>
-                                        <button onClick={() => handleDeleteEvent(ev.id)} className="del-btn">×</button>
+                                                <button onClick={() => handleDeleteTask(task.id)} className="del-btn">×</button>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
-                            ))}
+                            )}
                         </div>
+                    </div>
 
-                        {/* COMPLETED EVENTS */}
-                        {events.filter(e => e.status === 'completed').length > 0 && (
-                            <div className="completed-section">
-                                <h3>Past / Completed</h3>
-                                <div className="list">
-                                    {events.filter(e => e.status === 'completed').map((ev, i) => (
-                                        <div key={i} className="item event-card completed">
-                                            <div className="event-date-box" style={{ opacity: 0.5 }}>
-                                                <span className="day">{new Date(ev.event_date).getDate()}</span>
-                                                <span className="month">{new Date(ev.event_date).toLocaleString('tr-TR', { month: 'short' }).toUpperCase()}</span>
+                    {/* 2. RIGHT COLUMN: EVENTS */}
+                    <div className="column right-col">
+                        <div className="glass-panel events-panel">
+                            <h2>📅 Yaklaşan Etkinlikler</h2>
+                            <form onSubmit={handleAddEvent} className="event-form-grid">
+
+                                {/* ROW 1 */}
+                                <div className="form-row">
+                                    <input
+                                        value={newEventTitle}
+                                        onChange={e => setNewEventTitle(e.target.value)}
+                                        placeholder="Etkinlik..."
+                                        className="input-title"
+                                        style={{ flex: 2 }}
+                                    />
+                                    <select
+                                        value={newEventType}
+                                        onChange={e => setNewEventType(e.target.value)}
+                                        className="input-type"
+                                        style={{ flex: 1, minWidth: '100px', cursor: 'pointer' }}
+                                    >
+                                        <option value="diğer">Diğer</option>
+                                        <option value="ders">Ders</option>
+                                        <option value="sınav">Sınav</option>
+                                        <option value="staj">Staj</option>
+                                        <option value="hackathon">Hackathon</option>
+                                        <option value="toplantı">Toplantı</option>
+                                    </select>
+                                </div>
+
+                                {/* ROW 2 */}
+                                <div className="form-row">
+                                    <input
+                                        type="date"
+                                        value={newEventDateVal}
+                                        onChange={e => setNewEventDateVal(e.target.value)}
+                                        className="input-date"
+                                        style={{ flex: 1 }}
+                                    />
+                                    <div className="city-wrapper" style={{ flex: 1 }}>
+                                        <input
+                                            value={newEventLocation}
+                                            onChange={e => setNewEventLocation(e.target.value)}
+                                            onFocus={() => setShowCityList(true)}
+                                            onBlur={() => setTimeout(() => setShowCityList(false), 200)}
+                                            placeholder="📍 Konum"
+                                            style={{ width: '100%' }}
+                                        />
+                                        {showCityList && (
+                                            <div className="city-dropdown">
+                                                {CITIES.filter(c => c.toLowerCase().includes(newEventLocation.toLowerCase())).map(city => (
+                                                    <div
+                                                        key={city}
+                                                        className="city-option"
+                                                        onClick={() => setNewEventLocation(city)}
+                                                    >
+                                                        {city}
+                                                    </div>
+                                                ))}
                                             </div>
-                                            <div className="event-info">
-                                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                    <h3 className="event-title-text">{ev.title}</h3>
-                                                </div>
-                                                <div className="event-meta">
-                                                    <span className="event-time">
-                                                        {new Date(ev.event_date).toLocaleDateString()}
-                                                    </span>
-                                                </div>
+                                        )}
+                                    </div>
+                                </div>
+
+                                {/* ROW 3 */}
+                                <div className="form-row">
+                                    <div className="time-range-group" style={{ flex: 1, display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                        <input
+                                            type="time"
+                                            value={newEventTimeVal}
+                                            onChange={e => setNewEventTimeVal(e.target.value)}
+                                            className="input-time"
+                                            style={{ flex: 1 }}
+                                        />
+                                        <span style={{ color: '#999' }}>-</span>
+                                        <input
+                                            type="time"
+                                            value={newEventEndTimeVal}
+                                            onChange={e => setNewEventEndTimeVal(e.target.value)}
+                                            className="input-time"
+                                            style={{ flex: 1 }}
+                                        />
+                                    </div>
+                                    <button type="submit" className="add-btn">+</button>
+                                </div>
+                            </form>
+
+                            {/* UPCOMING EVENTS */}
+                            <div className="list">
+                                {events.filter(e => e.status !== 'completed').map((ev, i) => (
+                                    <div key={i} className="item event-card">
+                                        <div className="event-date-box">
+                                            <span className="day">{new Date(ev.event_date).getDate()}</span>
+                                            <span className="month">{new Date(ev.event_date).toLocaleString('tr-TR', { month: 'short' }).toUpperCase()}</span>
+                                        </div>
+                                        <div className="event-info">
+                                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                <h3 className="event-title-text">{ev.title}</h3>
+                                                {ev.type && ev.type !== 'diğer' && ev.type !== 'reminder' && (
+                                                    <span className="event-type-badge">{ev.type}</span>
+                                                )}
                                             </div>
-                                            <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
-                                                {/* No complete button for completed events */}
-                                                <button onClick={() => handleDeleteEvent(ev.id)} className="del-btn">×</button>
+                                            <div className="event-meta">
+                                                <span className="event-time">
+                                                    🕒 {new Date(ev.event_date).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}
+                                                    {ev.end_date && ` - ${new Date(ev.end_date).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}`}
+                                                </span>
+                                                <span className={`countdown-badge ${getTimeLeft(ev.event_date).includes('kaldı') ? 'active' : 'expired'}`}>
+                                                    {getTimeLeft(ev.event_date)}
+                                                </span>
+                                                {ev.location && <span className="event-location">📍 {ev.location}</span>}
                                             </div>
                                         </div>
-                                    ))}
-                                </div>
+                                        <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                                            <button onClick={() => handleCompleteEvent(ev)} className="complete-btn" style={{ background: 'rgba(76, 175, 80, 0.15)', border: '1px solid rgba(76, 175, 80, 0.3)', color: '#4caf50', borderRadius: '6px', width: '28px', height: '28px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9rem' }}>✓</button>
+                                            <button onClick={() => handleDeleteEvent(ev.id)} className="del-btn">×</button>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
-                        )}
+
+                            {/* COMPLETED EVENTS */}
+                            {events.filter(e => e.status === 'completed').length > 0 && (
+                                <div className="completed-section">
+                                    <h3>Geçmiş / Tamamlanan</h3>
+                                    <div className="list">
+                                        {events.filter(e => e.status === 'completed').map((ev, i) => (
+                                            <div key={i} className="item event-card completed">
+                                                <div className="event-date-box" style={{ opacity: 0.5 }}>
+                                                    <span className="day">{new Date(ev.event_date).getDate()}</span>
+                                                    <span className="month">{new Date(ev.event_date).toLocaleString('tr-TR', { month: 'short' }).toUpperCase()}</span>
+                                                </div>
+                                                <div className="event-info">
+                                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                        <h3 className="event-title-text">{ev.title}</h3>
+                                                    </div>
+                                                    <div className="event-meta">
+                                                        <span className="event-time">
+                                                            {new Date(ev.event_date).toLocaleDateString()}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                                                    {/* No complete button for completed events */}
+                                                    <button onClick={() => handleDeleteEvent(ev.id)} className="del-btn">×</button>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 }

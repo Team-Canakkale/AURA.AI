@@ -48,20 +48,24 @@ body {
   place-items: center;
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
-  overflow: hidden;
-  /* Disable scrolling */
+  overflow-x: hidden;
+  /* Disable horizontal scrolling only */
+  overflow-y: auto;
+  /* Allow vertical scrolling */
   margin: 0;
 }
 
 #root {
   width: 100%;
-  height: 100vh;
-  /* Ensure root takes full height */
+  min-height: 100vh;
+  /* Changed from height to min-height to allow content to expand */
   margin: 0 auto;
   padding: 0;
-  /* Remove padding that might cause overflow */
   text-align: center;
-  overflow: hidden;
+  overflow-x: hidden;
+  /* Disable horizontal scrolling only */
+  overflow-y: auto;
+  /* Allow vertical scrolling */
 }
 
 .app {

@@ -1,0 +1,84 @@
+.health-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: rgba(236, 72, 153, 0.15);
+    backdrop-filter: blur(20px);
+    border-bottom: 2px solid rgba(236, 72, 153, 0.3);
+    box-shadow: 0 4px 30px rgba(236, 72, 153, 0.2);
+}
+
+.health-nav-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.health-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.health-logo:hover {
+    transform: translateY(-2px);
+}
+
+.health-icon {
+    font-size: 2rem;
+    filter: drop-shadow(0 0 10px rgba(236, 72, 153, 0.5));
+}
+
+.health-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.health-nav-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.health-navbar .nav-back-btn {
+    padding: 0.75rem 1.5rem;
+    background: rgba(236, 72, 153, 0.1);
+    border: 1px solid rgba(236, 72, 153, 0.3);
+    border-radius: 12px;
+    color: #ec4899;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.health-navbar .nav-back-btn:hover {
+    background: rgba(236, 72, 153, 0.2);
+    transform: translateY(-2px);
+}
+
+.health-navbar .logout-btn {
+    padding: 0.75rem 1.5rem;
+    background: rgba(220, 20, 60, 0.1);
+    border: 1px solid rgba(220, 20, 60, 0.3);
+    border-radius: 12px;
+    color: #ff6b6b;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.health-navbar .logout-btn:hover {
+    background: rgba(220, 20, 60, 0.2);
+    transform: translateY(-2px);
+}
