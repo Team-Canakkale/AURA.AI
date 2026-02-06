@@ -31,7 +31,7 @@ export default function BloodAnalysis() {
             });
 
             if (!response.ok) {
-                let errorMessage = 'Analysis failed.';
+                let errorMessage = `Analysis failed (Status: ${response.status}).`;
                 try {
                     const errorData = await response.json();
                     if (errorData.detail) errorMessage = errorData.detail;
