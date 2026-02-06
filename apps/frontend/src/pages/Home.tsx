@@ -45,8 +45,12 @@ function Home() {
             <div className="ocean-background"></div>
 
             {/* Cinematic Element 1: Logo & Slogan (0.0s) */}
+            {/* Cinematic Element 1: Logo & Slogan (0.0s) */}
             <header className="home-header animate-blur-in">
-                <h1 className="aura-logo">AURA.AI</h1>
+                <div className="logo-container">
+                    <h1 className="aura-logo">AURA.AI</h1>
+                    <img src="/aura_icon.png" alt="Aura Logo" className="aura-logo-img" />
+                </div>
                 <p className="aura-slogan">Level Up Your Aura</p>
             </header>
 
