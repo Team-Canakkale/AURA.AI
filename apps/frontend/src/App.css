@@ -2090,27 +2090,66 @@ textarea::placeholder {
   gap: 2rem;
 }
 
-.pulsing-aura-icon img {
-  width: 120px;
-  height: 120px;
-  filter: drop-shadow(0 0 20px #00d2ff);
-  animation: callingPulse 1.5s infinite;
+.pulsing-phone-icon {
+  width: 100px;
+  height: 100px;
+  background: rgba(0, 210, 255, 0.1);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  box-shadow: 0 0 0 0 rgba(0, 210, 255, 0.7);
+  animation: pulse-rings 2s infinite;
 }
 
-@keyframes callingPulse {
+@keyframes pulse-rings {
   0% {
-    transform: scale(1);
-    filter: drop-shadow(0 0 20px #00d2ff);
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(0, 210, 255, 0.7);
   }
 
-  50% {
-    transform: scale(1.1);
-    filter: drop-shadow(0 0 60px #00d2ff);
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 50px rgba(0, 210, 255, 0);
   }
 
   100% {
-    transform: scale(1);
-    filter: drop-shadow(0 0 20px #00d2ff);
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(0, 210, 255, 0);
+  }
+}
+
+.pulsing-phone-icon span {
+  z-index: 2;
+  animation: phone-shake 1.5s ease-in-out infinite;
+}
+
+@keyframes phone-shake {
+
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+
+  10% {
+    transform: rotate(-10deg);
+  }
+
+  20% {
+    transform: rotate(10deg);
+  }
+
+  30% {
+    transform: rotate(-10deg);
+  }
+
+  40% {
+    transform: rotate(10deg);
+  }
+
+  50% {
+    transform: rotate(0deg);
   }
 }
 

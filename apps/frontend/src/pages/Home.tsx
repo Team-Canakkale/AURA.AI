@@ -56,8 +56,8 @@ function Home() {
             {/* Calling Overlay */}
             <div className={`calling-overlay ${isCalling ? 'active' : ''}`}>
                 <div className="calling-content">
-                    <div className="pulsing-aura-icon">
-                        <img src="/aura_icon.png" alt="Calling..." />
+                    <div className="pulsing-phone-icon">
+                        <span style={{ fontSize: '4rem' }}>📞</span>
                     </div>
                     <p className="calling-text">Calling Aura...</p>
                     <button className="end-call-btn" onClick={handleEndCall}>
