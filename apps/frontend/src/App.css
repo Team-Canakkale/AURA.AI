@@ -337,13 +337,34 @@ body {
 .habit-dashboard {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0 2rem 2rem 2rem;
+  /* TOP PADDING 0 */
   color: white;
 }
 
 .dashboard-header {
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
   text-align: center;
+  padding-top: 1rem;
+}
+
+.header-top-bar {
+  margin-bottom: 0.5rem;
+  /* Reduced space below Hub link */
+}
+
+.header-title-area {
+  margin-top: -3.5rem;
+  /* Aggressive pull-up */
+  position: relative;
+  z-index: 10;
+  pointer-events: none;
+  /* Let clicks pass through if overlapping functionality */
+}
+
+.header-title-area h1 {
+  margin-bottom: 0;
+  line-height: 1.2;
 }
 
 .back-btn {
@@ -371,6 +392,19 @@ body {
   border-radius: 20px;
   padding: 2rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.panel-header {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.panel-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
 }
 
 .section-header {
@@ -768,6 +802,14 @@ textarea::placeholder {
   height: 100vh;
   background: rgba(0, 0, 0, 0.5);
   z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.quick-notes-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .quick-notes-drawer {

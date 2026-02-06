@@ -49,11 +49,13 @@ function Home() {
 
             <main className="main">
                 <div className="services-grid">
-                    <ServiceCard
-                        title="💰 Finance Service"
-                        status={services.finance}
-                        description="Track your financial transactions and budgets"
-                    />
+                    <Link to="/finance" style={{ textDecoration: 'none', color: 'white' }}>
+                        <ServiceCard
+                            title="💰 Finance Service"
+                            status={services.finance}
+                            description="Track your financial transactions and budgets"
+                        />
+                    </Link>
                     <ServiceCard
                         title="🏥 Health Metrics"
                         status={services.health}
@@ -61,7 +63,7 @@ function Home() {
                     />
 
                     {/* Habit Tracker Card - Now Clickable */}
-                    <Link to="/habitat" style={{ textDecoration: 'none' }}>
+                    <Link to="/habitat" style={{ textDecoration: 'none', color: 'white' }}>
                         <ServiceCard
                             title="✅ Habit Tracker"
                             status={services.habit}

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { notesApi, Note } from '../api/habit';
 
 export default function QuickNotes() {
@@ -11,6 +12,14 @@ export default function QuickNotes() {
     useEffect(() => {
         if (isOpen) {
             loadNotes();
+            // Prevent background scrolling
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+
+        return () => {
+            document.body.style.overflow = 'unset';
         }
     }, [isOpen]);
 
@@ -54,78 +63,85 @@ export default function QuickNotes() {
                 <span>Brain Dump</span>
             </button>
 
-            {/* Overlay */}
-            {isOpen && (
-                <div className="quick-notes-overlay" onClick={() => setIsOpen(false)} />
-            )}
+            {/* Portal to Body */}
+            {createPortal(
+                <>
+                    {/* Overlay */}
+                    <div
+                        className={`quick-notes-overlay ${isOpen ? 'open' : ''}`}
+                        onClick={() => setIsOpen(false)}
+                    />
 
-            {/* Drawer */}
-            <div className={`quick-notes-drawer ${isOpen ? 'open' : ''}`}>
-                <div className="drawer-header">
-                    <h2>🧠 Brain Dump</h2>
-                    <button onClick={() => setIsOpen(false)} className="close-btn">×</button>
-                </div>
+                    {/* Drawer */}
+                    <div className={`quick-notes-drawer ${isOpen ? 'open' : ''}`}>
+                        <div className="drawer-header">
+                            <h2>🧠 Brain Dump</h2>
+                            <button onClick={() => setIsOpen(false)} className="close-btn">×</button>
+                        </div>
 
-                <div className="drawer-content">
-                    {/* Input Section */}
-                    <div className="note-input-section">
-                        <textarea
-                            value={newNote}
-                            onChange={(e) => setNewNote(e.target.value)}
-                            onKeyDown={handleKeyDown}
-                            placeholder="What's on your mind? (Cmd+Enter to save)"
-                            rows={4}
-                            autoFocus
-                        />
-                        <button
-                            onClick={handleSave}
-                            disabled={loading || !newNote.trim()}
-                            className="save-note-btn"
-                        >
-                            {loading ? 'Saving...' : 'Save Note'}
-                        </button>
-                    </div>
+                        <div className="drawer-content">
+                            {/* Input Section */}
+                            <div className="note-input-section">
+                                <textarea
+                                    value={newNote}
+                                    onChange={(e) => setNewNote(e.target.value)}
+                                    onKeyDown={handleKeyDown}
+                                    placeholder="What's on your mind? (Cmd+Enter to save)"
+                                    rows={4}
+                                    autoFocus
+                                />
+                                <button
+                                    onClick={handleSave}
+                                    disabled={loading || !newNote.trim()}
+                                    className="save-note-btn"
+                                >
+                                    {loading ? 'Saving...' : 'Save Note'}
+                                </button>
+                            </div>
 
-                    {/* History Section */}
-                    <div className="notes-history">
-                        <h3>Recent Dumps</h3>
-                        <div className="notes-list">
-                            {notes.length === 0 ? (
-                                <p className="empty-state">No thoughts logged yet.</p>
-                            ) : (
-                                notes.map(note => (
-                                    <div key={note.id} className="note-card">
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                                            <div className="note-time">
-                                                {new Date(note.created_at).toLocaleString('tr-TR', {
-                                                    weekday: 'short', hour: '2-digit', minute: '2-digit'
-                                                })}
+                            {/* History Section */}
+                            <div className="notes-history">
+                                <h3>Recent Dumps</h3>
+                                <div className="notes-list">
+                                    {notes.length === 0 ? (
+                                        <p className="empty-state">No thoughts logged yet.</p>
+                                    ) : (
+                                        notes.map(note => (
+                                            <div key={note.id} className="note-card">
+                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                                                    <div className="note-time">
+                                                        {new Date(note.created_at).toLocaleString('tr-TR', {
+                                                            weekday: 'short', hour: '2-digit', minute: '2-digit'
+                                                        })}
+                                                    </div>
+                                                    <button
+                                                        onClick={() => handleDelete(note.id)}
+                                                        style={{
+                                                            background: 'none',
+                                                            border: 'none',
+                                                            color: '#666',
+                                                            fontSize: '1.2rem',
+                                                            cursor: 'pointer',
+                                                            padding: '0 4px',
+                                                            lineHeight: '1',
+                                                            marginTop: '-2px'
+                                                        }}
+                                                        className="delete-note-btn"
+                                                    >
+                                                        ×
+                                                    </button>
+                                                </div>
+                                                <p className="note-content">{note.content}</p>
                                             </div>
-                                            <button
-                                                onClick={() => handleDelete(note.id)}
-                                                style={{
-                                                    background: 'none',
-                                                    border: 'none',
-                                                    color: '#666',
-                                                    fontSize: '1.2rem',
-                                                    cursor: 'pointer',
-                                                    padding: '0 4px',
-                                                    lineHeight: '1',
-                                                    marginTop: '-2px'
-                                                }}
-                                                className="delete-note-btn"
-                                            >
-                                                ×
-                                            </button>
-                                        </div>
-                                        <p className="note-content">{note.content}</p>
-                                    </div>
-                                ))
-                            )}
+                                        ))
+                                    )}
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                </>,
+                document.body
+            )}
         </>
     );
 }
