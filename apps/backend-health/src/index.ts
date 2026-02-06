@@ -5,6 +5,7 @@ dotenv.config();
 
 import { supabase } from './lib/supabase';
 import { getGeminiModel } from './lib/gemini';
+import healthRoutes from './routes/healthRoutes';
 
 const app = express();
 const PORT = process.env.PORT || 4003;
@@ -12,6 +13,7 @@ const PORT = process.env.PORT || 4003;
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(healthRoutes);
 
 // Health check endpoint
 app.get('/health', (req: Request, res: Response) => {
@@ -45,6 +47,9 @@ app.post('/metrics', (req: Request, res: Response) => {
 // Supabase Test Endpoint
 app.get('/test-supabase', async (req: Request, res: Response) => {
     try {
+        if (!supabase) {
+            return res.status(400).json({ success: false, error: 'Supabase is not configured.' });
+        }
         const { data, error } = await supabase.from('test_table').select('*').limit(1);
         if (error) throw error;
         res.json({ success: true, data });
