@@ -85,10 +85,6 @@ function Home() {
                     <span className="aura-icon">🔮</span>
                     Initialize Aura Call
                 </button>
-
-                <div className="tusu-mascot-container">
-                    <span className="tusu-mascot">🐿️</span>
-                </div>
             </footer>
         </div>
     )
