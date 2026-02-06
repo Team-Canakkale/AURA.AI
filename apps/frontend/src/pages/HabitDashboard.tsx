@@ -11,9 +11,12 @@ const CITIES = [
 
 export default function HabitDashboard() {
     // --- STATE ---
-
-    // Game
     const [treeRefresh, setTreeRefresh] = useState(0);
+    const [tree, setTree] = useState<any>(null);
+
+    useEffect(() => {
+        gamificationApi.getState().then(setTree).catch(console.error);
+    }, [treeRefresh]);
 
     // Tasks
     const [tasks, setTasks] = useState<Task[]>([]);
@@ -139,17 +142,26 @@ export default function HabitDashboard() {
     return (
         <div className="habit-dashboard">
             <header className="dashboard-header">
-                {/* Top Navigation Bar */}
+                {/* 1. TOP NAVIGATION BAR (Fixed height, pins Hub/BrainDump) */}
                 <div className="header-top-bar">
-                    <Link to="/" className="back-link">
-                        <span className="arrow">←</span> Hub
-                    </Link>
-                    <div className="header-actions">
+                    <div className="nav-left">
+                        <Link to="/" className="back-link">
+                            <span className="arrow">←</span> Hub
+                        </Link>
+                    </div>
+
+                    <div className="nav-right">
+                        {tree && (
+                            <div className="token-stats" style={{ display: 'flex', gap: '15px', marginRight: '20px', fontSize: '0.9rem', color: '#4caf50', fontWeight: 'bold' }}>
+                                <span>💧 {tree.current_xp} Water</span>
+                                <span>⭐ Lvl {tree.current_level}</span>
+                            </div>
+                        )}
                         <QuickNotes />
                     </div>
                 </div>
 
-                {/* Title Area */}
+                {/* 2. TITLE AREA (Centered) */}
                 <div className="header-title-area">
                     <h1>🌿 Habitat Control Center</h1>
                     <p>Manage your habits, tasks, and schedule in one place.</p>

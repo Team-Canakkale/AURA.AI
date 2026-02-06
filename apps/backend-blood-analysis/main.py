@@ -1,8 +1,7 @@
 import os
-# Disable OneDNN/MKLDNN optimizations to prevent PaddlePaddle/TensorFlow conflicts/crashes
+# Disable OneDNN/MKLDNN optimizations
 os.environ["FLAGS_use_mkldnn"] = "0"
 os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
-os.environ["DN_ENABLE_ONEDNN_OPTS"] = "0"
 
 # Load environment variables
 from dotenv import load_dotenv
@@ -12,7 +11,7 @@ from fastapi import FastAPI, UploadFile, File, HTTPException
 from contextlib import asynccontextmanager
 import uvicorn
 import numpy as np
-import tensorflow as tf
+# Removed tensorflow as it causes segfaults on Python 3.13 Mac
 import joblib
 import cv2
 import re
@@ -21,7 +20,7 @@ import fitz  # PyMuPDF
 import easyocr
 from openai import OpenAI
 
-# Global variables to hold models
+# Global variables
 models = {}
 ocr = None
 
@@ -32,32 +31,21 @@ REQUIRED_PARAMS = [
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup: Load models
-    print("Loading models...")
+    # Startup: Load minimal artifacts (no heavy TF models)
+    print("Loading OCR and artifacts...")
     global ocr
     try:
-        models['model'] = tf.keras.models.load_model('blood_analysis_model.h5')
-        models['scaler'] = joblib.load('scaler.pkl')
-        models['label_encoder'] = joblib.load('label_encoder.pkl')
-        
-        # Load class names
-        with open('class_names.json', 'r') as f:
-            models['class_names'] = json.load(f)
-            
-        print("Keras model and artifacts loaded.")
-
-        # Initialize EasyOCR (replacing PaddleOCR)
+        # Initialize EasyOCR
         print("Initializing EasyOCR...")
-        ocr = easyocr.Reader(['tr', 'en'], gpu=False)  # Turkish and English, CPU mode
+        # Note: GPU=False because we are on Mac and want stability
+        ocr = easyocr.Reader(['tr', 'en'], gpu=False) 
         print("EasyOCR initialized.")
         
     except Exception as e:
-        print(f"Error loading models: {e}")
-        raise e
+        print(f"Error during startup: {e}")
+        # Don't fail the whole app if OCR fails, just log it
         
     yield
-    
-    # Shutdown (cleanup if needed)
     models.clear()
 
 app = FastAPI(lifespan=lifespan)
@@ -266,30 +254,45 @@ async def analyze_blood_test(file: UploadFile = File(...)):
         parsed_data = parse_ocr_output(ocr_results)
         print("Parsed Data:", parsed_data)
         
-        # 3. Prepare for Prediction
-        feature_vector = [parsed_data[p] for p in REQUIRED_PARAMS]
-        feature_vector = np.array(feature_vector).reshape(1, -1)
+        # 3. AI Analysis (Diagnosis & Insight)
+        # Using LLM to interpret the values since local model is unavailable/unstable
+        print("Interpreting blood values with AI...")
         
-        # Scale features
-        scaled_features = models['scaler'].transform(feature_vector)
-        
-        # 4. Prediction
-        prediction = models['model'].predict(scaled_features)
-        predicted_class_index = np.argmax(prediction, axis=1)[0]
-        confidence = float(np.max(prediction))
-        
-        predicted_class_name = models['class_names'].get(str(predicted_class_index), "Unknown")
-        
-        # Generate personalized diet plan using OpenAI
-        print("Generating diet plan with OpenAI...")
-        diet_plan = generate_diet_plan(predicted_class_name, parsed_data)
-        
-        return {
-            "diagnosis": predicted_class_name,
-            "probability": f"{confidence * 100:.2f}%",
-            "extracted_values": parsed_data,
-            "diet_plan": diet_plan
-        }
+        try:
+            client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+            
+            # Format results for the LLM
+            detected_values = {k: v for k, v in parsed_data.items() if v > 0}
+            formatted_values = json.dumps(detected_values, indent=2)
+            
+            # 3.1. Get Diagnosis
+            diag_response = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {"role": "system", "content": "You are a professional medical analyst. Given blood test values, provide a one-word or short phrase diagnosis (e.g., Anemia, Normal, Infection)."},
+                    {"role": "user", "content": f"Values:\n{formatted_values}"}
+                ],
+                max_tokens=10
+            )
+            predicted_class_name = diag_response.choices[0].message.content.strip() or "Değerlendirilemedi"
+            
+            # 4. Generate Diet Plan
+            diet_plan = generate_diet_plan(predicted_class_name, parsed_data)
+            
+            return {
+                "diagnosis": predicted_class_name,
+                "probability": "AI Interpretation",
+                "extracted_values": parsed_data,
+                "diet_plan": diet_plan
+            }
+        except Exception as ai_err:
+            print(f"AI Analysis error: {ai_err}")
+            return {
+                "diagnosis": "Analiz Yapılamadı",
+                "probability": "Error",
+                "extracted_values": parsed_data,
+                "diet_plan": f"Hata: {str(ai_err)}"
+            }
 
     except HTTPException as he:
         raise he

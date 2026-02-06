@@ -38,11 +38,7 @@ interface AnalysisResult {
     recommendations: string[];
 }
 
-interface FinanceDashboardProps {
-    onBack?: () => void;
-}
-
-function FinanceDashboard({ onBack }: FinanceDashboardProps) {
+function FinanceDashboard() {
     const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
