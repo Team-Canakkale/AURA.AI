@@ -1888,3 +1888,202 @@ textarea::placeholder {
   opacity: 1 !important;
   pointer-events: auto !important;
 }
+/* --- PHASE 9: VISUAL ENHANCEMENTS --- */
+
+/* 1. Cinematic Background */
+.ocean-background {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at center, rgba(0, 100, 255, 0.05) 0%, rgba(0, 0, 0, 0) 60%);
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0;
+    animation: fadeInOcean 2s ease-out 0.5s forwards;
+}
+
+@keyframes fadeInOcean {
+    to { opacity: 1; }
+}
+
+/* 2. Cinematic Entrance Animations */
+.animate-blur-in {
+    opacity: 0;
+    filter: blur(10px);
+    animation: blurIn 1s ease-out 0s forwards;
+}
+
+@keyframes blurIn {
+    to {
+        opacity: 1;
+        filter: blur(0);
+    }
+}
+
+.animate-slide-up {
+    opacity: 0;
+    transform: translateY(50px);
+    animation: slideUp 1s ease-out 0.8s forwards; /* 0.8s delay */
+}
+
+@keyframes slideUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-delayed {
+    opacity: 0;
+    animation: fadeIn 1s ease-out 1.2s forwards; /* 1.2s delay */
+}
+
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+
+/* 3. New Layout Elements */
+.home-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.home-header {
+    text-align: center;
+    margin-bottom: 4rem;
+    position: relative;
+    z-index: 2;
+}
+
+.aura-logo {
+    font-size: 5rem;
+    font-weight: 900;
+    letter-spacing: -2px;
+    background: linear-gradient(135deg, #fff 0%, #a5a5a5 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.aura-slogan {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.6);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* 4. 3D Tilt Cards */
+.services-grid {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 2;
+    margin-bottom: 4rem;
+}
+
+.tilt-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    padding: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    width: 300px;
+    height: 380px;
+    position: relative;
+    overflow: hidden;
+    transform-style: preserve-3d;
+    cursor: none; /* Hide cursor over cards too */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.card-glare {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+    mix-blend-mode: overlay;
+    transition: opacity 0.3s ease;
+}
+
+.card-content {
+    position: relative;
+    z-index: 1;
+    transform: translateZ(20px); /* Parallax Effect for content */
+}
+
+.tilt-card h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    transition: color 0.3s ease;
+}
+
+/* 5. Aura Call Button & Mascot */
+.home-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    position: relative;
+    z-index: 2;
+}
+
+.aura-call-btn {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 1rem 3rem;
+    border-radius: 100px;
+    color: white;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    box-shadow: 0 0 20px rgba(0, 100, 255, 0.1);
+}
+
+.aura-call-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgba(0, 210, 255, 0.3);
+}
+
+.aura-icon {
+    font-size: 1.5rem;
+    filter: drop-shadow(0 0 10px #00d2ff);
+}
+
+.tusu-mascot-container {
+    position: relative;
+}
+
+.tusu-mascot {
+    font-size: 3rem;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+    animation: float 3s ease-in-out infinite;
+    display: block;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}

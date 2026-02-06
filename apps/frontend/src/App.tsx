@@ -13,9 +13,12 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
     return isAuthenticated ? children : <Navigate to="/login" replace />;
 };
 
+import CustomCursor from './components/ui/CustomCursor';
+
 function App() {
     return (
         <Router>
+            <CustomCursor />
             <Routes>
                 <Route path="/login" element={<Login />} />
 

@@ -1,0 +1,60 @@
+body {
+    cursor: none;
+    /* Hide default cursor */
+}
+
+.custom-cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 8px;
+    height: 8px;
+    background-color: #00D2FF;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate3d(-100px, -100px, 0);
+    /* Initial off-screen */
+    transition: width 0.2s ease, height 0.2s ease, background-color 0.2s ease;
+    mix-blend-mode: screen;
+}
+
+.cursor-trailer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    border: 1px solid rgba(0, 210, 255, 0.5);
+    background-color: rgba(0, 210, 255, 0.1);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate3d(-100px, -100px, 0);
+    /* Initial off-screen */
+    transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+    box-shadow: 0 0 10px rgba(0, 210, 255, 0.3);
+}
+
+/* Hover State */
+.custom-cursor.hover {
+    width: 4px;
+    height: 4px;
+    background-color: #ffffff;
+}
+
+.cursor-trailer.hover {
+    width: 40px;
+    height: 40px;
+    background-color: rgba(0, 210, 255, 0.2);
+    border-color: #00D2FF;
+    box-shadow: 0 0 20px rgba(0, 210, 255, 0.6);
+}
+
+/* Ensure interactive elements still show the custom cursor */
+button,
+a,
+input,
+select {
+    cursor: none;
+}
