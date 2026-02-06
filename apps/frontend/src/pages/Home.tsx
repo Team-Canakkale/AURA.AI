@@ -14,6 +14,7 @@ function Home() {
         habit: null,
         health: null
     });
+    const [isCalling, setIsCalling] = useState(false);
 
     useEffect(() => {
         const checkServices = async () => {
@@ -39,58 +40,81 @@ function Home() {
         return () => clearInterval(interval);
     }, []);
 
+    const handleAuraCall = () => {
+        setIsCalling(true);
+    };
+
+    const handleEndCall = () => {
+        setIsCalling(false);
+    };
+
     return (
         <div className="home-container">
             {/* Cinematic Background - Ocean Wave Fade In */}
             <div className="ocean-background"></div>
 
-            {/* Cinematic Element 1: Logo & Slogan (0.0s) */}
-            {/* Cinematic Element 1: Logo & Slogan (0.0s) */}
-            <header className="home-header animate-blur-in">
-                <div className="logo-container">
-                    <img src="/lumi.png" alt="Lumi Mascot" className="lumi-img" />
-                    <h1 className="aura-logo">AURA.AI</h1>
-                    <img src="/aura_icon.png" alt="Aura Logo" className="aura-logo-img" />
+            {/* Calling Overlay */}
+            <div className={`calling-overlay ${isCalling ? 'active' : ''}`}>
+                <div className="calling-content">
+                    <div className="pulsing-aura-icon">
+                        <img src="/aura_icon.png" alt="Calling..." />
+                    </div>
+                    <p className="calling-text">Calling Aura...</p>
+                    <button className="end-call-btn" onClick={handleEndCall}>
+                        End Call
+                    </button>
                 </div>
-                <p className="aura-slogan">Level Up Your Aura</p>
-            </header>
+            </div>
 
-            <main className="main-content">
-                {/* Cinematic Element 2: Cards Slide Up (0.8s) */}
-                <div className="services-grid animate-slide-up">
-                    <TiltCard
-                        title="💰 Finance"
-                        status={services.finance}
-                        description="Smart budgeting & expense tracking"
-                        link="/finance"
-                        color="var(--secondary)" // Blue
-                    />
+            {/* Main Content (Hidden when calling) */}
+            <div className={`main-ui-layer ${isCalling ? 'hidden' : ''}`}>
+                {/* Cinematic Element 1: Logo & Slogan (0.0s) */}
+                <header className="home-header animate-blur-in">
+                    <div className="logo-container">
+                        <img src="/lumi.png" alt="Lumi Mascot" className="lumi-img" />
+                        <h1 className="aura-logo">AURA.AI</h1>
+                        <img src="/aura_icon.png" alt="Aura Logo" className="aura-logo-img" />
+                    </div>
+                    <p className="aura-slogan">Level Up Your Aura</p>
+                </header>
 
-                    <TiltCard
-                        title="🏥 Health"
-                        status={services.health}
-                        description="Blood analysis & wellness monitoring"
-                        link="/blood-analysis"
-                        color="var(--destructive)" // Red-ish/Pink
-                    />
+                <main className="main-content">
+                    {/* Cinematic Element 2: Cards Slide Up (0.8s) */}
+                    <div className="services-grid animate-slide-up">
+                        <TiltCard
+                            title="aura.finance 🐿️"
+                            status={services.finance}
+                            description="Smart budgeting & expense tracking"
+                            link="/finance"
+                            color="var(--secondary)" // Blue
+                        />
 
-                    <TiltCard
-                        title="✅ Habits"
-                        status={services.habit}
-                        description="Build routine & track progress"
-                        link="/habitat"
-                        color="var(--accent)" // Green
-                    />
-                </div>
-            </main>
+                        <TiltCard
+                            title="aura.health"
+                            status={services.health}
+                            description="Blood analysis & wellness monitoring"
+                            link="/blood-analysis"
+                            color="var(--destructive)" // Red-ish/Pink
+                        />
 
-            {/* Cinematic Element 3: Aura Call & Tusu (1.2s) */}
-            <footer className="home-footer animate-fade-in-delayed">
-                <button className="aura-call-btn">
-                    <span className="aura-icon">🔮</span>
-                    Initialize Aura Call
-                </button>
-            </footer>
+                        <TiltCard
+                            title="aura.habits"
+                            status={services.habit}
+                            description="Build routine & track progress"
+                            link="/habitat"
+                            color="var(--accent)" // Green
+                        />
+                    </div>
+                </main>
+
+                {/* Cinematic Element 3: Aura Call & Tusu (1.2s) */}
+                <footer className="home-footer animate-fade-in-delayed">
+                    <button className="aura-call-btn" onClick={handleAuraCall}>
+                        <span className="aura-icon">🔮</span>
+                        One click away your aura call
+                    </button>
+                </footer>
+            </div>
         </div>
     )
 }
