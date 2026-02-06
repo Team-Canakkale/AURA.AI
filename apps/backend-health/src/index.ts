@@ -47,6 +47,9 @@ app.post('/metrics', (req: Request, res: Response) => {
 // Supabase Test Endpoint
 app.get('/test-supabase', async (req: Request, res: Response) => {
     try {
+        if (!supabase) {
+            return res.status(400).json({ success: false, error: 'Supabase is not configured.' });
+        }
         const { data, error } = await supabase.from('test_table').select('*').limit(1);
         if (error) throw error;
         res.json({ success: true, data });

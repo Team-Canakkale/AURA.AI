@@ -11,5 +11,8 @@ const upload = multer({
 
 router.post('/api/health/parse-blood', upload.single('file'), parseBloodPdf);
 router.post('/api/health/diet-plan', generateDietPlanHandler);
+router.get('/api/health/health', (_req, res) => {
+    res.json({ status: 'ok', service: 'health', timestamp: new Date().toISOString() });
+});
 
 export default router;

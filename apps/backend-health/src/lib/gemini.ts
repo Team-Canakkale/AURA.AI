@@ -1,16 +1,21 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
-import dotenv from 'dotenv';
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import dotenv from "dotenv";
 
-dotenv.config({ path: '../../.env', override: false }); // Look for root .env, but don't overwrite
+// root .env dosyasını yükler
+dotenv.config({ path: "../../../.env" });
 
-const apiKey = process.env.GEMINI_API_KEY || '';
+const apiKey = process.env.GEMINI_API_KEY;
 
 if (!apiKey) {
-    console.warn('⚠️ Gemini API Key is missing in environment variables.');
+  throw new Error("❌ GEMINI_API_KEY .env dosyasında bulunamadı");
 }
 
+// Gemini client (TEK KERE oluşturulur)
 const genAI = new GoogleGenerativeAI(apiKey);
 
-export const getGeminiModel = (modelName: string = 'gemini-pro') => {
-    return genAI.getGenerativeModel({ model: modelName });
+// Dışarıdan kullanılacak tek fonksiyon
+export const getGeminiModel = () => {
+  return genAI.getGenerativeModel({
+    model: "gemini-1.5-flash",
+  });
 };

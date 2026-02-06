@@ -55,13 +55,12 @@ function Home() {
                     />
 
                     {/* Health Metrics Card - Clickable */}
-                    <Link to="/health" style={{ textDecoration: 'none' }}>
-                        <ServiceCard
-                            title="🏥 Health Metrics"
-                            status={services.health}
-                            description="Monitor your health and wellness data"
-                        />
-                    </Link>
+                    <ServiceCard
+                        title="🏥 Health"
+                        status={services.health}
+                        description="Blood analysis & wellness tracking"
+                        link="/blood-analysis"
+                    />
 
                     <ServiceCard
                         title="✅ Habit Tracker"
@@ -78,10 +77,11 @@ interface ServiceCardProps {
     title: string;
     status: ServiceStatus | null;
     description: string;
+    link?: string;
 }
 
-function ServiceCard({ title, status, description }: ServiceCardProps) {
-    return (
+function ServiceCard({ title, status, description, link }: ServiceCardProps) {
+    const card = (
         <div className={`service-card ${status?.status === 'ok' ? 'active' : 'inactive'}`}>
             <h2>{title}</h2>
             <p className="description">{description}</p>
@@ -91,7 +91,9 @@ function ServiceCard({ title, status, description }: ServiceCardProps) {
                 </span>
             </div>
         </div>
-    )
+    );
+
+    return link ? <Link to={link} style={{ textDecoration: 'none' }}>{card}</Link> : card;
 }
 
 export default Home
