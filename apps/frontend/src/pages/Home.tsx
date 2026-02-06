@@ -47,7 +47,7 @@ function Home() {
             {/* Cinematic Element 1: Logo & Slogan (0.0s) */}
             <header className="home-header animate-blur-in">
                 <h1 className="aura-logo">AURA.AI</h1>
-                <p className="aura-slogan">Your Personal Intelligence Ecosystem</p>
+                <p className="aura-slogan">Level Up Your Aura</p>
             </header>
 
             <main className="main-content">

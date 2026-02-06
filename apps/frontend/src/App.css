@@ -1990,10 +1990,29 @@ textarea::placeholder {
 }
 
 .aura-slogan {
-  font-size: 1.2rem;
-  color: rgba(255, 255, 255, 0.6);
+  font-size: 1.5rem;
+  font-weight: 600;
   letter-spacing: 2px;
   text-transform: uppercase;
+  background: linear-gradient(270deg, #ff00cc, #333399, #00d2ff, #ff00cc);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientFlow 5s ease infinite;
+}
+
+@keyframes gradientFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 /* 4. 3D Tilt Cards */
