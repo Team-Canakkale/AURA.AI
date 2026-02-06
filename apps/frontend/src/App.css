@@ -2074,6 +2074,52 @@ textarea::placeholder {
   }
 }
 
+.card-title-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.card-icon {
+  width: 60px;
+  height: 60px;
+  filter: drop-shadow(0 0 10px rgba(0, 210, 255, 0.3));
+  transition: transform 0.3s ease;
+}
+
+.tilt-card:hover .card-icon {
+  transform: scale(1.1) translateY(-5px);
+}
+
+.finance-icon {
+  color: #4facfe;
+  /* Basic blue */
+  fill: url(#financeGradient);
+}
+
+.health-icon {
+  color: #f093fb;
+  /* Basic pink/purple */
+  fill: url(#healthGradient);
+}
+
+.habits-icon {
+  color: #43e97b;
+  /* Basic green */
+  fill: url(#habitsGradient);
+}
+
+.card-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  transition: color 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
 .lumi-img-v2 {
   height: 120px;
   width: auto;
