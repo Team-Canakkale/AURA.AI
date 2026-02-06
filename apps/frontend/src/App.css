@@ -21,15 +21,15 @@
 
 body {
   min-height: 100vh;
-  display: flex;
-  place-items: center;
+  margin: 0;
+  padding: 0;
 }
 
 #root {
   width: 100%;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
 }
 
 .app {

@@ -454,7 +454,8 @@ function PdfUploader({ onTransactionsExtracted }: PdfUploaderProps) {
                 lowerDesc.includes('bankkart lira ile ödeme') ||
                 lowerDesc.includes('bsmv') ||
                 lowerDesc.includes('kkdf') ||
-                lowerDesc.includes('faiz')) {
+                // Sadece 'faiz' kelimesi geçiyorsa atla, AMA 'taksit' veya 'taksidi' geçiyorsa atlama (Taksitli Nakit Avans gibi)
+                (lowerDesc.includes('faiz') && !lowerDesc.includes('taksit') && !lowerDesc.includes('taksidi'))) {
                 return null;
             }
 
@@ -575,6 +576,9 @@ function PdfUploader({ onTransactionsExtracted }: PdfUploaderProps) {
             if (transactions.length === 0) {
                 setError(`No transactions found. Checked ${parts.length} parts. Open browser console (F12) for details.`);
             } else {
+                // Sort transactions by date (Newest first)
+                transactions.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
                 console.log(`🎉 Success! Found ${transactions.length} transactions`);
                 onTransactionsExtracted(transactions);
                 setError(null);

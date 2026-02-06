@@ -10,7 +10,8 @@
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 1.5rem 2rem;
+    padding: 1.5rem 2rem 0.75rem 2rem;
+    /* Increased top padding */
     position: sticky;
     top: 0;
     z-index: 100;
@@ -84,6 +85,25 @@
     transform: translateX(-3px);
 }
 
+.sign-out-btn {
+    padding: 0.75rem 1.5rem;
+    background: rgba(244, 67, 54, 0.1);
+    /* Red tint */
+    border: 1px solid rgba(244, 67, 54, 0.2);
+    border-radius: 50px;
+    color: #f44336;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.sign-out-btn:hover {
+    background: rgba(244, 67, 54, 0.2);
+    border-color: rgba(244, 67, 54, 0.4);
+    transform: translateY(-2px);
+}
+
 .chat-toggle-btn {
     display: flex;
     align-items: center;
@@ -112,22 +132,56 @@
 .dashboard-main {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 2rem;
+    padding: 1rem 2rem;
 }
 
 .dashboard-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
+    gap: 1rem;
     align-items: start;
 }
 
-.analyzer-section,
+.analyzer-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    height: auto;
+}
+
 .results-section {
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: 0.75rem;
+    min-height: 250px;
+    height: auto;
+    max-height: 750px;
+    overflow-y: auto;
+    /* Whole section scrolls */
 }
+
+/* Custom Scrollbar for sections */
+.results-section::-webkit-scrollbar {
+    width: 6px;
+}
+
+.results-section::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 10px;
+}
+
+.analyzer-section::-webkit-scrollbar-thumb,
+.results-section::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.analyzer-section::-webkit-scrollbar-thumb:hover,
+.results-section::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* --- Restored Analysis UI Styles --- */
 
 /* Error Message */
 .error-message {
@@ -321,15 +375,44 @@
     color: hsl(var(--secondary));
 }
 
-/* Empty State */
+.category-alert {
+    display: flex;
+    align-items: start;
+    gap: 0.75rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.75rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: hsl(var(--foreground) / 0.8);
+}
+
+.alert-icon {
+    font-size: 1.1rem;
+}
+
+.category-alert p {
+    margin: 0;
+}
+
+/* --- End Restored Styles --- */
+
+
 .empty-state {
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
     border: 2px dashed rgba(255, 255, 255, 0.1);
     border-radius: 20px;
-    padding: 4rem 2rem;
+    padding: 2rem;
     text-align: center;
     color: hsl(var(--foreground));
+    flex: 1;
+    /* Fill available space */
+    min-height: 250px;
+    /* Ensure visual balance if parent is minimum height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .empty-icon {

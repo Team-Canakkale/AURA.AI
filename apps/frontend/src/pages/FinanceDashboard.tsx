@@ -89,6 +89,16 @@ function FinanceDashboard({ onBack }: FinanceDashboardProps) {
                             ← Home
                         </button>
                         <button
+                            className="sign-out-btn"
+                            onClick={() => {
+                                // Clear session and redirect
+                                localStorage.clear();
+                                window.location.href = '/';
+                            }}
+                        >
+                            Sign Out
+                        </button>
+                        <button
                             className="chat-toggle-btn"
                             onClick={() => setShowChat(!showChat)}
                         >

@@ -5,15 +5,30 @@
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 16px;
-    padding: 1.25rem;
+    padding: 0.75rem;
+    /* Reduced padding */
     color: white;
+
+    /* Layout */
+    display: flex;
+    flex-direction: column;
+    min-height: 250px;
+    max-height: 750px;
+    /* Limit height here */
+    height: auto;
+    /* Grow with content up to max */
+    overflow: hidden;
+    /* Contain children */
 }
 
 .analyzer-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
+    /* Reduced margin */
+    flex-shrink: 0;
+    /* Don't shrink header */
 }
 
 .analyzer-header h2 {
@@ -164,6 +179,12 @@
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
+    flex: 1;
+    /* Take remaining space */
+    min-height: 0;
+    /* Crucial for nested flex scrolling */
+    overflow: hidden;
+    /* Ensure scroll stays inside child */
 }
 
 .list-header {
@@ -186,8 +207,12 @@
 }
 
 .transactions-scroll {
-    max-height: 700px;
+    /* max-height: 700px; Removed to allow full height flex */
+    flex: 1;
+    /* Take remaining vertical space */
     overflow-y: auto;
+    min-height: 0;
+    /* Crucial for nested flex scrolling */
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -296,6 +321,36 @@
 
 .remove-btn:disabled {
     opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Save Button */
+.save-btn {
+    width: 100%;
+    padding: 0.8rem;
+    background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+    margin-bottom: 1rem;
+}
+
+.save-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.6);
+}
+
+.save-btn:disabled {
+    opacity: 0.7;
     cursor: not-allowed;
 }
 

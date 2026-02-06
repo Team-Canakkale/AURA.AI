@@ -7,6 +7,7 @@ import { supabase } from './lib/supabase';
 import { getGeminiModel } from './lib/gemini';
 import { ExpenseAnalysisController } from './controllers/ExpenseAnalysisController';
 import { ChatController } from './controllers/ChatController';
+import { TransactionController } from './controllers/TransactionController';
 
 const app = express();
 const PORT = process.env.PORT || 4001;
@@ -18,6 +19,7 @@ app.use(express.json());
 // Initialize controllers
 const expenseAnalysisController = new ExpenseAnalysisController();
 const chatController = new ChatController();
+const transactionController = new TransactionController();
 
 // Health check endpoint
 app.get('/health', (req: Request, res: Response) => {
@@ -35,21 +37,19 @@ app.post('/api/analyze-expenses', expenseAnalysisController.analyzeExpenses);
 app.get('/api/expense-categories', expenseAnalysisController.getCategories);
 
 // ========================================
+// Transaction Management API
+// ========================================
+app.get('/api/transactions', transactionController.getTransactions);
+app.post('/api/transactions/bulk', transactionController.saveBulkTransactions);
+
+// ========================================
 // TUSU Chat API
 // ========================================
 app.post('/api/chat', chatController.chat);
 app.get('/api/chat/greeting', chatController.getGreeting);
 
-// Sample finance endpoints
-app.get('/transactions', (req: Request, res: Response) => {
-    res.json({
-        transactions: [
-            { id: 1, amount: 100, description: 'Sample transaction', date: new Date() }
-        ]
-    });
-});
-
-app.post('/transactions', (req: Request, res: Response) => {
+// Sample finance endpoints (Deprecated/Test)
+app.post('/transactions-test', (req: Request, res: Response) => {
     const { amount, description } = req.body;
     res.json({
         success: true,

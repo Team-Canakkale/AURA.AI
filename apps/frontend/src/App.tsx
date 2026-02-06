@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import './App.css'
+import LoginPage from './pages/LoginPage'
 import FinanceDashboard from './pages/FinanceDashboard'
 
 interface ServiceStatus {
@@ -11,6 +12,7 @@ interface ServiceStatus {
 type Page = 'home' | 'finance' | 'habit' | 'health';
 
 function App() {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [currentPage, setCurrentPage] = useState<Page>('home');
     const [services, setServices] = useState<{ [key: string]: ServiceStatus | null }>({
         finance: null,
@@ -32,7 +34,8 @@ function App() {
                     const data = await response.json();
                     setServices(prev => ({ ...prev, [endpoint.name]: data }));
                 } catch (error) {
-                    console.error(`Error checking ${endpoint.name}:`, error);
+                    // Silent fail to avoid console spam when services are not running
+                    // console.debug(`Service ${endpoint.name} offline`);
                     setServices(prev => ({ ...prev, [endpoint.name]: null }));
                 }
             }
@@ -43,6 +46,11 @@ function App() {
         return () => clearInterval(interval);
     }, []);
 
+    // Login check
+    if (!isLoggedIn) {
+        return <LoginPage onLogin={() => setIsLoggedIn(true)} />;
+    }
+
     // Render different pages based on currentPage
     if (currentPage === 'finance') {
         return <FinanceDashboard onBack={() => setCurrentPage('home')} />;
@@ -51,8 +59,33 @@ function App() {
     return (
         <div className="app">
             <header className="header">
-                <h1>🌟 Aura AI Platform</h1>
-                <p className="subtitle">Multi-Service AI Dashboard</p>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', maxWidth: '1200px', margin: '0 auto', position: 'relative', paddingTop: '2rem' }}>
+                    <div>
+                        <h1>🌟 Aura AI Platform</h1>
+                        <p className="subtitle">Multi-Service AI Dashboard</p>
+                    </div>
+                    <button
+                        onClick={() => {
+                            localStorage.clear();
+                            setIsLoggedIn(false);
+                        }}
+                        style={{
+                            padding: '0.75rem 1.5rem',
+                            background: 'rgba(244, 67, 54, 0.1)',
+                            border: '1px solid rgba(244, 67, 54, 0.2)',
+                            borderRadius: '50px',
+                            color: '#f44336',
+                            fontWeight: 600,
+                            fontSize: '1rem',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.5rem'
+                        }}
+                    >
+                        Sign Out
+                    </button>
+                </div>
             </header>
 
             <main className="main">
