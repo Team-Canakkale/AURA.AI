@@ -42,11 +42,11 @@ function ExpenseAnalyzer({ onAnalyze, loading }: ExpenseAnalyzerProps) {
             });
 
             if (response.data.success) {
-                alert(`Successfully saved ${response.data.message}`);
+                alert(`${response.data.message} başarıyla kaydedildi`);
             }
         } catch (error) {
             console.error('Failed to save transactions:', error);
-            alert('Failed to save transactions. Check console for details.');
+            alert('İşlemler kaydedilemedi. Detaylar için konsola bakın.');
         }
     };
 
@@ -55,7 +55,7 @@ function ExpenseAnalyzer({ onAnalyze, loading }: ExpenseAnalyzerProps) {
     return (
         <div className="expense-analyzer">
             <div className="analyzer-header">
-                <h2>📝 Add Transactions</h2>
+                <h2>📝 İşlem Ekle</h2>
             </div>
 
             {/* PDF Upload */}
@@ -65,8 +65,8 @@ function ExpenseAnalyzer({ onAnalyze, loading }: ExpenseAnalyzerProps) {
             {transactions.length > 0 && (
                 <div className="transactions-list">
                     <div className="list-header">
-                        <h3>Transactions ({transactions.length})</h3>
-                        <span className="total-amount">Total: ₺{totalAmount.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}</span>
+                        <h3>İşlemler ({transactions.length})</h3>
+                        <span className="total-amount">Toplam: ₺{totalAmount.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}</span>
                     </div>
 
                     <button
@@ -78,12 +78,12 @@ function ExpenseAnalyzer({ onAnalyze, loading }: ExpenseAnalyzerProps) {
                         {loading ? (
                             <>
                                 <span className="spinner"></span>
-                                Analyzing...
+                                Analiz Ediliyor...
                             </>
                         ) : (
                             <>
                                 <span className="btn-icon">🔍</span>
-                                Analyze Expenses
+                                Harcamaları Analiz Et
                             </>
                         )}
                     </button>
@@ -95,7 +95,7 @@ function ExpenseAnalyzer({ onAnalyze, loading }: ExpenseAnalyzerProps) {
                         style={{ marginBottom: '1rem', marginLeft: '0.5rem', backgroundColor: '#4caf50' }}
                     >
                         <span className="btn-icon">💾</span>
-                        Save to Database
+                        Veritabanına Kaydet
                     </button>
 
                     <div className="transactions-scroll">

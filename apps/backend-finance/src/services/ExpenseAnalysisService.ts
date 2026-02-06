@@ -152,10 +152,10 @@ export class ExpenseAnalysisService {
     private generateRecommendations(anomalies: CategoryAnalysis[]): string[] {
         return anomalies.map(anomaly => {
             const currency = 'TL';
-            return `You spent ${anomaly.currentMonthSpending.toLocaleString()} ${currency} on ${anomaly.category} ` +
-                `(${anomaly.percentageChange.toFixed(1)}% of total). ` +
-                `This exceeds the recommended 20% limit (${anomaly.averageMonthlySpending.toLocaleString()} ${currency}). ` +
-                `Potential saving: ${anomaly.potentialSavings.toLocaleString()} ${currency}.`;
+            return `${anomaly.category} kategorisinde ${anomaly.currentMonthSpending.toLocaleString()} ${currency} harcama yaptınız ` +
+                `(%${anomaly.percentageChange.toFixed(1)} toplam harcama). ` +
+                `Bu, önerilen %20 limitini aşıyor (Limit: ${anomaly.averageMonthlySpending.toLocaleString()} ${currency}). ` +
+                `Potansiyel tasarruf: ${anomaly.potentialSavings.toLocaleString()} ${currency}.`;
         });
     }
 
@@ -164,15 +164,15 @@ export class ExpenseAnalysisService {
      */
     private generateSummaryMessage(anomalies: CategoryAnalysis[], totalSavings: number): string {
         if (anomalies.length === 0) {
-            return '✅ Great job! Your spending is within normal patterns this month.';
+            return '✅ Harika iş! Harcamaların bu ay normal sınırlar içinde.';
         }
 
         const categoriesText = anomalies.length === 1
-            ? '1 category'
-            : `${anomalies.length} categories`;
+            ? '1 kategoride'
+            : `${anomalies.length} kategoride`;
 
-        return `⚠️ Excessive consumption detected in ${categoriesText}. ` +
-            `Total potential savings: ${totalSavings.toLocaleString()} TL`;
+        return `⚠️ ${categoriesText} aşırı tüketim tespit edildi. ` +
+            `Toplam potansiyel tasarruf: ${totalSavings.toLocaleString()} TL`;
     }
 
     /**

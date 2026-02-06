@@ -84,7 +84,7 @@ function FinanceDashboard() {
                             className="back-btn"
                             onClick={() => navigate('/')}
                         >
-                            ← Home
+                            ← Ana Sayfa
                         </button>
                         <button
                             className="sign-out-btn"
@@ -94,14 +94,14 @@ function FinanceDashboard() {
                                 window.location.href = '/';
                             }}
                         >
-                            Sign Out
+                            Çıkış Yap
                         </button>
                         <button
                             className="chat-toggle-btn"
                             onClick={() => setShowChat(!showChat)}
                         >
                             <span className="chat-icon">💬</span>
-                            Chat with TUSU
+                            TUSU ile Sohbet Et
                         </button>
                     </div>
                 </div>
@@ -129,14 +129,14 @@ function FinanceDashboard() {
                                 {/* Summary Card */}
                                 <div className="summary-card">
                                     <div className="summary-header">
-                                        <h2>💰 Analysis Summary</h2>
+                                        <h2>💰 Analiz Özeti</h2>
                                         <span className="analysis-date">
                                             {new Date(analysisResult.analysisDate).toLocaleDateString('tr-TR')}
                                         </span>
                                     </div>
 
                                     <div className="total-savings">
-                                        <span className="savings-label">Total Potential Savings</span>
+                                        <span className="savings-label">Toplam Potansiyel Tasarruf</span>
                                         <span className="savings-amount">
                                             ₺{analysisResult.totalPotentialSavings.toLocaleString('tr-TR', {
                                                 minimumFractionDigits: 2,
@@ -149,7 +149,7 @@ function FinanceDashboard() {
 
                                     {analysisResult.recommendations.length > 0 && (
                                         <div className="quick-tips">
-                                            <h3>💡 Quick Tips</h3>
+                                            <h3>💡 Hızlı İpuçları</h3>
                                             <ul>
                                                 {analysisResult.recommendations.map((rec, idx) => (
                                                     <li key={idx}>{rec}</li>
@@ -162,31 +162,31 @@ function FinanceDashboard() {
                                 {/* Excessive Categories */}
                                 {analysisResult.excessiveCategories.length > 0 && (
                                     <div className="excessive-categories">
-                                        <h2>🚨 Areas to Improve</h2>
+                                        <h2>🚨 Geliştirilmesi Gereken Alanlar</h2>
                                         {analysisResult.excessiveCategories.map((category, idx) => (
                                             <div key={idx} className="category-card">
                                                 <div className="category-header">
                                                     <h3>{category.category}</h3>
                                                     <span className={`change-badge ${category.percentageChange > 20 ? 'negative' : 'neutral'}`}>
-                                                        {category.percentageChange}% of Total
+                                                        {category.percentageChange}% (Toplam)
                                                     </span>
                                                 </div>
 
                                                 <div className="category-stats">
                                                     <div className="stat">
-                                                        <span className="stat-label">Recommended Limit (20%)</span>
+                                                        <span className="stat-label">Önerilen Limit (%20)</span>
                                                         <span className="stat-value">
                                                             ₺{category.averageMonthlySpending.toLocaleString('tr-TR')}
                                                         </span>
                                                     </div>
                                                     <div className="stat">
-                                                        <span className="stat-label">Current Month</span>
+                                                        <span className="stat-label">Bu Ay</span>
                                                         <span className="stat-value">
                                                             ₺{category.currentMonthSpending.toLocaleString('tr-TR')}
                                                         </span>
                                                     </div>
                                                     <div className="stat highlight">
-                                                        <span className="stat-label">Potential Savings</span>
+                                                        <span className="stat-label">Potansiyel Tasarruf</span>
                                                         <span className="stat-value">
                                                             ₺{category.potentialSavings.toLocaleString('tr-TR')}
                                                         </span>
@@ -196,9 +196,9 @@ function FinanceDashboard() {
                                                 <div className="category-alert">
                                                     <span className="alert-icon">⚠️</span>
                                                     <p>
-                                                        You spent <strong>₺{category.currentMonthSpending.toLocaleString('tr-TR')}</strong> on {category.category},
-                                                        which is <strong>{category.percentageChange.toFixed(1)}%</strong> of your total spending.
-                                                        You exceeded the recommended limit by <strong>₺{category.potentialSavings.toLocaleString('tr-TR')}</strong>.
+                                                        {category.category} için <strong>₺{category.currentMonthSpending.toLocaleString('tr-TR')}</strong> harcadınız
+                                                        (Toplamın <strong>%{category.percentageChange.toFixed(1)}</strong>'i).
+                                                        Önerilen limiti <strong>₺{category.potentialSavings.toLocaleString('tr-TR')}</strong> aştınız.
                                                     </p>
                                                 </div>
                                             </div>
@@ -209,7 +209,7 @@ function FinanceDashboard() {
                                 {/* All Categories Breakdown (Excluding Excessive Ones) */}
                                 {analysisResult.allCategories && analysisResult.allCategories.filter(cat => !cat.isExcessive).length > 0 && (
                                     <div className="all-categories-section">
-                                        <h2>📊 Other Categories</h2>
+                                        <h2>📊 Diğer Kategoriler</h2>
                                         <div className="categories-grid">
                                             {analysisResult.allCategories
                                                 .filter(cat => !cat.isExcessive)
@@ -231,8 +231,8 @@ function FinanceDashboard() {
                         ) : (
                             <div className="empty-state">
                                 <div className="empty-icon">📊</div>
-                                <h3>No Analysis Yet</h3>
-                                <p>Add your transactions and click "Analyze Expenses" to get started!</p>
+                                <h3>Henüz Analiz Yok</h3>
+                                <p>İşlemlerinizi ekleyin ve başlamak için "Harcamaları Analiz Et" butonuna tıklayın!</p>
                             </div>
                         )}
                     </div>
