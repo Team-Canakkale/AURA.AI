@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import './LoginPage.css';
 
@@ -9,6 +10,7 @@ const Login: React.FC = () => {
     const [name, setName] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -27,8 +29,7 @@ const Login: React.FC = () => {
 
                 if (data.session) {
                     localStorage.setItem('sb-access-token', data.session.access_token);
-                    // Force a reload or navigate to root to trigger App.tsx re-evaluation
-                    window.location.href = '/';
+                    navigate('/');
                 }
             } else {
                 // Sign Up Logic
@@ -52,7 +53,7 @@ const Login: React.FC = () => {
 
     const handleDemoLogin = () => {
         localStorage.setItem('sb-access-token', 'DEMO_TOKEN');
-        window.location.href = '/';
+        navigate('/');
     };
 
     return (
