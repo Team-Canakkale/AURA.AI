@@ -1,152 +1,154 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
+import './LoginPage.css';
 
-export default function Login() {
+const Login: React.FC = () => {
+    const [isLogin, setIsLogin] = useState(true);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [loading, setLoading] = useState(false);
+    const [name, setName] = useState('');
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    const handleLogin = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setLoading(true);
         setError('');
+        setLoading(true);
 
-        const { data, error } = await supabase.auth.signInWithPassword({
-            email,
-            password,
-        });
+        try {
+            if (isLogin) {
+                // Login Logic
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email,
+                    password,
+                });
 
-        if (error) {
-            setError(error.message);
-            setLoading(false);
-        } else {
-            // Save token
-            if (data.session) {
-                localStorage.setItem('sb-access-token', data.session.access_token);
-                navigate('/habitat');
+                if (error) throw error;
+
+                if (data.session) {
+                    localStorage.setItem('sb-access-token', data.session.access_token);
+                    navigate('/habitat');
+                }
+            } else {
+                // Sign Up Logic
+                const { error } = await supabase.auth.signUp({
+                    email,
+                    password,
+                    options: {
+                        data: { full_name: name }
+                    }
+                });
+
+                if (error) throw error;
+                setError('Check your email for confirmation link!');
             }
+        } catch (err: any) {
+            setError(err.message || 'An error occurred');
+        } finally {
+            setLoading(false);
         }
     };
 
-    const handleSignUp = async () => {
-        setLoading(true);
-        setError('');
-        const { data, error } = await supabase.auth.signUp({
-            email,
-            password,
-        });
-
-        if (error) {
-            setError(error.message);
-        } else {
-            setError('Check your email for confirmation link! (Or if auto-confirm is on, just Login)');
-        }
-        setLoading(false);
+    const handleDemoLogin = () => {
+        localStorage.setItem('sb-access-token', 'DEMO_TOKEN');
+        navigate('/habitat');
     };
 
     return (
         <div className="login-container">
-            <div className="glass-panel login-box">
-                <h1>🔐 Aura AI Access</h1>
-                <p>Login to access Task Manager</p>
-
-                {error && <div className="error-msg">{error}</div>}
-
-                <form onSubmit={handleLogin}>
-                    <input
-                        type="email"
-                        placeholder="Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                    <button type="submit" disabled={loading} className="login-btn">
-                        {loading ? 'Processing...' : 'Login'}
-                    </button>
-                    <button type="button" onClick={() => {
-                        localStorage.setItem('sb-access-token', 'DEMO_TOKEN');
-                        navigate('/habitat');
-                    }} className="demo-btn">
-                        🚀 Demo Giriş (Hızlı)
-                    </button>
-                    <button type="button" onClick={handleSignUp} className="signup-btn">
-                        Sign Up
-                    </button>
-                </form>
+            <div className="login-background">
+                <div className="shape shape-1"></div>
+                <div className="shape shape-2"></div>
+                <div className="shape shape-3"></div>
             </div>
 
-            <style>{`
-                .login-container {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    height: 100vh;
-                    background: radial-gradient(circle at top left, #2a2a72, #009ffd);
-                }
-                .login-box {
-                    padding: 3rem;
-                    width: 400px;
-                    text-align: center;
-                    border-radius: 24px;
-                }
-                .login-box h1 { margin-bottom: 0.5rem; }
-                .login-box p { color: rgba(255,255,255,0.7); margin-bottom: 2rem; }
-                input {
-                    width: 100%;
-                    padding: 12px;
-                    margin-bottom: 1rem;
-                    border-radius: 8px;
-                    border: 1px solid rgba(255,255,255,0.2);
-                    background: rgba(0,0,0,0.2);
-                    color: white;
-                }
-                .login-btn {
-                    width: 100%;
-                    padding: 12px;
-                    background: #00bf8f;
-                    color: white;
-                    border: none;
-                    border-radius: 8px;
-                    font-weight: bold;
-                    cursor: pointer;
-                    margin-bottom: 1rem;
-                }
-                .demo-btn {
-                    width: 100%;
-                    padding: 12px;
-                    background: #575fcf;
-                    color: white;
-                    border: none;
-                    border-radius: 8px;
-                    font-weight: bold;
-                    cursor: pointer;
-                    margin-bottom: 1rem;
-                }
-                .signup-btn {
-                    background: transparent;
-                    color: rgba(255,255,255,0.7);
-                    border: none;
-                    cursor: pointer;
-                    text-decoration: underline;
-                }
-                .error-msg {
-                    background: rgba(255, 71, 87, 0.2);
-                    color: #ff4757;
-                    padding: 10px;
-                    border-radius: 8px;
-                    margin-bottom: 1rem;
-                }
-            `}</style>
+            <div className="login-content">
+                <div className="login-header">
+                    <h1>Aura AI</h1>
+                    <p>Your Personal AI Ecosystem</p>
+                </div>
+
+                <div className="glass-card">
+                    <div className="auth-tabs">
+                        <button
+                            className={`tab ${isLogin ? 'active' : ''}`}
+                            onClick={() => { setIsLogin(true); setError(''); }}
+                        >
+                            Login
+                        </button>
+                        <button
+                            className={`tab ${!isLogin ? 'active' : ''}`}
+                            onClick={() => { setIsLogin(false); setError(''); }}
+                        >
+                            Register
+                        </button>
+                    </div>
+
+                    <form onSubmit={handleSubmit} className="auth-form">
+                        {error && <div className="auth-error" style={{ color: '#ff4444', marginBottom: '1rem', fontSize: '0.9rem', background: 'rgba(255,0,0,0.1)', padding: '0.5rem', borderRadius: '4px', whiteSpace: 'pre-line' }}>{error}</div>}
+
+                        {!isLogin && (
+                            <div className="form-group">
+                                <label htmlFor="name">Full Name</label>
+                                <input
+                                    type="text"
+                                    id="name"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                    placeholder="John Doe"
+                                    required={!isLogin}
+                                />
+                            </div>
+                        )}
+
+                        <div className="form-group">
+                            <label htmlFor="email">Email Address</label>
+                            <input
+                                type="email"
+                                id="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="name@example.com"
+                                required
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="password">Password</label>
+                            <input
+                                type="password"
+                                id="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                placeholder="••••••••"
+                                required
+                            />
+                        </div>
+
+                        <button type="submit" className="submit-btn" disabled={loading}>
+                            {loading ? 'Processing...' : (isLogin ? 'Sign In' : 'Create Account')}
+                        </button>
+
+                        {isLogin && (
+                            <button type="button" onClick={handleDemoLogin} className="submit-btn" style={{ background: 'rgba(255,255,255,0.1)', marginTop: '0.5rem', boxShadow: 'none' }}>
+                                🚀 Demo Login
+                            </button>
+                        )}
+                    </form>
+
+                    <div className="auth-footer">
+                        {isLogin ? (
+                            <p>Don't have an account? <span onClick={() => { setIsLogin(false); setError(''); }}>Sign up</span></p>
+                        ) : (
+                            <p>Already have an account? <span onClick={() => { setIsLogin(true); setError(''); }}>Sign in</span></p>
+                        )}
+                    </div>
+                </div>
+            </div>
         </div>
     );
-}
+};
+
+export default Login;
