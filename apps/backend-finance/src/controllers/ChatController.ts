@@ -71,10 +71,10 @@ export class ChatController {
     public getGreeting = async (req: Request, res: Response): Promise<void> => {
         try {
             const greetings = [
-                "Merhaba! 🐿️ Ben TUSU, senin finans asistanın! Harcamalarınla ilgili bir sorum var mı?",
-                "Hey there! 🐿️ I'm TUSU, your friendly finance squirrel! How can I help you save money today?",
+                "Merhaba! 🐿️ Ben TUSU, senin finans asistanın! Bugün tasarruf etmene nasıl yardımcı olabilirim?",
                 "Selam! 🐿️ Finans dünyasında kaybolmuş gibi hissediyor musun? Ben sana yardımcı olabilirim!",
-                "Hi! 🐿️ Ready to learn how to make your money work smarter? Let's chat!"
+                "Merhaba! 🐿️ Ben TUSU, senin finans asistanın! Harcamalarınla ilgili bir sorum var mı?",
+                "Selam! 🐿️ Finansal hedeflerine ulaşmak için hazır mısın? Hadi sohbet edelim!"
             ];
 
             const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
