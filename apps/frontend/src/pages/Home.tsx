@@ -48,6 +48,7 @@ function Home() {
             {/* Cinematic Element 1: Logo & Slogan (0.0s) */}
             <header className="home-header animate-blur-in">
                 <div className="logo-container">
+                    <img src="/lumi.png" alt="Lumi Mascot" className="lumi-img" />
                     <h1 className="aura-logo">AURA.AI</h1>
                     <img src="/aura_icon.png" alt="Aura Logo" className="aura-logo-img" />
                 </div>
