@@ -1994,11 +1994,8 @@ textarea::placeholder {
   text-transform: uppercase;
   text-shadow:
     0 0 2px #fff,
-    0 0 5px #fff,
-    0 0 10px #00d2ff,
-    0 0 20px #00d2ff,
-    0 0 40px #00d2ff;
-  /* Reduced excessive glow */
+    0 0 5px #00d2ff,
+    0 0 10px #00d2ff;
   animation: neonPulse 2s infinite alternate;
 }
 
@@ -2006,19 +2003,17 @@ textarea::placeholder {
   from {
     text-shadow:
       0 0 2px #fff,
-      0 0 5px #fff,
-      0 0 10px #00d2ff,
-      0 0 20px #00d2ff,
-      0 0 40px #00d2ff;
+      0 0 5px #00d2ff,
+      0 0 10px #00d2ff;
+    opacity: 0.9;
   }
 
   to {
     text-shadow:
       0 0 1px #fff,
-      0 0 2px #fff,
-      0 0 5px #00d2ff,
-      0 0 10px #00d2ff,
-      0 0 20px #00d2ff;
+      0 0 2px #00d2ff,
+      0 0 5px #00d2ff;
+    opacity: 1;
   }
 }
 
@@ -2058,6 +2053,26 @@ textarea::placeholder {
 
   50% {
     transform: translateY(-12px) rotate(5deg);
+  }
+}
+
+.lumi-img-v2 {
+  height: 120px;
+  width: auto;
+  filter: drop-shadow(0 0 15px rgba(100, 100, 255, 0.4));
+  animation: floatLumiV2 3s ease-in-out infinite;
+  margin-right: 1rem;
+}
+
+@keyframes floatLumiV2 {
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-15px) rotate(5deg);
   }
 }
 
