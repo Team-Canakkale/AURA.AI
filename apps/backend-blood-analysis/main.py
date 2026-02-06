@@ -60,6 +60,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/health")
+async def health_check():
+    return {
+        "status": "ok",
+        "ocr_initialized": ocr is not None,
+        "openai_key_present": bool(os.getenv("OPENAI_API_KEY"))
+    }
+
+
 def clean_value(val_str):
     """
     Cleans a numeric string: replaces ',' with '.', removes non-numeric chars except dot/minus.

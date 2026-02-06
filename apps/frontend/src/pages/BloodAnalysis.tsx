@@ -31,14 +31,21 @@ export default function BloodAnalysis() {
             });
 
             if (!response.ok) {
-                throw new Error('Analysis failed. Make sure backend is running on port 4004.');
+                let errorMessage = 'Analysis failed.';
+                try {
+                    const errorData = await response.json();
+                    if (errorData.detail) errorMessage = errorData.detail;
+                } catch (e) {
+                    errorMessage += ' Check if backend is running on port 4004.';
+                }
+                throw new Error(errorMessage);
             }
 
             const data = await response.json();
             setResults(data);
         } catch (err: any) {
-            setError(err.message || 'An error occurred');
-            console.error('Error:', err);
+            console.error('Analysis Error:', err);
+            setError(err.message || 'An error occurred during analysis.');
         } finally {
             setLoading(false);
         }
