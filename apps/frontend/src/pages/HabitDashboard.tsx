@@ -240,7 +240,6 @@ export default function HabitDashboard() {
                                         <option value="ders">Ders</option>
                                         <option value="sınav">Sınav</option>
                                         <option value="staj">Staj</option>
-                                        <option value="hackathon">Hackathon</option>
                                         <option value="toplantı">Toplantı</option>
                                     </select>
                                 </div>

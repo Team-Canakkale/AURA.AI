@@ -7,6 +7,7 @@ import eventsRouter from './routes/events';
 import { notesRouter } from './routes/notes';
 import { gamificationRouter } from './routes/gamification';
 import { aiRouter } from './routes/ai';
+import { callRouter } from './routes/call';
 import { supabase } from './lib/supabase';
 import { getGeminiModel } from './lib/gemini';
 
@@ -36,6 +37,7 @@ app.use('/events', eventsRouter);
 app.use('/notes', notesRouter);
 app.use('/gamification', gamificationRouter);
 app.use('/ai', aiRouter);
+app.use('/call', callRouter);
 
 // Legacy/Simple Habit Routes (Keep for compatibility if frontend uses them)
 app.get('/habits', (req: Request, res: Response) => {

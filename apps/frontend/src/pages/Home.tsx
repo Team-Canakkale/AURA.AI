@@ -40,8 +40,22 @@ function Home() {
         return () => clearInterval(interval);
     }, []);
 
-    const handleAuraCall = () => {
+    const handleAuraCall = async () => {
         setIsCalling(true);
+        try {
+            const response = await fetch('/api/habit/call', { method: 'POST' });
+            const data = await response.json();
+
+            if (!response.ok) {
+                console.error('Call failed:', data.error);
+                alert('Arama başlatılamadı: ' + (data.error || 'Bilinmeyen hata'));
+                setIsCalling(false);
+            }
+        } catch (error) {
+            console.error('Network error:', error);
+            alert('Bağlantı hatası oluştu.');
+            setIsCalling(false);
+        }
     };
 
     const handleEndCall = () => {
