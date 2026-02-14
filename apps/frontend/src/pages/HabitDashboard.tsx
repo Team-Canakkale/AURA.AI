@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { taskApi, eventApi, gamificationApi, Task, Event } from '../api/habit';
 import QuickNotes from '../components/QuickNotes';
 import HabitatTree from '../components/HabitatTree';
@@ -31,10 +30,19 @@ export default function HabitDashboard() {
     const [newEventTimeVal, setNewEventTimeVal] = useState('');
     const [newEventEndTimeVal, setNewEventEndTimeVal] = useState('');
     const [newEventLocation, setNewEventLocation] = useState('');
-    const [newEventType, setNewEventType] = useState('diğer');
+    const [newEventType, setNewEventType] = useState('');
     const [showCityList, setShowCityList] = useState(false);
+    const [showTypeList, setShowTypeList] = useState(false);
+    const [showPriorityList, setShowPriorityList] = useState(false);
 
-    // AI
+    const EVENT_TYPES = ['Class', 'Exam', 'Internship', 'Meeting', 'Reminder', 'Sports', 'Social', 'Other'];
+    const PRIORITY_OPTIONS = [
+        { value: 'big_one', label: '⭐ Big One' },
+        { value: 'medium', label: 'Medium' },
+        { value: 'small', label: 'Small' }
+    ];
+
+
 
 
     // Initial Load & Game Login
@@ -96,7 +104,7 @@ export default function HabitDashboard() {
             title: newEventTitle,
             event_date: combinedDateTime,
             end_date: combinedEndDateTime,
-            type: newEventType,
+            type: newEventType || 'Other',
             location: newEventLocation
         });
         setNewEventTitle('');
@@ -104,7 +112,7 @@ export default function HabitDashboard() {
         setNewEventTimeVal('');
         setNewEventEndTimeVal('');
         setNewEventLocation('');
-        setNewEventType('diğer');
+        setNewEventType('');
         loadAllData();
     };
 
@@ -132,18 +140,18 @@ export default function HabitDashboard() {
     // Helper: Countdown
     const getTimeLeft = (dateStr: string) => {
         const diff = new Date(dateStr).getTime() - new Date().getTime();
-        if (diff < 0) return 'Süresi doldu';
+        if (diff < 0) return 'Expired';
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
         const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
 
-        if (days > 0) return `${days} gün kaldı`;
-        return `${hours} sa kaldı`;
+        if (days > 0) return `${days} days left`;
+        return `${hours} hrs left`;
     };
 
     return (
         <>
             <HabitatNavbar tree={tree} QuickNotesComponent={<QuickNotes />} />
-            <div className="habit-dashboard" style={{ paddingTop: '80px' }}>
+            <div className="habit-dashboard" style={{ paddingTop: '8rem' }}>
                 <div className="habitat-grid">
                     {/* 1. LEFT COLUMN: HABITAT & TASKS */}
                     <div className="column left-col">
@@ -154,71 +162,15 @@ export default function HabitDashboard() {
                         {/* MOOD ANALYST AI */}
                         <MoodAnalyst />
 
-                        {/* Task Matrix */}
-                        <div className="glass-panel task-panel">
-                            <div className="panel-header">
-                                <h2>✅ Görev Matrisi</h2>
-                                <span className="badge">{tasks.filter(t => t.status === 'pending').length} bekliyor</span>
-                            </div>
-                            <form onSubmit={handleAddTask} className="mini-form task-form">
-                                <input
-                                    value={newTaskTitle}
-                                    onChange={e => setNewTaskTitle(e.target.value)}
-                                    placeholder="Yeni görev..."
-                                />
-                                <select value={newTaskPriority} onChange={e => setNewTaskPriority(e.target.value)}>
-                                    <option value="big_one">⭐ Büyük Görev</option>
-                                    <option value="medium">Orta</option>
-                                    <option value="small">Küçük</option>
-                                </select>
-                                <button type="submit">+</button>
-                            </form>
 
-                            {/* ACTIVE TASKS */}
-                            <div className="list task-list">
-                                {sortedTasks.filter(t => t.status !== 'completed').map(task => (
-                                    <div key={task.id} className={`item task-item ${task.priority}`}>
-                                        <div className="task-left">
-                                            <input
-                                                type="checkbox"
-                                                checked={false}
-                                                onChange={() => toggleTask(task)}
-                                            />
-                                            <span className="task-title">{task.title}</span>
-                                        </div>
-                                        <button onClick={() => handleDeleteTask(task.id)} className="del-btn">×</button>
-                                    </div>
-                                ))}
-                            </div>
-
-                            {/* COMPLETED TASKS */}
-                            {sortedTasks.filter(t => t.status === 'completed').length > 0 && (
-                                <div className="completed-section">
-                                    <h3>Tamamlanan Görevler</h3>
-                                    <div className="list task-list">
-                                        {sortedTasks.filter(t => t.status === 'completed').map(task => (
-                                            <div key={task.id} className={`item task-item completed ${task.priority}`}>
-                                                <div className="task-left">
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={true}
-                                                        onChange={() => toggleTask(task)}
-                                                    />
-                                                    <span className="task-title">{task.title}</span>
-                                                </div>
-                                                <button onClick={() => handleDeleteTask(task.id)} className="del-btn">×</button>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-                        </div>
                     </div>
 
                     {/* 2. RIGHT COLUMN: EVENTS */}
                     <div className="column right-col">
-                        <div className="glass-panel events-panel">
-                            <h2>📅 Yaklaşan Etkinlikler</h2>
+                        <div className="glass-panel events-panel" style={{ position: 'relative', zIndex: 100 }}>
+                            <div className="panel-header" style={{ justifyContent: 'flex-start', marginBottom: '1.5rem' }}>
+                                <h2 style={{ margin: 0 }}>📅 Upcoming Events</h2>
+                            </div>
                             <form onSubmit={handleAddEvent} className="event-form-grid">
 
                                 {/* ROW 1 */}
@@ -226,22 +178,34 @@ export default function HabitDashboard() {
                                     <input
                                         value={newEventTitle}
                                         onChange={e => setNewEventTitle(e.target.value)}
-                                        placeholder="Etkinlik..."
+                                        placeholder="Event..."
                                         className="input-title"
                                         style={{ flex: 2 }}
                                     />
-                                    <select
-                                        value={newEventType}
-                                        onChange={e => setNewEventType(e.target.value)}
-                                        className="input-type"
-                                        style={{ flex: 1, minWidth: '100px', cursor: 'pointer' }}
-                                    >
-                                        <option value="diğer">Diğer</option>
-                                        <option value="ders">Ders</option>
-                                        <option value="sınav">Sınav</option>
-                                        <option value="staj">Staj</option>
-                                        <option value="toplantı">Toplantı</option>
-                                    </select>
+                                    <div className="type-wrapper" style={{ flex: 1, position: 'relative' }}>
+                                        <input
+                                            value={newEventType}
+                                            onChange={e => setNewEventType(e.target.value)}
+                                            onFocus={() => setShowTypeList(true)}
+                                            onBlur={() => setTimeout(() => setShowTypeList(false), 200)}
+                                            placeholder="Type (e.g. Exam)"
+                                            className="input-type"
+                                            style={{ width: '100%', cursor: 'text' }}
+                                        />
+                                        {showTypeList && (
+                                            <div className="city-dropdown" style={{ zIndex: 9999 }}>
+                                                {EVENT_TYPES.filter(t => t.toLowerCase().includes(newEventType.toLowerCase())).map(type => (
+                                                    <div
+                                                        key={type}
+                                                        className="city-option"
+                                                        onClick={() => setNewEventType(type)}
+                                                    >
+                                                        {type}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
 
                                 {/* ROW 2 */}
@@ -253,17 +217,17 @@ export default function HabitDashboard() {
                                         className="input-date"
                                         style={{ flex: 1 }}
                                     />
-                                    <div className="city-wrapper" style={{ flex: 1 }}>
+                                    <div className="city-wrapper" style={{ flex: 1, position: 'relative' }}>
                                         <input
                                             value={newEventLocation}
                                             onChange={e => setNewEventLocation(e.target.value)}
                                             onFocus={() => setShowCityList(true)}
                                             onBlur={() => setTimeout(() => setShowCityList(false), 200)}
-                                            placeholder="📍 Konum"
+                                            placeholder="📍 Location"
                                             style={{ width: '100%' }}
                                         />
                                         {showCityList && (
-                                            <div className="city-dropdown">
+                                            <div className="city-dropdown" style={{ zIndex: 9999 }}>
                                                 {CITIES.filter(c => c.toLowerCase().includes(newEventLocation.toLowerCase())).map(city => (
                                                     <div
                                                         key={city}
@@ -307,21 +271,21 @@ export default function HabitDashboard() {
                                     <div key={i} className="item event-card">
                                         <div className="event-date-box">
                                             <span className="day">{new Date(ev.event_date).getDate()}</span>
-                                            <span className="month">{new Date(ev.event_date).toLocaleString('tr-TR', { month: 'short' }).toUpperCase()}</span>
+                                            <span className="month">{new Date(ev.event_date).toLocaleString('en-US', { month: 'short' }).toUpperCase()}</span>
                                         </div>
                                         <div className="event-info">
                                             <div style={{ display: 'flex', alignItems: 'center' }}>
                                                 <h3 className="event-title-text">{ev.title}</h3>
-                                                {ev.type && ev.type !== 'diğer' && ev.type !== 'reminder' && (
+                                                {ev.type && ev.type !== 'other' && ev.type !== 'reminder' && (
                                                     <span className="event-type-badge">{ev.type}</span>
                                                 )}
                                             </div>
                                             <div className="event-meta">
                                                 <span className="event-time">
-                                                    🕒 {new Date(ev.event_date).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}
-                                                    {ev.end_date && ` - ${new Date(ev.end_date).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}`}
+                                                    🕒 {new Date(ev.event_date).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                                                    {ev.end_date && ` - ${new Date(ev.end_date).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}`}
                                                 </span>
-                                                <span className={`countdown-badge ${getTimeLeft(ev.event_date).includes('kaldı') ? 'active' : 'expired'}`}>
+                                                <span className={`countdown-badge ${getTimeLeft(ev.event_date).includes('left') ? 'active' : 'expired'}`}>
                                                     {getTimeLeft(ev.event_date)}
                                                 </span>
                                                 {ev.location && <span className="event-location">📍 {ev.location}</span>}
@@ -338,13 +302,13 @@ export default function HabitDashboard() {
                             {/* COMPLETED EVENTS */}
                             {events.filter(e => e.status === 'completed').length > 0 && (
                                 <div className="completed-section">
-                                    <h3>Geçmiş / Tamamlanan</h3>
+                                    <h3>Past / Completed</h3>
                                     <div className="list">
                                         {events.filter(e => e.status === 'completed').map((ev, i) => (
                                             <div key={i} className="item event-card completed">
                                                 <div className="event-date-box" style={{ opacity: 0.5 }}>
                                                     <span className="day">{new Date(ev.event_date).getDate()}</span>
-                                                    <span className="month">{new Date(ev.event_date).toLocaleString('tr-TR', { month: 'short' }).toUpperCase()}</span>
+                                                    <span className="month">{new Date(ev.event_date).toLocaleString('en-US', { month: 'short' }).toUpperCase()}</span>
                                                 </div>
                                                 <div className="event-info">
                                                     <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -360,6 +324,88 @@ export default function HabitDashboard() {
                                                     {/* No complete button for completed events */}
                                                     <button onClick={() => handleDeleteEvent(ev.id)} className="del-btn">×</button>
                                                 </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Task Matrix (Moved to Right Column) */}
+                        <div className="glass-panel task-panel">
+                            <div className="panel-header">
+                                <h2>✅ Task Matrix</h2>
+                                <span className="badge">{tasks.filter(t => t.status === 'pending').length} pending</span>
+                            </div>
+                            <form onSubmit={handleAddTask} className="mini-form task-form">
+                                <input
+                                    value={newTaskTitle}
+                                    onChange={e => setNewTaskTitle(e.target.value)}
+                                    placeholder="New task..."
+                                    style={{ flex: '1 1 0%', minWidth: '0' }}
+                                />
+                                <div className="priority-wrapper" style={{ flex: '0 10 120px', minWidth: '100px', position: 'relative' }}>
+                                    <input
+                                        value={PRIORITY_OPTIONS.find(p => p.value === newTaskPriority)?.label || newTaskPriority}
+                                        readOnly
+                                        onFocus={() => setShowPriorityList(true)}
+                                        onBlur={() => setTimeout(() => setShowPriorityList(false), 200)}
+                                        placeholder="Priority"
+                                        style={{ width: '100%', cursor: 'pointer' }}
+                                    />
+                                    {showPriorityList && (
+                                        <div className="city-dropdown" style={{ zIndex: 9999 }}>
+                                            {PRIORITY_OPTIONS.map(opt => (
+                                                <div
+                                                    key={opt.value}
+                                                    className="city-option"
+                                                    onClick={() => {
+                                                        setNewTaskPriority(opt.value);
+                                                        setShowPriorityList(false);
+                                                    }}
+                                                >
+                                                    {opt.label}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                                <button type="submit" style={{ flex: '0 0 35px' }}>+</button>
+                            </form>
+
+                            {/* ACTIVE TASKS */}
+                            <div className="list task-list">
+                                {sortedTasks.filter(t => t.status !== 'completed').map(task => (
+                                    <div key={task.id} className={`item task-item ${task.priority}`}>
+                                        <div className="task-left">
+                                            <input
+                                                type="checkbox"
+                                                checked={false}
+                                                onChange={() => toggleTask(task)}
+                                            />
+                                            <span className="task-title">{task.title}</span>
+                                        </div>
+                                        <button onClick={() => handleDeleteTask(task.id)} className="del-btn">×</button>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* COMPLETED TASKS */}
+                            {sortedTasks.filter(t => t.status === 'completed').length > 0 && (
+                                <div className="completed-section">
+                                    <h3>Completed Tasks</h3>
+                                    <div className="list task-list">
+                                        {sortedTasks.filter(t => t.status === 'completed').map(task => (
+                                            <div key={task.id} className={`item task-item completed ${task.priority}`}>
+                                                <div className="task-left">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={true}
+                                                        onChange={() => toggleTask(task)}
+                                                    />
+                                                    <span className="task-title">{task.title}</span>
+                                                </div>
+                                                <button onClick={() => handleDeleteTask(task.id)} className="del-btn">×</button>
                                             </div>
                                         ))}
                                     </div>

@@ -70,8 +70,12 @@ export const taskApi = {
         try {
             const response = await fetch(`${API_BASE_URL}/tasks`);
             if (!response.ok) return [];
-            return await response.json();
-        } catch (e) { return []; }
+            const data = await response.json();
+            return Array.isArray(data) ? data : [];
+        } catch (e) {
+            console.error("Failed to fetch tasks:", e);
+            return [];
+        }
     },
 
     createTask: async (task: { title: string; priority: string }) => {
@@ -99,8 +103,15 @@ export const taskApi = {
 // 3. Event API
 export const eventApi = {
     getEvents: async (): Promise<Event[]> => {
-        const response = await fetch(`${API_BASE_URL}/events`);
-        return await response.json();
+        try {
+            const response = await fetch(`${API_BASE_URL}/events`);
+            if (!response.ok) return [];
+            const data = await response.json();
+            return Array.isArray(data) ? data : [];
+        } catch (e) {
+            console.error("Failed to fetch events:", e);
+            return [];
+        }
     },
 
     createEvent: async (event: Omit<Event, 'id' | 'user_id' | 'created_at'>) => {
@@ -138,8 +149,12 @@ export const notesApi = {
         try {
             const response = await fetch(`${API_BASE_URL}/notes`);
             if (!response.ok) return [];
-            return await response.json();
-        } catch (e) { return []; }
+            const data = await response.json();
+            return Array.isArray(data) ? data : [];
+        } catch (e) {
+            console.error("Failed to fetch notes:", e);
+            return [];
+        }
     },
 
     createNote: async (content: string) => {

@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './FinanceDashboard.css';
 import TusuChatWidget from '../components/finance/TusuChatWidget';
@@ -41,7 +40,6 @@ interface AnalysisResult {
 
 function FinanceDashboard() {
     const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
-    const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [showChat, setShowChat] = useState(false);
@@ -94,16 +92,16 @@ function FinanceDashboard() {
                                     {/* Summary Card */}
                                     <div className="summary-card">
                                         <div className="summary-header">
-                                            <h2>💰 Analiz Özeti</h2>
+                                            <h2>💰 Analysis Summary</h2>
                                             <span className="analysis-date">
-                                                {new Date(analysisResult.analysisDate).toLocaleDateString('tr-TR')}
+                                                {new Date(analysisResult.analysisDate).toLocaleDateString('en-US')}
                                             </span>
                                         </div>
 
                                         <div className="total-savings">
-                                            <span className="savings-label">Toplam Potansiyel Tasarruf</span>
+                                            <span className="savings-label">Total Potential Savings</span>
                                             <span className="savings-amount">
-                                                ₺{analysisResult.totalPotentialSavings.toLocaleString('tr-TR', {
+                                                ₺{analysisResult.totalPotentialSavings.toLocaleString('en-US', {
                                                     minimumFractionDigits: 2,
                                                     maximumFractionDigits: 2
                                                 })}
@@ -114,7 +112,7 @@ function FinanceDashboard() {
 
                                         {analysisResult.recommendations.length > 0 && (
                                             <div className="quick-tips">
-                                                <h3>💡 Hızlı İpuçları</h3>
+                                                <h3>💡 Quick Tips</h3>
                                                 <ul>
                                                     {analysisResult.recommendations.map((rec, idx) => (
                                                         <li key={idx}>{rec}</li>
@@ -127,33 +125,33 @@ function FinanceDashboard() {
                                     {/* Excessive Categories */}
                                     {analysisResult.excessiveCategories.length > 0 && (
                                         <div className="excessive-categories">
-                                            <h2>🚨 Geliştirilmesi Gereken Alanlar</h2>
+                                            <h2>🚨 Areas for Improvement</h2>
                                             {analysisResult.excessiveCategories.map((category, idx) => (
                                                 <div key={idx} className="category-card">
                                                     <div className="category-header">
                                                         <h3>{category.category}</h3>
                                                         <span className={`change-badge ${category.percentageChange > 20 ? 'negative' : 'neutral'}`}>
-                                                            {category.percentageChange}% (Toplam)
+                                                            {category.percentageChange}% (Total)
                                                         </span>
                                                     </div>
 
                                                     <div className="category-stats">
                                                         <div className="stat">
-                                                            <span className="stat-label">Önerilen Limit (%20)</span>
+                                                            <span className="stat-label">Recommended Limit (20%)</span>
                                                             <span className="stat-value">
-                                                                ₺{category.averageMonthlySpending.toLocaleString('tr-TR')}
+                                                                ₺{category.averageMonthlySpending.toLocaleString('en-US')}
                                                             </span>
                                                         </div>
                                                         <div className="stat">
-                                                            <span className="stat-label">Bu Ay</span>
+                                                            <span className="stat-label">This Month</span>
                                                             <span className="stat-value">
-                                                                ₺{category.currentMonthSpending.toLocaleString('tr-TR')}
+                                                                ₺{category.currentMonthSpending.toLocaleString('en-US')}
                                                             </span>
                                                         </div>
                                                         <div className="stat highlight">
-                                                            <span className="stat-label">Potansiyel Tasarruf</span>
+                                                            <span className="stat-label">Potential Savings</span>
                                                             <span className="stat-value">
-                                                                ₺{category.potentialSavings.toLocaleString('tr-TR')}
+                                                                ₺{category.potentialSavings.toLocaleString('en-US')}
                                                             </span>
                                                         </div>
                                                     </div>
@@ -161,9 +159,9 @@ function FinanceDashboard() {
                                                     <div className="category-alert">
                                                         <span className="alert-icon">⚠️</span>
                                                         <p>
-                                                            {category.category} için <strong>₺{category.currentMonthSpending.toLocaleString('tr-TR')}</strong> harcadınız
-                                                            (Toplamın <strong>%{category.percentageChange.toFixed(1)}</strong>'i).
-                                                            Önerilen limiti <strong>₺{category.potentialSavings.toLocaleString('tr-TR')}</strong> aştınız.
+                                                            You spent <strong>₺{category.currentMonthSpending.toLocaleString('en-US')}</strong> for {category.category}
+                                                            (<strong>{category.percentageChange.toFixed(1)}%</strong> of total).
+                                                            You exceeded the recommended limit by <strong>₺{category.potentialSavings.toLocaleString('en-US')}</strong>.
                                                         </p>
                                                     </div>
                                                 </div>
@@ -174,7 +172,7 @@ function FinanceDashboard() {
                                     {/* All Categories Breakdown (Excluding Excessive Ones) */}
                                     {analysisResult.allCategories && analysisResult.allCategories.filter(cat => !cat.isExcessive).length > 0 && (
                                         <div className="all-categories-section">
-                                            <h2>📊 Diğer Kategoriler</h2>
+                                            <h2>📊 Other Categories</h2>
                                             <div className="categories-grid">
                                                 {analysisResult.allCategories
                                                     .filter(cat => !cat.isExcessive)
@@ -185,7 +183,7 @@ function FinanceDashboard() {
                                                                 <span className="cat-percent">{cat.percentageChange.toFixed(1)}%</span>
                                                             </div>
                                                             <div className="cat-amount">
-                                                                ₺{cat.currentMonthSpending.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
+                                                                ₺{cat.currentMonthSpending.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                                                             </div>
                                                         </div>
                                                     ))}
@@ -196,8 +194,8 @@ function FinanceDashboard() {
                             ) : (
                                 <div className="empty-state">
                                     <div className="empty-icon">📊</div>
-                                    <h3>Henüz Analiz Yok</h3>
-                                    <p>İşlemlerinizi ekleyin ve başlamak için "Harcamaları Analiz Et" butonuna tıklayın!</p>
+                                    <h3>No Analysis Yet</h3>
+                                    <p>Upload your data and click "Analyze Expenses" to start!</p>
                                 </div>
                             )}
                         </div>

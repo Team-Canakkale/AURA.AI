@@ -27,9 +27,15 @@ const CustomCursor = () => {
             if (
                 target.tagName === 'BUTTON' ||
                 target.tagName === 'A' ||
+                target.tagName === 'INPUT' ||
+                target.tagName === 'SELECT' ||
+                target.tagName === 'LABEL' ||
                 target.closest('.service-card') ||
+                target.closest('.glass-panel') ||
                 target.closest('button') ||
-                target.closest('a')
+                target.closest('a') ||
+                target.closest('.interactive') ||
+                window.getComputedStyle(target).cursor === 'pointer'
             ) {
                 setIsHovering(true);
             } else {

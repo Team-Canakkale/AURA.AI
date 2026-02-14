@@ -35,7 +35,7 @@ router.post('/mood', requireAuth, async (req: Request, res: Response) => {
             return res.json({
                 mood: 'Neutral',
                 score: 5,
-                advice: 'Henüz analiz edilecek bir not yok. Biraz yazı yaz, seni analiz edeyim! 📝'
+                advice: 'No notes to analyze yet. Write something down so I can analyze you! 📝'
             });
         }
 
@@ -48,7 +48,7 @@ router.post('/mood', requireAuth, async (req: Request, res: Response) => {
             messages: [
                 {
                     role: "system",
-                    content: "You are 'Aura', an empathetic AI productivity coach. Analyze these notes. Return a JSON object ONLY: { mood: 'string (Turkish)', score: number (1-10, where 10 is high energy/happy), advice: 'string (Turkish, max 2 sentences, encouraging)' }."
+                    content: "You are 'Aura', an empathetic AI productivity coach. Analyze these notes. Return a JSON object ONLY: { mood: 'string (English)', score: number (1-10, where 10 is high energy/happy), advice: 'string (English, max 2 sentences, encouraging)' }."
                 },
                 {
                     role: "user",

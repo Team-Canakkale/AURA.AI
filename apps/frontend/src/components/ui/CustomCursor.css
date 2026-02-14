@@ -12,11 +12,10 @@ body {
     background-color: #00D2FF;
     border-radius: 50%;
     pointer-events: none;
-    z-index: 9999;
+    z-index: 10001;
     transform: translate3d(-100px, -100px, 0);
     /* Initial off-screen */
     transition: width 0.2s ease, height 0.2s ease, background-color 0.2s ease;
-    mix-blend-mode: screen;
 }
 
 .cursor-trailer {
@@ -29,7 +28,7 @@ body {
     background-color: rgba(0, 210, 255, 0.1);
     border-radius: 50%;
     pointer-events: none;
-    z-index: 9998;
+    z-index: 10000;
     transform: translate3d(-100px, -100px, 0);
     /* Initial off-screen */
     transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
@@ -51,10 +50,22 @@ body {
     box-shadow: 0 0 20px rgba(0, 210, 255, 0.6);
 }
 
-/* Ensure interactive elements still show the custom cursor */
+/* Ensure interactive elements still show the custom cursor and hide the default browser cursor */
 button,
 a,
 input,
-select {
-    cursor: none;
+select,
+label,
+[role="button"],
+.service-card,
+.habit-item,
+.task-item,
+.category-card {
+    cursor: none !important;
+}
+
+/* Force globally on everything if possible, but start with these common interactive elements. 
+   Using * with !important is the nuclear option if specific ones aren't enough. */
+* {
+    cursor: none !important;
 }

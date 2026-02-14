@@ -20,7 +20,7 @@ export default defineConfig({
             '/api/health': {
                 target: 'http://localhost:4003',
                 changeOrigin: true,
-
+                rewrite: (path) => path.replace(/^\/api\/health/, '')
             },
             '/api/blood-analysis': {
                 target: 'http://localhost:4004',

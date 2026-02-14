@@ -612,7 +612,7 @@ function PdfUploader({ onTransactionsExtracted }: PdfUploaderProps) {
             console.log(`📦 All transactions:`, transactions);
 
             if (transactions.length === 0) {
-                setError(`İşlem bulunamadı. ${parts.length} parça kontrol edildi. Detaylar için konsola (F12) bakın.`);
+                setError(`No transactions found. Checked ${parts.length} parts. Check console (F12) for details.`);
             } else {
                 // Sort transactions by date (Newest first)
                 transactions.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
@@ -626,7 +626,7 @@ function PdfUploader({ onTransactionsExtracted }: PdfUploaderProps) {
             console.error('❌ PDF parsing error:', err);
             console.error('❌ Error message:', err.message);
             console.error('❌ Error stack:', err.stack);
-            setError(`PDF okunamadı: ${err.message}. Detaylar için konsola (F12) bakın.`);
+            setError(`PDF could not be read: ${err.message}. Check console (F12) for details.`);
         } finally {
             setUploading(false);
         }
@@ -635,7 +635,7 @@ function PdfUploader({ onTransactionsExtracted }: PdfUploaderProps) {
     return (
         <div className="pdf-uploader">
             <div className="upload-header">
-                <h3>📄 Banka Ekstresi Yükle</h3>
+                <h3>📄 Upload Bank Statement</h3>
             </div>
 
             <div className="uploader-row">
@@ -656,7 +656,7 @@ function PdfUploader({ onTransactionsExtracted }: PdfUploaderProps) {
                             <>
                                 <div className="upload-icon">📤</div>
                                 <span className="upload-text-small">
-                                    {fileName ? 'PDF Değiştir' : 'PDF Seç'}
+                                    {fileName ? 'Change PDF' : 'Select PDF'}
                                 </span>
                             </>
                         )}
@@ -666,11 +666,11 @@ function PdfUploader({ onTransactionsExtracted }: PdfUploaderProps) {
 
                 {/* Sağ: Bilgi Alanı */}
                 <div className="upload-info">
-                    <h4>💡 Desteklenen Formatlar</h4>
+                    <h4>💡 Supported Formats</h4>
                     <ul>
-                        <li>Garanti, İş, Akbank, vb.</li>
-                        <li>Format: GG/AA/YYYY</li>
-                        <li>Tutar: 1.234,56 TL</li>
+                        <li>Garanti, İş, Akbank, etc.</li>
+                        <li>Format: DD/MM/YYYY</li>
+                        <li>Amount: 1,234.56 TL</li>
                     </ul>
                 </div>
             </div>

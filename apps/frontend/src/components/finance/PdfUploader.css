@@ -172,7 +172,7 @@
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .pdf-uploader {
         padding: 0.75rem;
     }
@@ -194,6 +194,12 @@
 
     .upload-icon {
         font-size: 1.5rem;
+    }
+
+    .upload-info {
+        width: 100%;
+        height: auto;
+        padding: 0.75rem;
     }
 
     .upload-text {

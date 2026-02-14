@@ -20,13 +20,10 @@ export default function HabitatTree({ refreshKey }: Props) {
 
                 if (data) {
                     // Animasyon Tetikleyici:
-                    // İlk yükleme değilse (prevXP null değilse) VE XP arttıysa
                     if (prevXPRef.current !== null && data.current_xp > prevXPRef.current) {
                         setShowWater(true);
                         setTimeout(() => setShowWater(false), 1500);
                     }
-
-                    // Mevcut XP'yi kaydet
                     prevXPRef.current = data.current_xp;
                 }
 
@@ -55,60 +52,102 @@ export default function HabitatTree({ refreshKey }: Props) {
     if (tree.current_level >= 20) { icon = '🌳🏡'; title = 'Habitat'; }
 
     return (
-        <div className="glass-panel habitat-tree-panel" style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '1.5rem', position: 'relative', overflow: 'hidden' }}>
+        <div className="glass-panel habitat-tree-panel" style={{
+            marginBottom: '1rem',
+            display: 'flex',
+            flexDirection: 'column', // Dikey yerleşim
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '2rem',
+            gap: '1.5rem',
+            position: 'relative',
+            overflow: 'hidden',
+            minHeight: '300px' // Biraz yükseklik verelim
+        }}>
             {/* Background Glow */}
             <div style={{
-                position: 'absolute', top: '-50%', left: '-20%', width: '200px', height: '200px',
-                background: 'radial-gradient(circle, rgba(76, 175, 80, 0.15) 0%, rgba(0,0,0,0) 70%)',
+                position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '250px', height: '250px',
+                background: 'radial-gradient(circle, rgba(76, 175, 80, 0.2) 0%, rgba(0,0,0,0) 70%)',
                 zIndex: 0, pointerEvents: 'none'
             }} />
 
             {/* Water Drop Animation */}
-            {showWater && <div className="water-drop">💧</div>}
+            {showWater && <div className="water-drop" style={{
+                position: 'absolute', top: '20%', right: '20%', fontSize: '2rem', animation: 'drop 1s ease infinite'
+            }}>💧</div>}
 
-            {/* Left: Icon */}
+            {/* TOP: Big Icon */}
             <div className="tree-icon-wrapper" style={{
                 zIndex: 1,
-                background: 'rgba(255,255,255,0.03)',
+                background: 'rgba(255,255,255,0.05)',
                 borderRadius: '50%',
-                width: '80px',
-                height: '80px',
+                width: '120px', // Daha büyük
+                height: '120px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                border: '1px solid rgba(255,255,255,0.1)',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+                border: '1px solid rgba(255,255,255,0.15)',
+                boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
                 transition: 'transform 0.3s ease'
             }}>
-                <span style={{ fontSize: '3rem', display: 'inline-block', filter: 'drop-shadow(0 0 10px rgba(76, 175, 80, 0.3))' }}>
+                <span style={{ fontSize: '4.5rem', display: 'inline-block', filter: 'drop-shadow(0 0 15px rgba(76, 175, 80, 0.4))' }}>
                     {icon}
                 </span>
             </div>
 
-            {/* Middle: Stats */}
-            <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '5px' }}>
-                    <h2 style={{ margin: 0, fontSize: '1.2rem', color: '#fff' }}>Lvl {tree.current_level} <span style={{ fontSize: '0.9rem', color: '#888', fontWeight: 'normal' }}>{title}</span></h2>
-                    <div style={{ fontSize: '0.9rem', color: '#4caf50', fontWeight: 'bold' }}>
-                        {tree.current_xp} / {nextLevelXP} Water 💧
-                    </div>
+            {/* MIDDLE: Level Info & Bar */}
+            <div style={{ width: '100%', textAlign: 'center', zIndex: 1 }}>
+                <h2 style={{ margin: '0 0 0.5rem 0', fontSize: '1.8rem', color: '#fff', fontWeight: '800' }}>
+                    Lvl {tree.current_level} <span style={{ fontSize: '1.1rem', color: '#888', fontWeight: '500', marginLeft: '5px' }}>{title}</span>
+                </h2>
+
+                <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '5px',
+                    fontSize: '0.9rem',
+                    color: '#4caf50',
+                    fontWeight: 'bold',
+                    marginBottom: '0.8rem'
+                }}>
+                    <span>{tree.current_xp} / {nextLevelXP} Water</span>
+                    <span>💧</span>
                 </div>
 
-                {/* Progress Bar */}
-                <div style={{ width: '100%', height: '8px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', overflow: 'hidden' }}>
+                {/* Progress Bar Container */}
+                <div style={{
+                    width: '100%',
+                    height: '10px', // Biraz daha kalın
+                    background: 'rgba(255,255,255,0.08)',
+                    borderRadius: '5px',
+                    overflow: 'hidden',
+                    position: 'relative'
+                }}>
                     <div style={{
                         width: `${progress}%`,
                         height: '100%',
                         background: 'linear-gradient(90deg, #4caf50, #81c784)',
-                        transition: 'width 0.5s ease'
+                        boxShadow: '0 0 10px rgba(76, 175, 80, 0.5)',
+                        transition: 'width 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
                     }} />
                 </div>
             </div>
 
-            {/* Right: Streak */}
-            <div style={{ textAlign: 'center', paddingLeft: '1rem', borderLeft: '1px solid rgba(255,255,255,0.1)' }}>
-                <div style={{ fontSize: '1.5rem' }}>🔥 {tree.streak_days}</div>
-                <div style={{ fontSize: '0.7rem', color: '#aaa', textTransform: 'uppercase', letterSpacing: '1px' }}>Streak</div>
+            {/* BOTTOM: Streak */}
+            <div style={{
+                marginTop: '0.5rem',
+                paddingTop: '1rem',
+                borderTop: '1px solid rgba(255,255,255,0.1)',
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column',
+                gap: '2px'
+            }}>
+                <div style={{ fontSize: '2rem', lineHeight: 1 }}>🔥 {tree.streak_days}</div>
+                <div style={{ fontSize: '0.75rem', color: '#888', textTransform: 'uppercase', letterSpacing: '1.5px', fontWeight: '600' }}>Day Streak</div>
             </div>
         </div>
     );

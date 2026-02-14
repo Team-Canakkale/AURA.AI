@@ -5,9 +5,12 @@
     right: 0;
     z-index: 1000;
     background: rgba(34, 197, 94, 0.15);
+    background-clip: padding-box;
+    -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     border-bottom: 2px solid rgba(34, 197, 94, 0.3);
     box-shadow: 0 4px 30px rgba(34, 197, 94, 0.2);
+    isolation: isolate;
 }
 
 .habitat-nav-container {
@@ -52,13 +55,18 @@
 }
 
 .habitat-navbar .nav-back-btn {
-    padding: 0.75rem 1.5rem;
+    height: 42px;
+    padding: 0 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: rgba(34, 197, 94, 0.1);
     border: 1px solid rgba(34, 197, 94, 0.3);
     border-radius: 12px;
     color: #22c55e;
     text-decoration: none;
     font-weight: 600;
+    font-size: 0.95rem;
     transition: all 0.3s ease;
 }
 
@@ -68,12 +76,17 @@
 }
 
 .habitat-navbar .logout-btn {
-    padding: 0.75rem 1.5rem;
+    height: 42px;
+    padding: 0 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: rgba(220, 20, 60, 0.1);
     border: 1px solid rgba(220, 20, 60, 0.3);
     border-radius: 12px;
     color: #ff6b6b;
     font-weight: 600;
+    font-size: 0.95rem;
     cursor: pointer;
     transition: all 0.3s ease;
 }
@@ -85,12 +98,100 @@
 
 .habitat-navbar .token-stats {
     display: flex;
+    align-items: center;
     gap: 15px;
-    padding: 0.75rem 1.5rem;
+    height: 42px;
+    padding: 0 1.25rem;
     background: rgba(34, 197, 94, 0.1);
     border: 1px solid rgba(34, 197, 94, 0.3);
     border-radius: 12px;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     color: #4caf50;
     font-weight: bold;
+}
+
+/* --- Mobile Responsibility --- */
+.habitat-navbar .mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: #22c55e;
+    font-size: 2rem;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0 0.5rem;
+    z-index: 1002;
+    /* Butonun her şeyin üstünde olması için */
+}
+
+@media (max-width: 768px) {
+    .habitat-navbar .mobile-menu-btn {
+        display: block;
+    }
+
+    .habitat-nav-actions {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(5, 20, 5, 0.98);
+        backdrop-filter: blur(20px);
+        flex-direction: column;
+        padding: 1.5rem;
+        border-bottom: 2px solid rgba(34, 197, 94, 0.3);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        z-index: 999;
+    }
+
+    .habitat-nav-actions.open {
+        display: flex !important;
+        /* !important ile display: none'ı ezer */
+        animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Menü içindeki tüm öğeleri tam genişlik yap */
+    .habitat-nav-actions>*,
+    .habitat-nav-actions .token-stats,
+    .habitat-nav-actions .quick-notes-trigger,
+    .habitat-nav-actions .nav-back-btn,
+    .habitat-nav-actions .logout-btn {
+        width: 100% !important;
+        justify-content: center;
+        margin: 0.5rem 0;
+        display: flex;
+        align-items: center;
+    }
+
+    /* Quick Notes Trigger Specific Fix */
+    .habitat-navbar button,
+    .habitat-nav-actions button {
+        /* Genel buton stili */
+    }
+
+    .habitat-navbar .quick-notes-trigger {
+        background: rgba(34, 197, 94, 0.1);
+        border: 1px solid rgba(34, 197, 94, 0.3);
+        color: #22c55e;
+        padding: 12px;
+        border-radius: 12px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

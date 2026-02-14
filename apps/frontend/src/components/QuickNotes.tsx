@@ -110,7 +110,7 @@ export default function QuickNotes() {
                                             <div key={note.id} className="note-card">
                                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                                                     <div className="note-time">
-                                                        {new Date(note.created_at).toLocaleString('tr-TR', {
+                                                        {new Date(note.created_at).toLocaleString('en-US', {
                                                             weekday: 'short', hour: '2-digit', minute: '2-digit'
                                                         })}
                                                     </div>

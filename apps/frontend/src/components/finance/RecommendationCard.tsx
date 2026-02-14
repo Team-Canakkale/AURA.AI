@@ -48,7 +48,7 @@ function RecommendationCard({ recommendation }: RecommendationCardProps) {
                     <div className="stat-item">
                         <span className="stat-label">Estimated Gain</span>
                         <span className="stat-value gain">
-                            ₺{recommendation.estimatedGain.toLocaleString('tr-TR', {
+                            ₺{recommendation.estimatedGain.toLocaleString('en-US', {
                                 minimumFractionDigits: 2,
                                 maximumFractionDigits: 2
                             })}

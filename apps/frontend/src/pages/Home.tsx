@@ -48,12 +48,12 @@ function Home() {
 
             if (!response.ok) {
                 console.error('Call failed:', data.error);
-                alert('Arama başlatılamadı: ' + (data.error || 'Bilinmeyen hata'));
+                alert('Call failed to start: ' + (data.error || 'Unknown error'));
                 setIsCalling(false);
             }
         } catch (error) {
             console.error('Network error:', error);
-            alert('Bağlantı hatası oluştu.');
+            alert('Connection error occurred.');
             setIsCalling(false);
         }
     };
@@ -73,9 +73,9 @@ function Home() {
                     <div className="pulsing-phone-icon">
                         <span style={{ fontSize: '4rem' }}>📞</span>
                     </div>
-                    <p className="calling-text">Aura Aranıyor...</p>
+                    <p className="calling-text">Calling Aura...</p>
                     <button className="end-call-btn" onClick={handleEndCall}>
-                        Aramayı Sonlandır
+                        End Call
                     </button>
                 </div>
             </div>
@@ -85,12 +85,15 @@ function Home() {
                 {/* Cinematic Element 1: Logo & Slogan (0.0s) */}
                 <header className="home-header animate-blur-in">
                     <div className="logo-container">
+                        <div className="home-background" />
                         <div className="lumi-wrapper">
                             <img src="/lumi_v2.png" alt="Lumi Mascot" className="lumi-img-v2" />
                         </div>
-                        <h1 className="aura-logo">AURA.AI</h1>
+                        <h1 className="aura-logo">
+                            <span className="aura-text">AURA.AI</span>
+                        </h1>
                     </div>
-                    <p className="aura-slogan">Auralarını Yükselt</p>
+                    <p className="aura-slogan">Level up your aura</p>
                 </header>
 
                 <main className="main-content">
@@ -102,11 +105,11 @@ function Home() {
                                     <svg viewBox="0 0 24 24" className="card-icon finance-icon">
                                         <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.15-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.63-.34-1.34-2.12-1.38-2.63-.06-3.8-1.48-3.8-3.07 0-1.68 1.15-2.81 2.8-3.19V5h2.67v1.93c1.38.35 2.58 1.34 2.7 3.24h-1.97c-.1-1.19-.94-1.85-2.27-1.85-1.56 0-2.3.81-2.3 1.5 0 .7.62 1.25 2.1 1.29 2.5.06 3.81 1.45 3.81 3.1 0 1.63-1.11 2.92-2.69 3.22z" />
                                     </svg>
-                                    <span>FİNANS</span>
+                                    <span>FINANCE</span>
                                 </div>
                             }
                             status={services.finance}
-                            description="Akıllı bütçe ve harcama takibi"
+                            description="Budget & expense insights"
                             link="/finance"
                             color="var(--secondary)" // Blue
                         />
@@ -117,11 +120,11 @@ function Home() {
                                     <svg viewBox="0 0 24 24" className="card-icon health-icon">
                                         <path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                                     </svg>
-                                    <span>SAĞLIK</span>
+                                    <span>HEALTH</span>
                                 </div>
                             }
                             status={services.health}
-                            description="Kan analizi ve sağlık takibi"
+                            description="Blood & health insights"
                             link="/blood-analysis"
                             color="var(--destructive)" // Red-ish/Pink
                         />
@@ -132,11 +135,11 @@ function Home() {
                                     <svg viewBox="0 0 24 24" className="card-icon habits-icon">
                                         <path fill="currentColor" d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z" />
                                     </svg>
-                                    <span>ALIŞKANLIKLAR</span>
+                                    <span>HABITS</span>
                                 </div>
                             }
                             status={services.habit}
-                            description="Rutin oluştur ve ilerlemeyi takip et"
+                            description="Routine & progress insights"
                             link="/habitat"
                             color="var(--accent)" // Green
                         />
@@ -147,7 +150,7 @@ function Home() {
                 <footer className="home-footer animate-fade-in-delayed">
                     <button className="aura-call-btn" onClick={handleAuraCall}>
                         <span className="aura-icon">🔮</span>
-                        Aura çağrına bir tık uzaktasın
+                        Your Aura call is just a click away
                     </button>
                 </footer>
             </div>
@@ -247,7 +250,7 @@ function TiltCard({ title, status, description, link, color }: TiltCardProps) {
                 <p className="description">{description}</p>
                 <div className="status">
                     <span className={`status-indicator ${status?.status === 'ok' ? 'online' : 'offline'}`}>
-                        {status?.status === 'ok' ? '● Çevrimiçi' : '○ Çevrimdışı'}
+                        {status?.status === 'ok' ? '● Online' : '○ Offline'}
                     </span>
                 </div>
             </div>

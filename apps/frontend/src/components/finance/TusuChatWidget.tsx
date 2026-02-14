@@ -43,7 +43,7 @@ function TusuChatWidget({ onClose, contextData }: TusuChatWidgetProps) {
             console.error('Failed to load greeting:', error);
             setMessages([{
                 role: 'assistant',
-                content: "Merhaba! 🐿️ Ben TUSU, senin finans asistanın! Harcamalarınla ilgili bir sorum var mı?",
+                content: "Hello! 🐿️ I'm TUSU, your financial assistant! Do you have a question about your spending?",
                 timestamp: new Date()
             }]);
         }
@@ -80,7 +80,7 @@ function TusuChatWidget({ onClose, contextData }: TusuChatWidgetProps) {
             console.error('Chat error:', error);
             const errorMessage: Message = {
                 role: 'assistant',
-                content: "Üzgünüm, şu anda bir sorun yaşıyorum. Lütfen daha sonra tekrar dene! 🐿️",
+                content: "Sorry, I'm having a problem right now. Please try again later! 🐿️",
                 timestamp: new Date()
             };
             setMessages(prev => [...prev, errorMessage]);
@@ -97,10 +97,10 @@ function TusuChatWidget({ onClose, contextData }: TusuChatWidgetProps) {
     };
 
     const quickQuestions = [
-        "Nerede tasarruf edebilirim?",
-        "Dolar almak mantıklı mı?",
-        "En çok nereye harcıyorum?",
-        "Yatırım önerisi ver"
+        "Where can I save money?",
+        "Is it logical to buy USD?",
+        "Where do I spend the most?",
+        "Give investment advice"
     ];
 
     const handleQuickQuestion = (question: string) => {
@@ -130,7 +130,7 @@ function TusuChatWidget({ onClose, contextData }: TusuChatWidgetProps) {
                         <div className="message-content">
                             <p>{message.content}</p>
                             <span className="message-time">
-                                {message.timestamp.toLocaleTimeString('tr-TR', {
+                                {message.timestamp.toLocaleTimeString('en-US', {
                                     hour: '2-digit',
                                     minute: '2-digit'
                                 })}
@@ -171,7 +171,7 @@ function TusuChatWidget({ onClose, contextData }: TusuChatWidgetProps) {
             <div className="chat-input-container">
                 <textarea
                     className="chat-input"
-                    placeholder="TUSU'ya bir şey sor..."
+                    placeholder="Ask TUSU anything..."
                     value={inputMessage}
                     onChange={(e) => setInputMessage(e.target.value)}
                     onKeyPress={handleKeyPress}
